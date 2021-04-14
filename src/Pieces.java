@@ -1,8 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
 
-import com.sun.beans.editors.ColorEditor;
-
 public class Pieces extends JComponent {
 	
 	public Pieces () {
