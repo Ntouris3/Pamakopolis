@@ -11,17 +11,26 @@ public class Gui extends JFrame{
 	public Pieces p = new Pieces();
 	public JButton button = new JButton("Test");
 	public ImagePanel board = new ImagePanel();
-	
+	public JLayeredPane jl = new JLayeredPane();
+	public JButton rollButton = new JButton("Roll Dice");
 
 	public Gui(){
-		
+		jl.setBounds(6, 6, 632, 630);
+		jl.setPreferredSize(new Dimension(400, 400));
+
+		Dice dice1 = new Dice(150, 180, 40, 40);
+		jl.add(dice1);
+
+		Dice dice2 = new Dice(210, 180, 40, 40);
+		jl.add(dice2);
+
 		gameP.setBounds(0, 0, 700, 700);
 		
 		
 		gameP.setVisible(true);
 		
-		board.setOpaque(true);//ίσως πάει στη κλάση ImagePanel
-		board.setBounds(0, 0, 700, 700);//ίσως πάει στη κλάση ImagePanel
+		board.setOpaque(true);//οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ ImagePanel
+		board.setBounds(0, 0, 700, 700);//οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ ImagePanel
 		
 		
 		gameP.add(board , JLayeredPane.DEFAULT_LAYER);
@@ -36,11 +45,22 @@ public class Gui extends JFrame{
 		
 		
 		panelbig.add(sidepanel , BorderLayout.EAST);
-		sidepanel.add(button);
-		
+
+		sidepanel.setLayout(new BorderLayout());
+		sidepanel.add(button,BorderLayout.SOUTH);
+		sidepanel.add(rollButton, BorderLayout.NORTH);
+		sidepanel.add(jl, BorderLayout.EAST);
+
 		ButtonListener listener = new ButtonListener();
 		button.addActionListener(listener);
 		
+		rollButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dice1.rollDice();
+				dice2.rollDice();
+			}
+		});
+
 		panelbig.setVisible(true);
 		
 		
@@ -52,9 +72,9 @@ public class Gui extends JFrame{
 	}
 	class ButtonListener implements ActionListener {
 		/*
-		 * Μετακινεί το πιόνι κατά 50 + 50 (θέλει αρκετό γράψιμο για να κάνει τις κινήσεις που θέλουμε ,
-		 * θα πρέπει να συνδυαστεί και με τον αριθμό των ζαριών) και έπειτα
-		 * ενημερώνει όλα τα components για να φανεί η μετακίνηση.
+		 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ 50 + 50 (οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ ,
+		 * οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½) οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½
+		 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ components οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
 		 * 
 		 */
 		@Override
