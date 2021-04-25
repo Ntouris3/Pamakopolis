@@ -21,12 +21,15 @@ public class GUI extends JFrame{
 	private JTextField nameField;	
 	
 	private JPanel boardPanel;
-	private Board board ;
-	private Piece player1Piece ;
-	private Piece player2Piece ;
+	private Board board;
+	private Piece player1Piece;
+	private Piece player2Piece;
 	private Piece player3Piece;
-	private Piece player4Piece ;
-
+	private Piece player4Piece;
+	private Dice dice1 = new Dice(150, 180, 40, 40);
+	private Dice dice2 = new Dice(210, 180, 40, 40);
+	
+	
 	public GUI(){
 		
 	}

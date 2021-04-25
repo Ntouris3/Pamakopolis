@@ -1,9 +1,7 @@
-import java.awt.image.BufferedImage;
-
 public class TransportationCard extends Card{
 	private int numberOfRepositioning;
 
-	public TransportationCard(BufferedImage cardImg, int numberOfRepositioning) {
+	public TransportationCard(String cardImg, int numberOfRepositioning) {
 		super(cardImg);
 		this.numberOfRepositioning = numberOfRepositioning;
 	}

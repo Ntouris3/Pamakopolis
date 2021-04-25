@@ -1,9 +1,7 @@
-import java.awt.image.BufferedImage;
-
 public class Card {
-	private BufferedImage cardImg;
+	private String cardImg;
 
-	public Card(BufferedImage cardImg) {
+	public Card(String cardImg) {
 		this.cardImg = cardImg;
 	}
 	
