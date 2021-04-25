@@ -21,7 +21,7 @@ public class ImagePanel extends JPanel{
                     
         
           try {
-			image = ImageIO.read(getClass().getResource("Board.jpg"));
+			image = ImageIO.read(getClass().getResource("Assets/Board.jpg"));
 		} catch (IOException e) {
 			
 			e.printStackTrace();
