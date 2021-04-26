@@ -5,11 +5,11 @@ public class Player {
 	
 	private String name;
 	private Piece piece;
-	private int balance = 1500;
-	private boolean isInJail = false; 
+	public int balance = 1500;
+	public boolean isInJail = false; 
 	private boolean JailCard = false; 
 	private int position = 0;
-	private ArrayList<Property> properties;
+	public ArrayList<Property> properties;
 	
 	public Player(String name, Piece piece) {
 	

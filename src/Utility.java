@@ -11,11 +11,15 @@ public class Utility extends Property{
 	}
 
 
-	public int CalcRent(int balance) {
+	public int CalcRent(Player player) {
+		player.balance =player.balance-rent[houses];
 		
-		balance=balance-rent;
-			
-		return balance;
+		if (hotel>=1) {
+			player.balance=player.balance-(rent[5]*hotel);
+		}
+		
+		
+		return player.balance;
 	}
 	
 }
