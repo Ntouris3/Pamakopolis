@@ -13,8 +13,7 @@ public class Utility extends Property{
 
 
 	public int CalcRent(Player player) {
-		
-		 ArrayList<Player> players=new ArrayList<Player>(getPlayers);
+			 
 		
 		for (int i=0; i<=players.size(); i++) {
 			

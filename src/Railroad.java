@@ -16,7 +16,6 @@ public class Railroad extends Property{
 		
 		int i=0;
 		for (i=0; i<=totalRailroads; i++) {
-			Railroad.get()
 		}
 		
 		player.balance =player.balance-(rent*Railroad.totalRailroads);
