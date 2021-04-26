@@ -1,5 +1,3 @@
-
-
 public class GetOutOfJailCard extends Card{
 	
 	public GetOutOfJailCard(String cardImg) {

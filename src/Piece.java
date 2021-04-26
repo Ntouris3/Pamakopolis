@@ -1,6 +1,7 @@
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class Piece {
+public class Piece implements Serializable{
 	
 	private BufferedImage pieceimg;
 	
