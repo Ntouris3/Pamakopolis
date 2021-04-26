@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Utility extends Property{
 
@@ -13,16 +14,12 @@ public class Utility extends Property{
 
 	public int CalcRent(Player player) {
 		
-		for (int i=0; i<=Main.players.size(); i++) {
-			if 
+		 ArrayList<Player> players=new ArrayList<Player>(getPlayers);
+		
+		for (int i=0; i<=players.size(); i++) {
+			
 		}
-		
-		player.balance =player.balance-rent[houses];
-		
-		if (hotel>=1) {
-			player.balance=player.balance-(rent[5]*hotel);
-		}
-		
+					
 		
 		return player.balance;
 	}

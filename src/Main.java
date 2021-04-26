@@ -2,11 +2,17 @@ import java.util.ArrayList;
 
 public class Main {
 	
-	public static ArrayList<Player> players;
+	public ArrayList<Player> players=new ArrayList<Player>();
 	
 	public static void main(String[] args) {	
 		
 		new GUI();
 	
 	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
+	 
 }
