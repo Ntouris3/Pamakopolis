@@ -11,8 +11,8 @@ public class Dice extends JPanel {
 	 * 
 	 */
 	
-	Random rnd = new Random();
-	int faceValue = 1;
+	
+	private int faceValue = 1;
 	
 	public Dice(int xCoord, int yCoord, int width, int height) {
 		setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -55,7 +55,8 @@ public class Dice extends JPanel {
 	}
 	
 	public void rollDice(){
-		faceValue = rnd.nextInt(6) + 1;
+		Random r = new Random();
+		faceValue = r.nextInt(6) + 1;
 		repaint();
 	}
 	
