@@ -1,8 +1,8 @@
-import java.awt.image.BufferedImage;
+
 
 public class GetOutOfJailCard extends Card{
 	
-	public GetOutOfJailCard(BufferedImage cardImg) {
+	public GetOutOfJailCard(String cardImg) {
 		super(cardImg);
 	}
 

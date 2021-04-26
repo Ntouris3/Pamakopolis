@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Serializable{
 	public static ArrayList<Player> allPlayers;
 	
 	private String name;

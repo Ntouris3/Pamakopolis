@@ -4,7 +4,7 @@ public class Street extends Property{
 	
 	private String colour;
 	private int propertiesInColour;
-	private ArrayList<Integer> rent;
+	private int[] rent = new int[6];
 	private int houses;
 	private int hotel ;
 	private int houseCost;
