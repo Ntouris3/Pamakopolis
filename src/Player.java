@@ -8,7 +8,7 @@ public class Player {
 	public int balance = 1500;
 	public boolean isInJail = false; 
 	private boolean JailCard = false; 
-	private int position = 0;
+	public int position = 0;
 	public ArrayList<Property> properties;
 	
 	public Player(String name, Piece piece) {

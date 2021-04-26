@@ -1,7 +1,7 @@
 
 public class Railroad extends Property{
 
-	private int rent=25;
+	private int rent;
 	private static int totalRailroads;
 
 	
@@ -13,6 +13,11 @@ public class Railroad extends Property{
 
 
 	public int CalcRent(Player player) {
+		
+		int i=0;
+		for (i=0; i<=totalRailroads; i++) {
+			Railroad.get()
+		}
 		
 		player.balance =player.balance-(rent*Railroad.totalRailroads);
 		
