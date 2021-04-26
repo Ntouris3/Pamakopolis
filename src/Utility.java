@@ -11,9 +11,11 @@ public class Utility extends Property{
 	}
 
 
-	public int CalcRent() {
-		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
-		return 0;
+	public int CalcRent(int balance) {
+		
+		balance=balance-rent;
+			
+		return balance;
 	}
 	
 }
