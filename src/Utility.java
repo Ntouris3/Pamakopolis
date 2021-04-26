@@ -12,6 +12,11 @@ public class Utility extends Property{
 
 
 	public int CalcRent(Player player) {
+		
+		for (int i=0; i<=Main.players.size(); i++) {
+			if 
+		}
+		
 		player.balance =player.balance-rent[houses];
 		
 		if (hotel>=1) {
