@@ -28,6 +28,8 @@ public class Street extends Property{
 
 	public void Build(Player player) {
 		
+		player.properties.add();
+		
 	}
 	
 	public void Demolish(Player player) {
