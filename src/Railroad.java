@@ -12,7 +12,7 @@ public class Railroad extends Property{
 	}
 
 
-	public void CalcRent(Player player) {
+	public int CalcRent(Player player) {
 		 
 		ArrayList<Player> players= new ArrayList<Player>(Main.players);
 		int sum=0;
@@ -24,7 +24,7 @@ public class Railroad extends Property{
 			}
 		}
 		
-		player.balance=player.balance-(sum*rent);
+		return (sum*rent);
 
 	}
 					

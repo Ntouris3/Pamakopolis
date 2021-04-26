@@ -27,9 +27,7 @@ public class Street extends Property{
 	}
 
 	public void Build(Player player) {
-		
-		player.properties.add();
-		
+				
 	}
 	
 	public void Demolish(Player player) {
@@ -37,13 +35,16 @@ public class Street extends Property{
 	}
 
 
-	public void CalcRent(Player player) {
-		
-		player.balance =player.balance-rent[houses];
+	public int CalcRent(Player player) {
+		int sum=0;
+		sum=sum+rent[houses];
 		
 		if (hotel>=1) {
-			player.balance=player.balance-(rent[5]*hotel);
+			sum=sum+(rent[5]*hotel);
 		}
+		
+		return sum;
 	}
+	
 
 }
