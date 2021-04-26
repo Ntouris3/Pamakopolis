@@ -12,15 +12,19 @@ public class Utility extends Property{
 	}
 
 
-	public int CalcRent(Player player) {
+	public void CalcRent(Player player) {
 			 
-		
-		for (int i=0; i<=players.size(); i++) {
-			
+		ArrayList<Player> players= new ArrayList<Player>(Main.players);
+		int sum=0;
+		for (Player player1:players) {
+			for(int i=0; i<=player1.properties.size(); i++) {
+				if (player1.properties.get(i).price==25) {
+					sum++;
+				}
+			}
 		}
 					
 		
-		return player.balance;
 	}
 	
 }

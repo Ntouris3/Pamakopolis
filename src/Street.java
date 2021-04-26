@@ -35,16 +35,13 @@ public class Street extends Property{
 	}
 
 
-	public int CalcRent(Player player) {
+	public void CalcRent(Player player) {
 		
 		player.balance =player.balance-rent[houses];
 		
 		if (hotel>=1) {
 			player.balance=player.balance-(rent[5]*hotel);
 		}
-		
-		
-		return player.balance;
 	}
 
 }
