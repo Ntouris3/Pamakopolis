@@ -23,6 +23,8 @@ public class Utility extends Property{
 				}
 			}
 		}
+		
+		player.balance=player.balance-(sum*rent);
 					
 		
 	}
