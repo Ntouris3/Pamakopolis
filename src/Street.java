@@ -4,7 +4,7 @@ public class Street extends Property{
 	
 	private String colour;
 	private int propertiesInColour;
-	private int rent[];
+	private ArrayList<Integer> rent;
 	private int houses;
 	private int hotel ;
 	private int houseCost;
@@ -26,9 +26,7 @@ public class Street extends Property{
 		this.hotelCost = hotelCost;
 	}
 
-	public void Build(int balance) {
-		
-		
+	public void Build() {
 		
 	}
 	
@@ -37,14 +35,9 @@ public class Street extends Property{
 	}
 
 
-	public int CalcRent(int balance) {		
-		balance=balance-rent[houses];
-		
-		if (hotel>=1)
-			balance=balance-(rent[5]*hotel);
-		
-		return balance;		
+	public int CalcRent() {
+		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
+		return 0;
 	}
-
 
 }
