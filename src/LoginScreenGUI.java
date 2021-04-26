@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class LoginScreenGUI extends JFrame {
 	private DefaultListModel listModel = new DefaultListModel();
 	private JButton addPlayerButton = new JButton("Προσθήκη παίκτη");
 	private JButton startGameButton = new JButton("Έναρξη παιχνιδιού");
+	
 	
 	
 	@SuppressWarnings("unchecked")
@@ -43,12 +45,12 @@ public class LoginScreenGUI extends JFrame {
 		
 		
 		try {
-			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Hat.png"))));
+			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Hat_adobespark.png"))));
 			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Car_adobespark.png"))));
 			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Shoe_adobespark.png"))));
 			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Dog_adobespark.png"))));
 			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Ship_adobespark.png"))));
-			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Weird thing_adobespark.png"))));
+			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Thimble_adobespark.png"))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -95,11 +97,11 @@ public class LoginScreenGUI extends JFrame {
 			}
 			else if(Player.playerExists(playerNameField.getText())) {
 				JOptionPane.showMessageDialog(panel, "Ο παίκτης " + playerNameField.getText() + " υπάρχει ήδη! Παρακαλούμε διαλέξτε άλλο όνομα.");
-			}
-			else {
-				new Player(playerNameField.getText() , sel_piece.getSelectedValue());
-				listModel.removeElement(sel_piece.getSelectedValue());
 			}*/
+			else {
+				//new Player(playerNameField.getText() , sel_piece.getSelectedValue());
+				listModel.removeElement(sel_piece.getSelectedValue());
+			}
 		}
 		
 	}
