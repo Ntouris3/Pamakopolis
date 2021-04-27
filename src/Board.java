@@ -61,7 +61,7 @@ public class Board extends JPanel {
 		File file2 = new File("allCommunityChests.ser");
 		
 		try {
-			FileInputStream fIn = new FileInputStream(file);
+			FileInputStream fIn = new FileInputStream(file2);
 			ObjectInputStream in = new ObjectInputStream(fIn);
 			
 			allCommunityChests = (Stack<Card>) in.readObject();
