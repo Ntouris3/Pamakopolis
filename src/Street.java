@@ -34,13 +34,16 @@ public class Street extends Property{
 		}else {
 			player.balance=player.balance-(houseCost*number);
 			houses=houses+number;
-
 		}
 				
 	}
 	
 	public void Demolish(Player player, int number) {
-		
+		if (number==5) {
+			hotel--;
+		}else {
+			houses=houses-number;
+		}
 	}
 
 
