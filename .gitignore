@@ -3,4 +3,5 @@
 *.class
 *.png
 *.jpg
-.vscode/launch.json
+*.class
+.vscode/
