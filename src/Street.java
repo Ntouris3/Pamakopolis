@@ -26,11 +26,20 @@ public class Street extends Property{
 		this.hotelCost = hotelCost;
 	}
 
-	public void Build(Player player) {
+	public void Build(Player player, int number) {
+		
+		if (number==5) {
+			player.balance=player.balance-hotelCost;
+			hotel++;
+		}else {
+			player.balance=player.balance-(houseCost*number);
+			houses=houses+number;
+
+		}
 				
 	}
 	
-	public void Demolish(Player player) {
+	public void Demolish(Player player, int number) {
 		
 	}
 
