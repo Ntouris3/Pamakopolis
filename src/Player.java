@@ -1,7 +1,10 @@
 import java.util.ArrayList;
 
 public class Player {
-	private String name;
+
+
+	public String name;
+
 	private Piece piece;
 	private int balance = 1500;
 	private boolean isInJail = false; 

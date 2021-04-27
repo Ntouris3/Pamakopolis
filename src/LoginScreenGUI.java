@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,9 +17,10 @@ public class LoginScreenGUI extends JFrame {
 	private JTextField playerNameField;
 	private JLabel playerName,choosePiece;
 	private JList sel_piece;
-	private DefaultListModel listModel = new DefaultListModel();
+	private DefaultListModel<ImageIcon> listModel = new DefaultListModel();
 	private JButton addPlayerButton = new JButton("Προσθήκη παίκτη");
 	private JButton startGameButton = new JButton("Έναρξη παιχνιδιού");
+	private Piece piece1,piece2,piece3,piece4,piece5,piece6;
 	
 	
 	
@@ -32,10 +34,10 @@ public class LoginScreenGUI extends JFrame {
 		
 		
 		playerNameField = new JTextField("Όνομα παίκτη ...");
-		//playerNameField.setPreferredSize(new Dimension(130,18));
-		namePanel.add(playerNameField);
+	
+		namePanel.add(playerNameField , BorderLayout.CENTER);
 		
-		panel.add(playerName);
+		//panel.add();
 		panel.add(namePanel);
 		
 		choosePiece = new JLabel();
@@ -55,7 +57,21 @@ public class LoginScreenGUI extends JFrame {
 			e.printStackTrace();
 		}
 		
-		sel_piece = new JList(listModel);
+		/*piece1 = new Piece("Car_adobespark.png");
+		piece2 = new Piece("Dog_adobespark.png");
+		piece3 = new Piece("Hat_adobespark.png");
+		piece4 = new Piece("Ship_adobespark.png");
+		piece5 = new Piece("Shoe_adobespark.png");
+		piece6 = new Piece("Thimble_adobespark.png");*/
+		/*
+		listModel.addElement(piece1.pieceimg);
+		listModel.addElement(piece2.pieceimg);
+		listModel.addElement(piece3.pieceimg);
+		listModel.addElement(piece4.pieceimg);
+		listModel.addElement(piece5.pieceimg);
+		listModel.addElement(piece6.pieceimg);
+		*/
+		sel_piece = new JList<ImageIcon>(listModel);
 		sel_piece.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		sel_piece.setVisibleRowCount(1);
 		
@@ -89,21 +105,34 @@ public class LoginScreenGUI extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			if(sel_piece.getSelectedValue()==null || playerNameField.getText().isEmpty() || playerNameField.getText().equals("Όνομα παίκτη ...")){
 				
-				JOptionPane.showMessageDialog(panel, "Πρέπει να επιλέξετε και όνομα και πιόνι!");
 				
+				if(Main.allPlayers.size()==6) {
+					JOptionPane.showMessageDialog(panel, "Φτάσατε τον μέγιστο αριθμό παικτών");
+				}
+				else {
+					JOptionPane.showMessageDialog(panel, "Πρέπει να επιλέξετε και όνομα και πιόνι!");
+				}
 			}
-			/*else if(Player.allPlayers.size()==6) {
-				JOptionPane.showMessageDialog(panel, "Φτάσατε τον μέγιστο αριθμό παικτών");
-			}
-			else if(Player.playerExists(playerNameField.getText())) {
+			else if(playerExists(playerNameField.getText())) {
 				JOptionPane.showMessageDialog(panel, "Ο παίκτης " + playerNameField.getText() + " υπάρχει ήδη! Παρακαλούμε διαλέξτε άλλο όνομα.");
-			}*/
+			}
 			else {
-				//new Player(playerNameField.getText() , sel_piece.getSelectedValue());
+				new Player(playerNameField.getText() , new Piece ((ImageIcon)sel_piece.getSelectedValue()));
 				listModel.removeElement(sel_piece.getSelectedValue());
 			}
+			
 		}
 		
+		public boolean playerExists(String aName) {
+			for(int i=0; i<Main.allPlayers.size(); i++) {
+				if(Main.allPlayers.get(i).name.equals(aName)) {
+					return true;
+				}
+			}
+		
+			return false;
+		}
+	
 	}
 	
 	class ButtonListener2 implements ActionListener {
