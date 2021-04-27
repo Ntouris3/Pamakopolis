@@ -10,7 +10,7 @@ public class GUI extends JFrame{
 	public JPanel panelbig = new JPanel();
 	public JLayeredPane gameP = new JLayeredPane();
 	public JPanel sidepanel = new JPanel();
-	public Piece p = new Piece();
+	//public Piece p = new Piece();
 	public JButton button = new JButton("Test");
 	public JLayeredPane jl = new JLayeredPane();
 	public JButton rollButton = new JButton("Roll Dice");
@@ -60,10 +60,10 @@ public class GUI extends JFrame{
 		
 		
 		gameP.add(board , JLayeredPane.DEFAULT_LAYER);
-		gameP.add(p, JLayeredPane.DRAG_LAYER);
+		//gameP.add(p, JLayeredPane.DRAG_LAYER);
 		
 		board.repaint();
-		p.repaint();
+		//p.repaint();
 		//gameP.repaint();
 		
 		panelbig.setLayout(new BorderLayout());
@@ -111,5 +111,3 @@ public class GUI extends JFrame{
 		}
 	}
 	}
-
-

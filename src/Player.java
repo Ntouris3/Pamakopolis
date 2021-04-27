@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Player {
 	public static ArrayList<Player> allPlayers;
 	
-	private String name;
+	public String name;
 	private Piece piece;
 	private int balance = 1500;
 	private boolean isInJail = false; 
