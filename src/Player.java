@@ -27,11 +27,11 @@ public class Player {
 		balance -= amount;
 	}
 	
-	public void Buy (Property prop) {
+	/*public void Buy (Property prop) {
 		properties.add(prop);
 		this.ReduceBalance(prop.price);
 		prop.owner = this.name;
-	}
+	}*/
 	
 	public void Sell (Property p) {
 		
@@ -49,10 +49,10 @@ public class Player {
 			
 	}
 	
-	public void Unmortgage (Property p) {
+	/*public void Unmortgage (Property p) {
 		if (p.isMortgage)
 			ReduceBalance(1.1*(p.mortgage));
-	}
+	}*/
 	public ArrayList<Property> PropertiesToBuildIn (){
 		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
 		ArrayList<Property> list = new ArrayList<>();
