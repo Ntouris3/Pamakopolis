@@ -5,8 +5,8 @@ public class Player {
 
 	public String name;
 
-	private Piece piece;
-	private int balance = 1500;
+	public Piece piece;
+	public int balance = 1500;
 	private boolean isInJail = false; 
 	private boolean JailCard = false; 
 	private int position = 0;
