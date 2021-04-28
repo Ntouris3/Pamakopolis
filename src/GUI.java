@@ -5,12 +5,11 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class GUI extends JFrame{
-	private Player tempPlayer;
+	public Player tempPlayer;
 	
 	public JPanel panelbig = new JPanel();
 	public JLayeredPane gameP = new JLayeredPane();
 	public JPanel sidepanel = new JPanel();
-	//public Piece p = new Piece();
 	public JButton button = new JButton("Test");
 	public JLayeredPane jl = new JLayeredPane();
 	public JButton rollButton = new JButton("Roll Dice");
@@ -40,8 +39,11 @@ public class GUI extends JFrame{
 	private Dice dice2 = new Dice(210, 180, 40, 40);
 	
 	
-	public GUI(){
-		jl.setBounds(6, 6, 632, 630);
+	public GUI(Player aPlayer){
+		
+		tempPlayer = aPlayer;
+		
+		jl.setBounds(6, 6, 700, 700);
 		jl.setPreferredSize(new Dimension(400, 400));
 
 		Dice dice1 = new Dice(150, 180, 40, 40);
@@ -60,7 +62,7 @@ public class GUI extends JFrame{
 		
 		
 		gameP.add(board , JLayeredPane.DEFAULT_LAYER);
-		//gameP.add(p, JLayeredPane.DRAG_LAYER);
+		gameP.add(tempPlayer.piece, JLayeredPane.DRAG_LAYER);
 		
 		board.repaint();
 		//p.repaint();
@@ -91,7 +93,7 @@ public class GUI extends JFrame{
 		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000,1000);
+		this.setSize(1150,750);
 		this.setVisible(true);
 		this.setTitle("");
 		this.setContentPane(panelbig);
