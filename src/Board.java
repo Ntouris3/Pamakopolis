@@ -1,41 +1,51 @@
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Stack;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-public class Board {
+public class Board extends JPanel {
 	private ArrayList<Location> locations;
 	private ArrayList<Player> playerTurn;
 	private BufferedImage boardimg;
-	private Stack<Card> chance;
-	private Stack<Card> communityChest;
+
+	private BufferedImage image;
 
 	public Board() {
-		File file = new File("Locations.ser");
-		
+	                    
+	        
 		try {
-			FileInputStream fIn = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(fIn);
-			
-			locations = (ArrayList<Location>) in.readObject();
-			in.close();
-			fIn.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			image = ImageIO.read(getClass().getResource("Board.jpg"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				
+				e.printStackTrace();
 		}
 		
+		
+	     this.setSize(image.getWidth(), image.getHeight());
+	  
+
+		
+			
+
+	    }
+
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+	        g.drawImage(image, 0, 0, getWidth() , getHeight() ,this); // see javadoc for more info on the parameters            
+	    }
+
 	}
 	
-	
-}
