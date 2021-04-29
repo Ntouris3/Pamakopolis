@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Utility extends Property{
 
@@ -10,10 +11,30 @@ public class Utility extends Property{
 		this.rent = rent;
 	}
 
-
-	public int CalcRent() {
-		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
-		return 0;
+	public int CalcRent(Player player) {
+		ArrayList<Player> players= new ArrayList<Player>(Main.allPlayers);
+		boolean flag=false;
+		for (Player player1:players) {
+			for(int i=0; i<=player1.properties.size(); i++) {
+				if(player1.properties.get(i).name.equals("Electric Company")) {
+					for(int j=0; j<=player1.properties.size(); j++) {
+						if(player1.properties.get(j).name.equals("Water Works")) {
+							flag=true;
+							break;
+						}
+					}
+				}
+			
+			}
+		}
+		
+		if (flag) {
+			return player.lastDice*10;
+		}
+		else
+			return player.lastDice*4;
+				
+		
 	}
-	
+
 }
