@@ -11,19 +11,17 @@ public class Utility extends Property{
 		this.rent = rent;
 	}
 
-
-	@Override
-	public int CalcRent(Player player, int sumdice) {
-			 
-		ArrayList<Player> players= new ArrayList<Player>(Main.players);
+	public int CalcRent(Player player) {
+		ArrayList<Player> players= new ArrayList<Player>(Main.allPlayers);
 		boolean flag=false;
 		for (Player player1:players) {
 			for(int i=0; i<=player1.properties.size(); i++) {
 				if(player1.properties.get(i).name.equals("Electric Company")) {
 					for(int j=0; j<=player1.properties.size(); j++) {
-						if(player1.properties.get(i).name.equals("Water Works"))
+						if(player1.properties.get(j).name.equals("Water Works")) {
 							flag=true;
-						break;
+							break;
+						}
 					}
 				}
 			
@@ -31,10 +29,10 @@ public class Utility extends Property{
 		}
 		
 		if (flag) {
-			return sumdice*10;
+			return player.lastDice*10;
 		}
 		else
-			return sumdice*4;
+			return player.lastDice*4;
 				
 		
 	}

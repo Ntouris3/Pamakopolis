@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 
 public class Player {
-	public static ArrayList<Player> allPlayers;
-	
 	private String name;
 	private Piece piece;
 	public int balance = 1500;
@@ -10,6 +8,7 @@ public class Player {
 	private boolean JailCard = false; 
 	public int position = 0;
 	public ArrayList<Property> properties;
+	public int lastDice;
 	
 	public Player(String name, Piece piece) {
 	

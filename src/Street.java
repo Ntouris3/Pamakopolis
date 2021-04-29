@@ -27,7 +27,7 @@ public class Street extends Property{
 	}
 
 	public void Build(Player player, int number) {
-		
+		//GUI input for number of houses #1-4 and hotel #5
 		if (number==5) {
 			player.balance=player.balance-hotelCost;
 			hotel++;
@@ -39,6 +39,7 @@ public class Street extends Property{
 	}
 	
 	public void Demolish(Player player, int number) {
+		//XARA DES NAOYME
 		if (number==5) {
 			hotel--;
 		}else {

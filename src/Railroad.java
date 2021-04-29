@@ -14,7 +14,7 @@ public class Railroad extends Property{
 
 	public int CalcRent(Player player) {
 		 
-		ArrayList<Player> players= new ArrayList<Player>(Main.players);
+		ArrayList<Player> players= new ArrayList<Player>(Main.allPlayers);
 		int sum=0;
 		for (Player player1:players) {
 			for(int i=0; i<=player1.properties.size(); i++) {
