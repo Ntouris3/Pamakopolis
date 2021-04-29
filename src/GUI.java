@@ -15,16 +15,24 @@ public class GUI extends JFrame{
 	public JLayeredPane jl = new JLayeredPane();
 	public JButton rollButton = new JButton("Roll Dice");
 	private JPanel propertyOptionsPanel;
+	
 	private JButton rollDiceButton;
-	private JButton readLocationInfoButton;
-	private JButton readPropertyInfoButton;
-	private JButton endTurnButton;
+	
 	private JButton buyButton;
-	private JTextField ownedByField;
+	private JButton seeLocationInfoButton;
 	private JButton buildButton;
 	private JButton demolishButton;
 	private JButton mortgageButton;
 	private JButton tradeButton;
+	private JButton seeCardsButton;
+		
+	private JButton endTurnButton;
+	
+	private JTextField ownedByField;
+	
+	
+	
+	
 	
 	private JPanel playerInformationPanel;
 	private JTextField balanceField;
