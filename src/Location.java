@@ -1,5 +1,4 @@
-import java.io.Serializable;
 
-public class Location implements Serializable{
+public abstract class Location {
 
 }

@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 
 public class GetOutOfJailCard extends Card{
 	
