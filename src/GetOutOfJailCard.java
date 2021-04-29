@@ -11,7 +11,7 @@ public class GetOutOfJailCard extends Card{
 		if (this.cardImgName.equals("Chance_GOOJF.png")){ //removing the card from the deck
 			Main.allChances.remove(this);
 		}else{
-			Board.allCommunityChests.remove(this);
+			Main.allCommunityChests.remove(this);
 		}
     }
 

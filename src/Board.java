@@ -19,8 +19,7 @@ public class Board extends JPanel {
 	private ArrayList<Location> locations;
 	private ArrayList<Player> playerTurn;
 	private BufferedImage boardimg;
-	public static Stack<Card> allChances = new Stack<Card>();
-	public static Stack<Card> allCommunityChests = new Stack<Card>();
+
 	private BufferedImage image;
 
 	public Board() {
@@ -37,46 +36,7 @@ public class Board extends JPanel {
 	     this.setSize(image.getWidth(), image.getHeight());
 	  
 
-		//Loading the card files
-		File file = new File("AllChances.ser");
 		
-		try {
-			FileInputStream fIn = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(fIn);
-			
-			allChances = (Stack<Card>) in.readObject();
-			in.close();
-			fIn.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		File file2 = new File("allCommunityChests.ser");
-		
-		try {
-			FileInputStream fIn = new FileInputStream(file2);
-			ObjectInputStream in = new ObjectInputStream(fIn);
-			
-			allCommunityChests = (Stack<Card>) in.readObject();
-			in.close();
-			fIn.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 			
 
 	    }
