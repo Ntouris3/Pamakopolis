@@ -14,12 +14,12 @@ public class Street extends Property{
 	
 
 	public Street(String name, String cardImg, Player owner, int price, int mortgage, boolean isMortgaged,
-			String colour, int propertiesInColour, ArrayList<Integer> rent, int houses, int hotel, int houseCost,
+			String colour, int propertiesInColour,  int[] rent, int houses, int hotel, int houseCost,
 			int hotelCost) {
 		super(name, cardImg, owner, price, mortgage, isMortgaged);
 		this.colour = colour;
 		this.propertiesInColour = propertiesInColour;
-		rent = new ArrayList<>();
+		rent =  new int[6];
 		this.houses = houses;
 		this.hotel = hotel;
 		this.houseCost = houseCost;
