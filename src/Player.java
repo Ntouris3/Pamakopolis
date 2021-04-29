@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
 public class Player {
-	private String name;
-	private Piece piece;
+	public String name;
+	public Piece piece;
 	public int balance = 1500;
 	public boolean isInJail = false; 
-	private boolean JailCard = false; 
+	public boolean JailCard = false; 
 	public int position = 0;
 	public ArrayList<Property> properties;
 	public int lastDice;
