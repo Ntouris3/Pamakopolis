@@ -1,16 +1,14 @@
 import java.util.ArrayList;
 
 public class Player {
-
-
 	public String name;
-
-	private Piece piece;
-	private int balance = 1500;
-	private boolean isInJail = false; 
-	private boolean JailCard = false; 
-	private int position = 0;
-	private ArrayList<Property> properties;
+	public Piece piece;
+	public int balance = 1500;
+	public boolean isInJail = false; 
+	public boolean JailCard = false; 
+	public int position = 0;
+	public ArrayList<Property> properties;
+	public int lastDice;
 	
 	public Player(String name, Piece piece) {
 	
@@ -20,21 +18,21 @@ public class Player {
 	}
 	
 	public void AddBalance (int amount) {
-		balance +=  amount;
+		balance = balance + amount;
 	}
 	
 	public void ReduceBalance (int amount) {
-		balance -= amount;
+		balance = balance - amount;
 	}
 	
 	public void Buy (Property prop) {
 		properties.add(prop);
-		this.ReduceBalance(prop.price);
-		prop.owner = this.name;
+		this.ReduceBalance(balance);
 	}
 	
-	public void Sell (Property p) {
-		
+	public void Sell (Property prop) {
+		properties.remove(prop);
+		this.ReduceBalance(balance);
 	}
 	public void ChangePosition (int newPosition) {
 		
@@ -44,14 +42,12 @@ public class Player {
 		
 	}
 	
-	public void AddToMortgage(Property p) {
-
-			
+	public void AddToMortgage(Property prop) {
+		
 	}
 	
-	public void Unmortgage (Property p) {
-		if (p.isMortgage)
-			ReduceBalance(1.1*(p.mortgage));
+	public void Unmortgage (Property prop) {
+		
 	}
 	public ArrayList<Property> PropertiesToBuildIn (){
 		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
@@ -63,5 +59,8 @@ public class Player {
 		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
 		return false;
 	}
-	
+	public static boolean playerExists (String Name) {
+		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
+		return false;
+	}
 }
