@@ -9,7 +9,7 @@ public class Player {
 	public int balance = 1500;
 	private boolean isInJail = false; 
 	private boolean JailCard = false; 
-	private int position = 0;
+	public int position = 0;
 	private ArrayList<Property> properties;
 	
 	public Player(String name, Piece piece) {
@@ -17,6 +17,7 @@ public class Player {
 		this.name = name;
 		this.piece = piece;
 		properties = new ArrayList<Property>();
+		Main.allPlayers.add(this);
 	}
 	
 	public void AddBalance (int amount) {

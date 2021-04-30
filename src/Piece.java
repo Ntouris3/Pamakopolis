@@ -13,7 +13,7 @@ public class Piece extends JComponent{
 
 		this.pieceimg = resizeImage(aImage);
 		this.setOpaque(true);
-		this.setBounds(0, 0, 80, 80);
+		this.setBounds(650, 650, 80, 80);
 		
 	}
 	
@@ -38,7 +38,79 @@ public class Piece extends JComponent{
 	    pieceimg.paintIcon(this, g, 0, 0);
 	}
 	
-	public void MoveOnBoard(int diceValue) {
+	public void MoveOnBoard(Player p ,int newPosition) {
+		int currPiecePos = p.position;
+		
+		
+		
+		while ( currPiecePos != newPosition ) {
+			
+			if(currPiecePos == 0) {
+				this.setBounds(this.getX()-96, this.getY(), 55, 45);
+				GUI.gameP.paintImmediately(getX()+96, getY(), getWidth(), getHeight());
+			}
+			else if(currPiecePos < 9) {
+				this.setBounds(this.getX()-58, this.getY(), 55, 45);
+				GUI.gameP.paintImmediately(getX()+58, getY(), getWidth(), getHeight());
+			}
+			else if(currPiecePos == 9) {
+				this.setBounds(this.getX()-90, this.getY(), 55, 45);
+				GUI.gameP.paintImmediately(getX()+90, getY(), getWidth(), getHeight());
+			}
+			else if(currPiecePos == 10) {
+				this.setBounds(this.getX(), this.getY()-96, 55, 45);
+				GUI.gameP.paintImmediately(getX(), getY()+96, getWidth(), getHeight());
+			}
+			else if(currPiecePos < 19) {
+				this.setBounds(this.getX(), this.getY()-58, 55, 45);
+				GUI.gameP.paintImmediately(getX(), getY()+58, getWidth(), getHeight());
+			}
+			else if(currPiecePos == 19) {
+				this.setBounds(this.getX(), this.getY()-90, 55, 45);
+				GUI.gameP.paintImmediately(getX(), getY()+90, getWidth(), getHeight());
+			}
+			else if(currPiecePos == 20) {
+				this.setBounds(this.getX()+90, this.getY(), 55, 45);
+				GUI.gameP.paintImmediately(getX()-90, getY(), getWidth(), getHeight());
+			}
+			else if(currPiecePos < 29) {
+				this.setBounds(this.getX()+58, this.getY(), 55, 45);
+				GUI.gameP.paintImmediately(getX()-58, getY(), getWidth(), getHeight());
+			}
+			else if(currPiecePos == 29) {
+				this.setBounds(this.getX()+96, this.getY(), 55, 45);
+				GUI.gameP.paintImmediately(getX()-96, getY(), getWidth(), getHeight());
+			}
+			else if(currPiecePos == 30) {
+				this.setBounds(this.getX(), this.getY()+90, 55, 45);
+				GUI.gameP.paintImmediately(getX(), getY()-90, getWidth(), getHeight());
+			}
+			else if(currPiecePos < 39) {
+				this.setBounds(this.getX(), this.getY()+58, 55, 45);
+				GUI.gameP.paintImmediately(getX(), getY()-58, getWidth(), getHeight());
+			}
+			else if(currPiecePos == 39) {
+				this.setBounds(this.getX(), this.getY()+96, 55, 45);
+				GUI.gameP.paintImmediately(getX(), getY()-96, getWidth(), getHeight());
+			}
+			
+			currPiecePos= (currPiecePos + 1)%40;
+			
+			
+			GUI.gameP.paintImmediately(getX(), getY(), getWidth(), getHeight());
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			
+			
+		}
+		
+		p.position = currPiecePos;
+		
 		
 	}
 }

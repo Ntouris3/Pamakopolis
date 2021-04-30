@@ -7,8 +7,8 @@ import javax.swing.*;
 public class GUI extends JFrame{
 	public Player tempPlayer;
 	
-	public JPanel panelbig = new JPanel();
-	public JLayeredPane gameP = new JLayeredPane();
+	public static JPanel panelbig = new JPanel();
+	public static JLayeredPane gameP = new JLayeredPane();
 	public JPanel sidepanel = new JPanel();
 	public JButton button = new JButton("Test");
 	public JLayeredPane jl = new JLayeredPane();
@@ -31,12 +31,9 @@ public class GUI extends JFrame{
 	
 	private JPanel boardPanel;
 	private Board board = new Board();
-	private Piece player1Piece;
-	private Piece player2Piece;
-	private Piece player3Piece;
-	private Piece player4Piece;
-	private Dice dice1 = new Dice(150, 180, 40, 40);
-	private Dice dice2 = new Dice(210, 180, 40, 40);
+	
+	public Dice dice1 = new Dice(150, 180, 40, 40);
+	public Dice dice2 = new Dice(210, 180, 40, 40);
 	
 	
 	public GUI(Player aPlayer){
@@ -86,6 +83,10 @@ public class GUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
 				dice2.rollDice();
+				dice1.paintImmediately(getX(), getY(), getWidth(), getHeight());
+				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
+				int newPos = (tempPlayer.position + dice1.getFaceValue() + dice2.getFaceValue())%40;
+				tempPlayer.piece.MoveOnBoard(tempPlayer, newPos);
 			}
 		});
 
