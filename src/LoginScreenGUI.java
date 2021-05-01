@@ -139,7 +139,7 @@ public class LoginScreenGUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			new GUI(Main.allPlayers.get(0));
+			new GUI();
 			dispose();
 			/*if(Player.allPlayers.size()>2) {
 				new Gui(Player.allPlayers.getIndex(0));
