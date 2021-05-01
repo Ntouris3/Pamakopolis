@@ -121,6 +121,8 @@ public class LoginScreenGUI extends JFrame {
 				listModel.removeElement(sel_piece.getSelectedValue());
 			}
 			
+			playerNameField.setText("Όνομα παίκτη ...");
+			
 		}
 		
 		public boolean playerExists(String aName) {
@@ -139,16 +141,15 @@ public class LoginScreenGUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			new GUI();
-			dispose();
-			/*if(Player.allPlayers.size()>2) {
-				new Gui(Player.allPlayers.getIndex(0));
-				
+			
+			if(Main.allPlayers.size()>2) {
+				new GUI();
+				dispose();
 				
 			}
 			else{
 				JOptionPane.showMessageDialog(panel, "Απαιτούνται τουλάχιστον 2 παίκτες για την έναρξη του παιχνιδιού!");
-			}*/
+			}
 			
 		}
 		
