@@ -11,7 +11,7 @@ public class GUI extends JFrame{
 	public JLayeredPane gameP = new JLayeredPane();
 	public JPanel sidepanel = new JPanel();
 	//public Piece p = new Piece();
-	public JButton button = new JButton("Test");
+	public JButton button = new JButton("Test Button");
 	public JLayeredPane jl = new JLayeredPane();
 	public JButton rollButton = new JButton("Roll Dice");
 	private JPanel propertyOptionsPanel;
@@ -19,7 +19,7 @@ public class GUI extends JFrame{
 	private JButton rollDiceButton;
 	
 	private JButton buyButton;
-	private JButton seeLocationInfoButton;
+	private JButton seeLocationInfoButton = new JButton("See location info");
 	private JButton buildButton;
 	private JButton demolishButton;
 	private JButton mortgageButton;
@@ -95,6 +95,18 @@ public class GUI extends JFrame{
 			}
 		});
 
+		//see Location Info Button
+		ShowLocationInfoButton l2 = new ShowLocationInfoButton();
+		seeLocationInfoButton.addActionListener(l2);
+		
+//		if (tempPlayer.position !=	4 || tempPlayer.position !=	38 || tempPlayer.position % 10 != 0) {
+//			sidepanel.add(seeLocationInfoButton);
+//		}
+		
+		System.out.println(Main.allChances.get(0).getClass());
+		if (Main.allChances.get(0).getClass().toString().equals("class GetOutOfJailCard")) {
+			System.out.println("Hello world");
+		}
 		panelbig.setVisible(true);
 		
 		
@@ -117,5 +129,15 @@ public class GUI extends JFrame{
 		
 			
 		}
+	}
+	
+	class ShowLocationInfoButton implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println(Main.locations.get(tempPlayer.position).getClass());
+			
+		}
+		
 	}
 	}

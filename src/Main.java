@@ -18,6 +18,8 @@ public class Main {
 	
 	public static void main(String[] args) {	
 
+		allChances.add(new GetOutOfJailCard("ATestName"));
+		
 		File file = new File("Locations.ser");
 		
 		try {
@@ -80,9 +82,9 @@ public class Main {
 					e.printStackTrace();
 				}
 		
-		new LoginScreenGUI();
+		//new LoginScreenGUI();
 		
-		//new GUI();
+		new GUI();
 
 	}
 	
