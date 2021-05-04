@@ -31,9 +31,14 @@ public class Player {
 	}
 	
 	public void Buy (Property prop) {
+		Class c = prop.getClass();
 		properties.add(prop);
-		this.ReduceBalance(prop.price);
-		prop.owner = this.name;
+		ReduceBalance(prop.price);
+		prop.owner = this;
+		if (c.getName() == "Street")
+		{
+			streets.add((Street)prop);
+		}
 	}
 	
 	public void ChangePosition (int newPosition) {
