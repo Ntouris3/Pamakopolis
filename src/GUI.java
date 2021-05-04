@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import com.sun.tools.jdeps.JdepsConfiguration.Builder;
+
 public class GUI extends JFrame{
 	private Player tempPlayer;
 	
@@ -20,8 +22,8 @@ public class GUI extends JFrame{
 	
 	private JButton buyButton;
 	private JButton seeLocationInfoButton;
-	private JButton buildButton;
-	private JButton demolishButton;
+	private JButton buildButton; //δικο μου
+	private JButton demolishButton; //δικο μου
 	private JButton mortgageButton;
 	private JButton tradeButton;
 	private JButton seeCardsButton;
@@ -30,10 +32,7 @@ public class GUI extends JFrame{
 	
 	private JTextField ownedByField;
 	
-	
-	
-	
-	
+
 	private JPanel playerInformationPanel;
 	private JTextField balanceField;
 	private JTextField nameField;	
@@ -84,9 +83,15 @@ public class GUI extends JFrame{
 		sidepanel.add(button,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
-
+		
 		ButtonListener listener = new ButtonListener();
 		button.addActionListener(listener);
+		
+		ButtonListener2 listener2 = new ButtonListener2();
+		buildButton.addActionListener(listener2);
+		
+		ButtonListener3 listener3 = new ButtonListener3();
+		demolishButton.addActionListener(listener3);
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -118,4 +123,38 @@ public class GUI extends JFrame{
 			
 		}
 	}
+	
+	
+	
+	class ButtonListener2 implements ActionListener{
+		public void actionPerformed(ActionEvent arg0) {
+			//BUILD
+			//ask for number 1-4 houses, number 5 hotel
+			//πως θα ξερουμε σε ποια ιδιοκτησια θα ειναι 
+			
+			//tempPlayer.position
+			JList<String> sugglist= new JList<String>();
+			DefaultListModel<String> listprop = new DefaultListModel<>();
+
+			for (Property prop1:tempPlayer.properties) {
+				listprop.addElement(prop1.name);
+			}
+			sugglist.setModel(listprop);
+			
+			JTextField number;
+			int counter = (Integer.parseInt(number.getText()));
+			this.Street.Build(tempPlayer, number);
+			
+		}
+	}
+	
+	class ButtonListener3 implements ActionListener{
+		public void actionPerformed(ActionEvent arg0) {
+			//DEMOLISH
+			
+			
+		}
+	}
+
+	
 	}

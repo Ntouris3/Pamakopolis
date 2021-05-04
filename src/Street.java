@@ -2,13 +2,13 @@ import java.util.ArrayList;
 
 public class Street extends Property{
 	
-	private String colour;
+	public String colour;
 	private int propertiesInColour;
 	private int rent[];
 	private int houses;
 	private int hotel ;
-	private int houseCost;
-	private int hotelCost;
+	public int houseCost;
+	public int hotelCost;
 
 	
 	
@@ -28,6 +28,7 @@ public class Street extends Property{
 
 	public void Build(Player player, int number) {
 		//GUI input for number of houses #1-4 and hotel #5
+		//αν θελει να χτισει ενα hotel κατευθειαν, τι γινεται??
 		if (number==5) {
 			player.balance=player.balance-hotelCost;
 			hotel++;

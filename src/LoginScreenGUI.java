@@ -32,9 +32,8 @@ public class LoginScreenGUI extends JFrame {
 		
 		playerName = new JLabel();
 		
-		
 		playerNameField = new JTextField("Όνομα παίκτη ...");
-	
+		
 		namePanel.add(playerNameField , BorderLayout.CENTER);
 		
 		//panel.add();
