@@ -22,7 +22,7 @@ public class GUI extends JFrame{
 	
 	private JButton buyButton;
 	private JButton seeLocationInfoButton;
-	private JButton buildButton; //δικο μου
+	private JButton buildButton= new JButton("build");; //δικο μου
 	private JButton demolishButton; //δικο μου
 	private JButton mortgageButton;
 	private JButton tradeButton;
@@ -83,7 +83,7 @@ public class GUI extends JFrame{
 		sidepanel.add(button,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
-		sidepanel.add(buildButton, BorderLayout.EAST);
+		sidepanel.add(buildButton, BorderLayout.SOUTH);
 		
 		ButtonListener listener = new ButtonListener();
 		buildButton.addActionListener(listener);
@@ -102,7 +102,7 @@ public class GUI extends JFrame{
 		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000,1000);
+		this.setSize(1100,750);
 		this.setVisible(true);
 		this.setTitle("");
 		this.setContentPane(panelbig);
@@ -131,10 +131,10 @@ public class GUI extends JFrame{
 			sugglist.setModel(listprop);
 			
 			//θα του ζηταμε 1-4 για σπιτια και 5 για ξενοδοχειο
-			JTextField number = null;
+			JTextField number=new JTextField();
+			panels.add(number);
 			int counter = (Integer.parseInt(number.getText()));
 			
-			panels.add(number);
 			panels.add(sugglist);
 			
 			sugglist.addListSelectionListener(new ListSelectionListener() {
