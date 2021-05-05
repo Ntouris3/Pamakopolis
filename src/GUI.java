@@ -3,60 +3,48 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 public class GUI extends JFrame{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	private Player tempPlayer;
+	public Player currPlayer;
 	
-	public JPanel panelbig = new JPanel();
-	public JLayeredPane gameP = new JLayeredPane();
+	public static JPanel panelbig = new JPanel();
 	public JPanel sidepanel = new JPanel();
-	//public Piece p = new Piece();
-	public JButton button = new JButton("Test Button");
-	public JLayeredPane jl = new JLayeredPane();
-	public JButton rollButton = new JButton("Roll Dice");
 	private JPanel propertyOptionsPanel;
+	private JPanel playerInformationPanel;
+	private JPanel boardPanel;
 	
+	public JLayeredPane jl = new JLayeredPane();
+	public static JLayeredPane gameP = new JLayeredPane();
+	
+	public JButton rollButton = new JButton("Roll Dice");
 	private JButton rollDiceButton;
-	
+	private JButton readLocationInfoButton;
+	private JButton readPropertyInfoButton;
+	private JButton endTurnButton = new JButton("End Turn");
 	private JButton buyButton;
-	private JButton seeLocationInfoButton = new JButton("See location info");
 	private JButton buildButton;
 	private JButton demolishButton;
 	private JButton mortgageButton;
 	private JButton tradeButton;
-	private JButton seeCardsButton = new JButton("See Cards");
-		
-	private JButton endTurnButton;
 	
 	private JTextField ownedByField;
-	
-	String cardImgName;
-	
-	
-	
-	private JPanel playerInformationPanel;
 	private JTextField balanceField;
 	private JTextField nameField;	
 	
-	private JPanel boardPanel;
 	private Board board = new Board();
-	private Piece player1Piece;
-	private Piece player2Piece;
-	private Piece player3Piece;
-	private Piece player4Piece;
-	private Dice dice1 = new Dice(150, 180, 40, 40);
-	private Dice dice2 = new Dice(210, 180, 40, 40);
 	
+	public Dice dice1 = new Dice(150, 180, 40, 40);
+	public Dice dice2 = new Dice(210, 180, 40, 40);
+	
+	int currPlayerCounter = 0;
 	
 	public GUI(){
-		jl.setBounds(6, 6, 632, 630);
+		buyButton = new JButton("BUY");
+		mortgageButton = new JButton("MORTGAGE");
+		Main.allPlayers.add(new Player("Chris",new Piece(null)));
+		currPlayer = Main.allPlayers.get(currPlayerCounter);
+		
+		jl.setBounds(6, 6, 700, 700);
 		jl.setPreferredSize(new Dimension(400, 400));
 
 		Dice dice1 = new Dice(150, 180, 40, 40);
@@ -66,20 +54,20 @@ public class GUI extends JFrame{
 		jl.add(dice2);
 
 		gameP.setBounds(0, 0, 700, 700);
-		
-		
 		gameP.setVisible(true);
 		
-		board.setOpaque(true);//���� ���� ��� ����� ImagePanel
-		board.setBounds(0, 0, 700, 700);//���� ���� ��� ����� ImagePanel
-		
+		board.setOpaque(true);
+		board.setBounds(0, 0, 700, 700);
 		
 		gameP.add(board , JLayeredPane.DEFAULT_LAYER);
-		//gameP.add(p, JLayeredPane.DRAG_LAYER);
+		
+		for(int i = 0 ; i<Main.allPlayers.size(); i++) {
+			
+			gameP.add(Main.allPlayers.get(i).piece , Integer.valueOf(i+1) );
+		
+		}
 		
 		board.repaint();
-		//p.repaint();
-		//gameP.repaint();
 		
 		panelbig.setLayout(new BorderLayout());
 		panelbig.add(gameP , BorderLayout.CENTER);
@@ -88,177 +76,105 @@ public class GUI extends JFrame{
 		panelbig.add(sidepanel , BorderLayout.EAST);
 
 		sidepanel.setLayout(new BorderLayout());
-		sidepanel.add(button,BorderLayout.SOUTH);
+		sidepanel.add(endTurnButton,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
-
-		ButtonListener listener = new ButtonListener();
-		button.addActionListener(listener);
+		sidepanel.add(mortgageButton,BorderLayout.WEST);
 		
+		ButtonListener listener = new ButtonListener();
+		endTurnButton.addActionListener(listener);
+		
+		if(Main.locations.get(currPlayer.position).getClass().equals(Location.class) || Main.locations.get(currPlayer.position).getClass().equals(GoToJail.class) || Main.locations.get(currPlayer.position).getClass().equals(Tax.class)) {
+			buyButton.setEnabled(false);
+		}
+		else { 
+			if(((Property)Main.locations.get(currPlayer.position)).getOwner() != null){
+				buyButton.setEnabled(false);
+			}
+			
+		}
+		
+		currPlayer.properties.add((Property) Main.locations.get(1));
+		currPlayer.properties.add((Property) Main.locations.get(3));
+		currPlayer.properties.add((Property) Main.locations.get(5));
+		((Property) Main.locations.get(1)).setOwner(currPlayer);
+		((Property) Main.locations.get(3)).setOwner(currPlayer);
+		((Property) Main.locations.get(5)).setOwner(currPlayer);
+		if(currPlayer.properties.size()==0) {
+			mortgageButton.setEnabled(false);
+		}
+		
+		
+		//Button Listeners//
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
 				dice2.rollDice();
+				dice1.paintImmediately(getX(), getY(), getWidth(), getHeight());
+				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
+				int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
+				currPlayer.ChangePosition(newPos);
 			}
 		});
-
-		tempPlayer = new Player("teo", null);
-		tempPlayer.position = 2;
-		tempPlayer.properties.add((Property) Main.locations.get(1));
-		tempPlayer.properties.add((Property) Main.locations.get(5));
-		tempPlayer.properties.add((Property) Main.locations.get(6));
-		//see Location Info Button
 		
-		ShowLocationInfoButtonListener l2 = new ShowLocationInfoButtonListener();
-		seeLocationInfoButton.addActionListener(l2);
-
-		if (tempPlayer.position !=	4 && tempPlayer.position !=	38 && tempPlayer.position % 10 != 0) {
-			sidepanel.add(seeLocationInfoButton);
-		}
-
-		//see cards button
+		buyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
+			}
+		});
 		
-		seeCardsButtonListener l3 = new seeCardsButtonListener();
-		seeCardsButton.addActionListener(l3);
-		sidepanel.add(seeCardsButton, BorderLayout.WEST);
-		
+		mortgageButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame f = new JFrame();
+				JPanel mortgage = new JPanel();
+				JButton b1 = new JButton("Mortgage");
+				JButton b2 = new JButton("Unmortgage");
+				JList <Property> list = new JList(currPlayer.properties.toArray());
+				DefaultListModel<Property> model;
+				
+				mortgage.add(list);
+				mortgage.add(b1);
+				mortgage.add(b2);
+				
+				model = new DefaultListModel<Property>();
+				for(Property prop: currPlayer.properties) {
+					model.addElement(prop);
+				}
+				list.setModel(model);
+					
+				f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				f.pack();
+				f.setSize(400,400);
+				f.setContentPane(mortgage);
+				f.setTitle("Mortgage");
+				f.setVisible(true);
+			}
+		});
 		
 		panelbig.setVisible(true);
 		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); 
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		this.setUndecorated(false);
+		this.setSize(1150,750);
 		this.setVisible(true);
 		this.setTitle("");
 		this.setContentPane(panelbig);
 	}
 	class ButtonListener implements ActionListener {
-		/*
-		 * ��������� �� ����� ���� 50 + 50 (����� ������ ������� ��� �� ����� ��� �������� ��� ������� ,
-		 * �� ������ �� ���������� ��� �� ��� ������ ��� ������) ��� ������
-		 * ���������� ��� �� components ��� �� ����� � ����������.
-		 * 
-		 */
+		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-		
+			currPlayerCounter++;
+			
+			if(currPlayerCounter == Main.allPlayers.size()) {
+				currPlayerCounter = 0;
+			}
+			
+			currPlayer = Main.allPlayers.get(currPlayerCounter);
+			
+			
 			
 		}
 	}
-	class seeCardsButtonListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			JFrame f = new JFrame("Properties");
-			
-			JList<String> PropertiesJList = new JList<String>();
-			DefaultListModel<String> model = new DefaultListModel<String>();
-			for(Property thisProperty:tempPlayer.properties) {
-				if(thisProperty instanceof Street) {
-					model.addElement(thisProperty.name);					
-				}else
-					model.addElement(thisProperty.name);
-			}	
-			PropertiesJList.setModel(model);
-			
-			clickOnPropertiesJListListener listener = new clickOnPropertiesJListListener(PropertiesJList,f);
-			PropertiesJList.addListSelectionListener(listener);
-			f.add(PropertiesJList);
-			f.add(PropertiesJList);
-			f.setSize(400,400); 
-			f.setVisible(true);
-		}
-		class clickOnPropertiesJListListener implements  ListSelectionListener{
-
-			JList<String> PropertiesJList;
-			JFrame f;
-			public clickOnPropertiesJListListener(JList<String> PropertiesJList, JFrame f) {
-				// TODO Auto-generated method stub
-				this.PropertiesJList = PropertiesJList;
-				this.f = f;
-			}
-
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				// TODO Auto-generated method stub
-				
-			    if (!e.getValueIsAdjusting()) {//This line prevents double events
-			    	
-			    	for(Property thisProperty: tempPlayer.properties) {
-			    		if (thisProperty.name.equals(PropertiesJList.getSelectedValue())) {
-			    			if (thisProperty instanceof Street) {
-				    			JTextField tf =new JTextField((thisProperty.name+" has "+((Street) thisProperty).hotel +" hotels and "+((Street) thisProperty).houses+" houses"));
-
-				    			f.add(tf);
-				    			f.revalidate();
-			    			}
-			    			cardImgName = thisProperty.cardImg;
-			    			new MyCanvas();
-			    		}
-			    	}
-			    }
-
-			}
-			class MyCanvas extends Canvas{
-
-				public MyCanvas() {
-
-					super();
-					JFrame f = new JFrame();
-					f.add(this);
-					f.setSize(319,390); 
-					f.setVisible(true);
-					
-				}
-				public void paint(Graphics g) {
-					Toolkit t=Toolkit.getDefaultToolkit();
-					Image i=t.getImage("src/Assets/CardImages/"+cardImgName);
-
-					g.drawImage(i, 0,0,this);	
-				}
-			}
-		}
-	}
-	class ShowLocationInfoButtonListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			if (Main.locations.get(tempPlayer.position) instanceof ChanceAndCommunityChest) {
-				Card thisCard = Main.allCommunityChests.peek();									//PREPEI NA KLEI8EI !!PRIN!! KLEI8EI H cardFunction!!!!
-				cardImgName = thisCard.cardImgName;
-				
-			}else if(Main.locations.get(tempPlayer.position) instanceof Property){
-				Property tempLocation =  (Property) Main.locations.get(tempPlayer.position);;
-				cardImgName = tempLocation.cardImg;
-				
-			}
-			new MyCanvas();
-		}
-		class MyCanvas extends Canvas{
-
-			public MyCanvas() {
-
-				//MyCanvas m = new MyCanvas();
-				super();
-				JFrame f = new JFrame();
-				f.add(this);
-				f.setSize(360,239); 
-				//f.setLayout(null);
-				f.setVisible(true);
-				
-			}
-			public void paint(Graphics g) {
-				Toolkit t=Toolkit.getDefaultToolkit();
-				Image i=t.getImage("src/Assets/CommunityChestsAndChances/"+cardImgName);
-
-				g.drawImage(i, 0,0,this);	
-			}
-		}
-	}
-	
 }

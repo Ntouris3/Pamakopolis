@@ -19,5 +19,22 @@ public abstract class Property extends Location{
 
 
 	public abstract int CalcRent (Player player);
+
+
+	public Player getOwner() {
+		return owner;
+	}
+	
+	
+	public void setOwner(Player owner) {
+		this.owner = owner;
+	}
+
+
+	public String toString() {
+		return name;
+		
+	}
+
 	
 }

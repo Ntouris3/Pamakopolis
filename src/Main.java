@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,6 +11,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
 
 public class Main {
 	
@@ -122,7 +130,7 @@ public class Main {
 		
 		Location l1 = new Location();
 		locations.add(l1);
-		Street s1 = new Street("Mediterranean Avenue","1.png", null,60,30,false,"Brown",2,rent1,0,0,50,250);
+		Street s1 = new Street("Mediterranean Avenue","1.png",null,60,30,false,"Brown",2,rent1,0,0,50,250);
 		locations.add(s1);
 		ChanceAndCommunityChest c = new ChanceAndCommunityChest();
 		locations.add(c);
@@ -279,5 +287,7 @@ public class Main {
 		
 	}
 	
-	 
+	
+	
+	
 }
