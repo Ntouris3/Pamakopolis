@@ -40,21 +40,24 @@ public class Street extends Property{
 	}
 	
 	public void Demolish(Player player, int number) {
-		//XARA DES NAOYME
 		if (number==5) {
 			hotel--;
+			player.balance=player.balance+(hotelCost/2);
 		}else {
 			houses=houses-number;
+			player.balance=player.balance+(houseCost/2)*number;
 		}
 	}
 
 
 	public int CalcRent(Player player) {
 		int sum=0;
-		sum=sum+rent[houses];
 		
-		if (hotel>=1) {
-			sum=sum+(rent[5]*hotel);
+		if (hotel==1) {
+			sum=sum+rent[5];
+		}
+		else if(hotel==0) {
+			sum=sum+rent[houses];			
 		}
 		
 		return sum;
