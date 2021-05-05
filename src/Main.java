@@ -80,9 +80,9 @@ public class Main {
 					e.printStackTrace();
 				}
 		
-		new LoginScreenGUI();
+		//new LoginScreenGUI();
 		
-		//new GUI();
+		new GUI();
 
 	}
 	

@@ -6,8 +6,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.sun.tools.jdeps.JdepsConfiguration.Builder;
-
 public class GUI extends JFrame{
 	private Player tempPlayer;
 	
@@ -85,15 +83,13 @@ public class GUI extends JFrame{
 		sidepanel.add(button,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
+		sidepanel.add(buildButton, BorderLayout.EAST);
 		
 		ButtonListener listener = new ButtonListener();
-		button.addActionListener(listener);
+		buildButton.addActionListener(listener);
 		
-		ButtonListener2 listener2 = new ButtonListener2();
-		buildButton.addActionListener(listener2);
-		
-		ButtonListener3 listener3 = new ButtonListener3();
-		demolishButton.addActionListener(listener3);
+		//ButtonListener3 listener3 = new ButtonListener3();
+		//demolishButton.addActionListener(listener3);
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -111,33 +107,35 @@ public class GUI extends JFrame{
 		this.setTitle("");
 		this.setContentPane(panelbig);
 	}
-	class ButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			
-		}
-	}
+
 	
-	
-	
-	class ButtonListener2 implements ActionListener{
+	class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent arg0) {
 			//BUILD
 			//ask for number 1-4 houses, number 5 hotel
-
+			
+			
+			JFrame f = new JFrame();
+			JPanel panels=new JPanel();
+			
+			
 			JList<String> sugglist= new JList<String>();
 			DefaultListModel<String> listprop = new DefaultListModel<>();
 			
 			//βαζουμε τα props σε μια λιστα που επιλεγει
 			for (Property prop1:tempPlayer.properties) {
-				
-				listprop.addElement(prop1.name);
+				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
+					listprop.addElement(prop1.name);
+				}
 			}
 			sugglist.setModel(listprop);
 			
 			//θα του ζηταμε 1-4 για σπιτια και 5 για ξενοδοχειο
 			JTextField number = null;
 			int counter = (Integer.parseInt(number.getText()));
+			
+			panels.add(number);
+			panels.add(sugglist);
 			
 			sugglist.addListSelectionListener(new ListSelectionListener() {
 	            @Override
@@ -152,6 +150,12 @@ public class GUI extends JFrame{
 	            }
 
 	        });		
+			
+			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			f.setSize(400,400);
+			f.setContentPane(panels);
+			f.setTitle("BUILD");
+			f.setVisible(true);
 			
 			
 		}
