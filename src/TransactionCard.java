@@ -15,6 +15,7 @@ public class TransactionCard extends Card{
     }
 	
     public void cardFunction(Player p){
+    	
         if(!(this.cardImgName.equals("Chance_YHBAECOTB.png")) && !(this.cardImgName.equals("Community_Chest_GOO.png"))){ //direct transaction
             if (kindOfTransaction){
                 p.AddBalance(moneyToTrasact);

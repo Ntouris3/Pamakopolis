@@ -4,3 +4,11 @@
 /Location.class
 /Piece.class
 /Assets/
+/GUI$ButtonListener.class
+/LoginScreenGUI$ButtonListener.class
+/LoginScreenGUI$ButtonListener2.class
+/GUI$ShowLocationInfoButtonListener$MyCanvas.class
+/GUI$ShowLocationInfoButtonListener.class
+/GUI$seeCardsButtonListener$clickOnPropertiesJListListener$MyCanvas.class
+/GUI$seeCardsButtonListener$clickOnPropertiesJListListener.class
+/GUI$seeCardsButtonListener.class

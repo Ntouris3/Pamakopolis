@@ -8,6 +8,7 @@ public class TransportationCard extends Card{
 	}
 	
     public void cardFunction (Player p){
+    	
         int newPosition;
         if(this.cardImgName.equals("Chance_GB3S.png")){ //go back 3 steps card: int this case n is the number of locations to go back
             newPosition = p.position-n;

@@ -1,3 +1,4 @@
+  
 public class GetOutOfJailCard extends Card{
 	
 	public GetOutOfJailCard(String cardImgName) {
@@ -5,14 +6,14 @@ public class GetOutOfJailCard extends Card{
 	}
 
     public void cardFunction(Player p){
-        p.hasJailCard = true; //gives the get out of jail card to the player
-
+    	
+     //   p.hasJailCard = true; //gives the get out of jail card to the player
+        p.jailCard = this;//gives the get out of jail card to the player
 		if (this.cardImgName.equals("Chance_GOOJF.png")){ //removing the card from the deck
 			Main.allChances.remove(this);
 		}else{
 			Main.allCommunityChests.remove(this);
 		}
-
     }
 
 	
