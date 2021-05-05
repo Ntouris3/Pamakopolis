@@ -3,6 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.sun.tools.jdeps.JdepsConfiguration.Builder;
 
@@ -110,16 +112,8 @@ public class GUI extends JFrame{
 		this.setContentPane(panelbig);
 	}
 	class ButtonListener implements ActionListener {
-		/*
-		 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ 50 + 50 (οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ ,
-		 * οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½) οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½
-		 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ components οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
-		 * 
-		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
-		
 			
 		}
 	}
@@ -130,20 +124,35 @@ public class GUI extends JFrame{
 		public void actionPerformed(ActionEvent arg0) {
 			//BUILD
 			//ask for number 1-4 houses, number 5 hotel
-			//πως θα ξερουμε σε ποια ιδιοκτησια θα ειναι 
-			
-			//tempPlayer.position
+
 			JList<String> sugglist= new JList<String>();
 			DefaultListModel<String> listprop = new DefaultListModel<>();
-
+			
+			//βαζουμε τα props σε μια λιστα που επιλεγει
 			for (Property prop1:tempPlayer.properties) {
+				
 				listprop.addElement(prop1.name);
 			}
 			sugglist.setModel(listprop);
 			
-			JTextField number;
+			//θα του ζηταμε 1-4 για σπιτια και 5 για ξενοδοχειο
+			JTextField number = null;
 			int counter = (Integer.parseInt(number.getText()));
-			this.Street.Build(tempPlayer, number);
+			
+			sugglist.addListSelectionListener(new ListSelectionListener() {
+	            @Override
+	            public void valueChanged(ListSelectionEvent arg0) {
+	                if (!arg0.getValueIsAdjusting()) {
+	                	for (int i=0; i<tempPlayer.properties.size(); i++) {
+	                		if (sugglist.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
+	                			((Street)tempPlayer.properties.get(i)).Build(tempPlayer, counter);
+	                		}
+	                	}
+	                }
+	            }
+
+	        });		
+			
 			
 		}
 	}
