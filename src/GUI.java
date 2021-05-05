@@ -12,7 +12,7 @@ public class GUI extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Player tempPlayer;
+	private Player curPlayer;
 	
 	public JPanel panelbig = new JPanel();
 	public JLayeredPane gameP = new JLayeredPane();
@@ -102,17 +102,17 @@ public class GUI extends JFrame{
 			}
 		});
 
-		tempPlayer = new Player("teo", null);
-		tempPlayer.position = 2;
-		tempPlayer.properties.add((Property) Main.locations.get(1));
-		tempPlayer.properties.add((Property) Main.locations.get(5));
-		tempPlayer.properties.add((Property) Main.locations.get(6));
+		for (Card thisc:Main.allChances) {
+			if (thisc instanceof GetOutOfJailCard) {
+				curPlayer.jailCards.add((GetOutOfJailCard) thisc);
+			}
+		}
 		//see Location Info Button
 		
 		ShowLocationInfoButtonListener l2 = new ShowLocationInfoButtonListener();
 		seeLocationInfoButton.addActionListener(l2);
 
-		if (tempPlayer.position !=	4 && tempPlayer.position !=	38 && tempPlayer.position % 10 != 0) {
+		if (curPlayer.position !=	4 && curPlayer.position !=	38 && curPlayer.position % 10 != 0) {
 			sidepanel.add(seeLocationInfoButton);
 		}
 
@@ -157,17 +157,20 @@ public class GUI extends JFrame{
 			
 			JList<String> PropertiesJList = new JList<String>();
 			DefaultListModel<String> model = new DefaultListModel<String>();
-			for(Property thisProperty:tempPlayer.properties) {
+			for(Property thisProperty:curPlayer.properties) {
 				if(thisProperty instanceof Street) {
 					model.addElement(thisProperty.name);					
 				}else
 					model.addElement(thisProperty.name);
 			}	
 			PropertiesJList.setModel(model);
-			
+
 			clickOnPropertiesJListListener listener = new clickOnPropertiesJListListener(PropertiesJList,f);
 			PropertiesJList.addListSelectionListener(listener);
-			f.add(PropertiesJList);
+			JTextField hasInJailCards = new JTextField("Has "+curPlayer.jailCards.size()+" get out of jail cards");
+			hasInJailCards.setEditable(false);
+			f.add(hasInJailCards);
+			f.setLayout(new FlowLayout());
 			f.add(PropertiesJList);
 			f.setSize(400,400); 
 			f.setVisible(true);
@@ -176,10 +179,12 @@ public class GUI extends JFrame{
 
 			JList<String> PropertiesJList;
 			JFrame f;
+
 			public clickOnPropertiesJListListener(JList<String> PropertiesJList, JFrame f) {
 				// TODO Auto-generated method stub
 				this.PropertiesJList = PropertiesJList;
 				this.f = f;
+
 			}
 
 			@Override
@@ -188,11 +193,15 @@ public class GUI extends JFrame{
 				
 			    if (!e.getValueIsAdjusting()) {//This line prevents double events
 			    	
-			    	for(Property thisProperty: tempPlayer.properties) {
+			    	for(Property thisProperty: curPlayer.properties) {
 			    		if (thisProperty.name.equals(PropertiesJList.getSelectedValue())) {
 			    			if (thisProperty instanceof Street) {
-				    			JTextField tf =new JTextField((thisProperty.name+" has "+((Street) thisProperty).hotel +" hotels and "+((Street) thisProperty).houses+" houses"));
 
+			    				JPanel p = new JPanel();
+			    				JTextField tf = new JTextField(thisProperty.name+" has "+((Street) thisProperty).hotel +" hotels and "+((Street) thisProperty).houses+" houses");;
+				    			p.add(tf);
+			    				f.add(p);
+			    				tf.setEditable(false);
 				    			f.add(tf);
 				    			f.revalidate();
 			    			}
@@ -228,12 +237,12 @@ public class GUI extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			if (Main.locations.get(tempPlayer.position) instanceof ChanceAndCommunityChest) {
+			if (Main.locations.get(curPlayer.position) instanceof ChanceAndCommunityChest) {
 				Card thisCard = Main.allCommunityChests.peek();									//PREPEI NA KLEI8EI !!PRIN!! KLEI8EI H cardFunction!!!!
 				cardImgName = thisCard.cardImgName;
 				
-			}else if(Main.locations.get(tempPlayer.position) instanceof Property){
-				Property tempLocation =  (Property) Main.locations.get(tempPlayer.position);;
+			}else if(Main.locations.get(curPlayer.position) instanceof Property){
+				Property tempLocation =  (Property) Main.locations.get(curPlayer.position);;
 				cardImgName = tempLocation.cardImg;
 				
 			}

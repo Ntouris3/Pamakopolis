@@ -5,7 +5,7 @@ public class Player {
 	public Piece piece;
 	public int balance = 1500;
 	public boolean isInJail = false;
-    GetOutOfJailCard jailCard = null;
+    ArrayList<GetOutOfJailCard> jailCards = new ArrayList<GetOutOfJailCard>();
 	public int position = 0;
 	public ArrayList<Property> properties;
 	public int lastDice;
