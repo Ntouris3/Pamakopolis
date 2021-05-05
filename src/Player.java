@@ -4,8 +4,8 @@ public class Player {
 	public String name;
 	public Piece piece;
 	public int balance = 1500;
-	public boolean isInJail = false; 
-	public boolean hasJailCard = false; 
+	public boolean isInJail = false;
+    GetOutOfJailCard jailCard = null;
 	public int position = 0;
 	public ArrayList<Property> properties;
 	public int lastDice;
