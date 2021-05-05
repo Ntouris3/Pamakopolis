@@ -1,16 +1,14 @@
 import java.util.ArrayList;
 
 public class Player {
-
-
 	public String name;
-
 	public Piece piece;
 	public int balance = 1500;
-	private boolean isInJail = false; 
-	private boolean JailCard = false; 
+	public boolean isInJail = false; 
+	public boolean hasJailCard = false; 
 	public int position = 0;
-	private ArrayList<Property> properties;
+	public ArrayList<Property> properties;
+	public int lastDice;
 	
 	public Player(String name, Piece piece) {
 	
@@ -21,23 +19,38 @@ public class Player {
 	}
 	
 	public void AddBalance (int amount) {
-		balance +=  amount;
+		balance += amount;
 	}
 	
 	public void ReduceBalance (int amount) {
 		balance -= amount;
 	}
 	
-	/*public void Buy (Property prop) {
+	public void Buy (Property prop) {
 		properties.add(prop);
 		this.ReduceBalance(prop.price);
-		prop.owner = this.name;
-	}*/
-	
-	public void Sell (Property p) {
-		
+		prop.owner = this;
 	}
-	public void ChangePosition (int newPosition) {
+	
+	public void Sell (Property prop) {
+		properties.remove(prop);
+		this.ReduceBalance((int)0.5*(prop.price));
+	}
+	
+	public void ChangePosition (int newPos) {
+		int temp = newPos % 40;
+		
+		this.piece.MoveOnBoard(this, newPos % 40);
+		if (temp == newPos) {         
+				this.position = newPos;
+			if (temp == 0) AddBalance(200);   //0 is the Start
+		}
+		else 
+		{
+			this.position = newPos % 40;
+			AddBalance(200);
+		}
+		
 		
 	}
 	
@@ -45,15 +58,20 @@ public class Player {
 		
 	}
 	
-	public void AddToMortgage(Property p) {
-
-			
+	public void AddToMortgage(Property prop) {
+		if (!prop.isMortgaged)
+		{
+			AddBalance(prop.mortgage);	
+			prop.isMortgaged = true;
+		}
 	}
 	
-	/*public void Unmortgage (Property p) {
-		if (p.isMortgage)
-			ReduceBalance(1.1*(p.mortgage));
-	}*/
+	public void Unmortgage (Property prop) {
+		if (prop.isMortgaged) {
+		  ReduceBalance((int)1.1*(prop.mortgage));
+		  prop.isMortgaged = false;  
+		}
+	}
 	public ArrayList<Property> PropertiesToBuildIn (){
 		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
 		ArrayList<Property> list = new ArrayList<>();
@@ -61,8 +79,20 @@ public class Player {
 	}
 	
 	public boolean isBankrupt () {
-		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
+		int sum1 = 0, sum2 = 0;
+		
+		for (int i=0; i<properties.size(); i++)
+		{
+			sum1 += properties.get(i).price;//mortgage
+		}
+		
+		/*for (int i=0; i<streets.size();i++)
+		{
+			sum2 += (streets.get(i).hotelCost + streets.get(i).houseCost);
+		}*/
+		
+		if (balance<0 && sum1==0 && sum2==0)
+			return true;
 		return false;
 	}
-	
 }

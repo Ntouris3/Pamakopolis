@@ -109,7 +109,7 @@ public class Piece extends JComponent{
 			
 		}
 		
-		p.position = currPiecePos;
+		//p.position = currPiecePos;
 		
 		
 	}

@@ -88,8 +88,8 @@ public class GUI extends JFrame{
 				dice2.rollDice();
 				dice1.paintImmediately(getX(), getY(), getWidth(), getHeight());
 				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
-				int newPos = (currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue())%40;
-				currPlayer.piece.MoveOnBoard(currPlayer, newPos);
+				int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
+				currPlayer.ChangePosition(newPos);
 			}
 		});
 
