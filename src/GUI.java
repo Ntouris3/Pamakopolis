@@ -38,7 +38,7 @@ public class GUI extends JFrame{
 	private JTextField ownedByField;
 	
 	String cardImgName;
-	
+	JTextField tf = new JTextField();
 	
 	
 	private JPanel playerInformationPanel;
@@ -102,11 +102,19 @@ public class GUI extends JFrame{
 			}
 		});
 
+		curPlayer = new Player("teo", null);
+		curPlayer.position = 1;
+		curPlayer.jailCards.add(new GetOutOfJailCard("Chance_GOOJF.png"));
+		curPlayer.properties.add((Property) Main.locations.get(1));
+		curPlayer.properties.add((Property) Main.locations.get(3));
+		
 		for (Card thisc:Main.allChances) {
 			if (thisc instanceof GetOutOfJailCard) {
 				curPlayer.jailCards.add((GetOutOfJailCard) thisc);
 			}
 		}
+		
+
 		//see Location Info Button
 		
 		ShowLocationInfoButtonListener l2 = new ShowLocationInfoButtonListener();
@@ -198,7 +206,7 @@ public class GUI extends JFrame{
 			    			if (thisProperty instanceof Street) {
 
 			    				JPanel p = new JPanel();
-			    				JTextField tf = new JTextField(thisProperty.name+" has "+((Street) thisProperty).hotel +" hotels and "+((Street) thisProperty).houses+" houses");;
+			    				tf.setText(thisProperty.name+" has "+((Street) thisProperty).hotel +" hotels and "+((Street) thisProperty).houses+" houses");;
 				    			p.add(tf);
 			    				f.add(p);
 			    				tf.setEditable(false);
@@ -240,13 +248,13 @@ public class GUI extends JFrame{
 			if (Main.locations.get(curPlayer.position) instanceof ChanceAndCommunityChest) {
 				Card thisCard = Main.allCommunityChests.peek();									//PREPEI NA KLEI8EI !!PRIN!! KLEI8EI H cardFunction!!!!
 				cardImgName = thisCard.cardImgName;
-				
+				new MyCanvas();
 			}else if(Main.locations.get(curPlayer.position) instanceof Property){
 				Property tempLocation =  (Property) Main.locations.get(curPlayer.position);;
 				cardImgName = tempLocation.cardImg;
-				
+				new MyCanvas2();
 			}
-			new MyCanvas();
+			
 		}
 		class MyCanvas extends Canvas{
 
@@ -268,6 +276,23 @@ public class GUI extends JFrame{
 				g.drawImage(i, 0,0,this);	
 			}
 		}
-	}
+		class MyCanvas2 extends Canvas{
+
+			public MyCanvas2() {
+				super();
+				JFrame f = new JFrame();
+				f.add(this);
+				f.setSize(319,390); 
+				f.setVisible(true);
+					
+			}
+			public void paint(Graphics g) {
+				Toolkit t=Toolkit.getDefaultToolkit();
+				Image i=t.getImage("src/Assets/CardImages/"+cardImgName);
+
+				g.drawImage(i, 0,0,this);	
+			}
+		}
 	
+	}
 }
