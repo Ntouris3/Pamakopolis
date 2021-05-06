@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import javax.swing.JComboBox;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -45,6 +45,7 @@ public class GUI extends JFrame{
 	private Piece player4Piece;
 	private Dice dice1 = new Dice(150, 180, 40, 40);
 	private Dice dice2 = new Dice(210, 180, 40, 40);
+	public int number;
 	
 	
 	public GUI(){
@@ -119,31 +120,64 @@ public class GUI extends JFrame{
 			JPanel panels=new JPanel();
 			
 			
-			JList<String> sugglist= new JList<String>();
-			DefaultListModel<String> listprop = new DefaultListModel<>();
+			//DEMO CODE
+			tempPlayer=new Player("tasos", null);
+			tempPlayer.properties.add((Property) Main.locations.get(1));
+			tempPlayer.properties.add((Property) Main.locations.get(3));
+			tempPlayer.properties.add((Property) Main.locations.get(5));
 			
+			
+			
+			JList<String> propertiestobuild= new JList<String>();
+			DefaultListModel<String> listprop = new DefaultListModel<>();
+						
 			//βαζουμε τα props σε μια λιστα που επιλεγει
 			for (Property prop1:tempPlayer.properties) {
 				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
+					//listprop.addElement(prop1.name);
+				}
+				else {
 					listprop.addElement(prop1.name);
 				}
 			}
-			sugglist.setModel(listprop);
+			propertiestobuild.setModel(listprop);
+			panels.add(propertiestobuild);
 			
-			//θα του ζηταμε 1-4 για σπιτια και 5 για ξενοδοχειο
-			JTextField number=new JTextField();
-			panels.add(number);
-			int counter = (Integer.parseInt(number.getText()));
 			
-			panels.add(sugglist);
+			String[] choices = { "1 house", "2 houses", "3 houses", "4 houses", "Hotel" };
+			JComboBox<String> choicelist = new JComboBox<String>(choices);
+			panels.add(choicelist);
+
+			choicelist.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent event) {
+			    	String selected = (String) choicelist.getSelectedItem();
+			    	if (selected=="1 house") {
+			    		number=1;
+			    	}
+			    	else if(selected=="2 houses") {
+			    		number=2;
+			    	}
+			    	else if(selected=="3 houses") {
+			    		number=3;
+			    	}
+			    	else if(selected=="4 houses") {
+			    		number=4;
+			    	}
+			    	else {
+			    		number=5;
+			    	}
+			    }
+			});			
 			
-			sugglist.addListSelectionListener(new ListSelectionListener() {
+			propertiestobuild.addListSelectionListener(new ListSelectionListener() {
 	            @Override
 	            public void valueChanged(ListSelectionEvent arg0) {
 	                if (!arg0.getValueIsAdjusting()) {
 	                	for (int i=0; i<tempPlayer.properties.size(); i++) {
-	                		if (sugglist.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
-	                			((Street)tempPlayer.properties.get(i)).Build(tempPlayer, counter);
+	                		if (propertiestobuild.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
+	                			((Street)tempPlayer.properties.get(i)).Build(tempPlayer, number);
+	                			System.out.println(number);
+	                			System.out.println(tempPlayer.properties.get(i).name);
 	                		}
 	                	}
 	                }
@@ -157,6 +191,7 @@ public class GUI extends JFrame{
 			f.setTitle("BUILD");
 			f.setVisible(true);
 			
+						
 			
 		}
 	}

@@ -29,6 +29,7 @@ public class Street extends Property{
 	public void Build(Player player, int number) {
 		//GUI input for number of houses #1-4 and hotel #5
 		//αν θελει να χτισει ενα hotel κατευθειαν, τι γινεται??
+		//hotelcost πρεπει να ειναι housecost*5
 		if (number==5) {
 			player.balance=player.balance-hotelCost;
 			hotel++;
