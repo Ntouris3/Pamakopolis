@@ -89,7 +89,7 @@ public class GUI extends JFrame{
 		endTurnButton.addActionListener(listener);
 		
 		//Disabling buy button when player is in a position in which he cant buy a property//
-		if(Main.locations.get(currPlayer.position).getClass().equals(Location.class) || Main.locations.get(currPlayer.position).getClass().equals(GoToJail.class) || Main.locations.get(currPlayer.position).getClass().equals(Tax.class)) {
+		if(Main.locations.get(currPlayer.position).getClass().equals(Location.class) || Main.locations.get(currPlayer.position).getClass().equals(GoToJail.class) || Main.locations.get(currPlayer.position).getClass().equals(Tax.class) || Main.locations.get(currPlayer.position).getClass().equals(ChanceAndCommunityChest.class)) {
 			buyButton.setEnabled(false);
 		}
 		else { 
@@ -135,12 +135,15 @@ public class GUI extends JFrame{
 				JPanel p = new JPanel();
 				JButton b1 = new JButton("Mortgage");
 				JButton b2 = new JButton("Unmortgage");
+				JLabel label1 = new JLabel("                                    ");
 				JList <Property> list = new JList(currPlayer.properties.toArray());
 				DefaultListModel<Property> model;
 				
 				p.add(list);
 				p.add(b1);
 				p.add(b2);
+				p.add(label1);
+				
 				model = new DefaultListModel<Property>();
 				for(Property prop: currPlayer.properties) {
 					model.addElement(prop);
@@ -169,6 +172,7 @@ public class GUI extends JFrame{
 					public void actionPerformed(ActionEvent e) {
 						Property pro = list.getSelectedValue();
 						currPlayer.AddToMortgage(pro);
+						label1.setText(pro.name+" is now on Mortgage");
 					}
 				});
 				
@@ -177,6 +181,7 @@ public class GUI extends JFrame{
 					public void actionPerformed(ActionEvent e) {
 						Property pro = list.getSelectedValue();
 						currPlayer.Unmortgage(pro);
+						label1.setText(pro.name+" is no longer on Mortgage");
 					}
 				});
 					
