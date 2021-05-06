@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.JComboBox;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -22,8 +24,8 @@ public class GUI extends JFrame{
 	
 	private JButton buyButton;
 	private JButton seeLocationInfoButton;
-	private JButton buildButton= new JButton("build");; //δικο μου
-	private JButton demolishButton; //δικο μου
+	private JButton buildButton= new JButton("Build"); //δικο μου
+	private JButton demolishButton= new JButton("Demolish"); //δικο μου
 	private JButton mortgageButton;
 	private JButton tradeButton;
 	private JButton seeCardsButton;
@@ -84,13 +86,29 @@ public class GUI extends JFrame{
 		sidepanel.add(button,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
-		sidepanel.add(buildButton, BorderLayout.SOUTH);
+		
+		
+		sidepanel.add(buildButton);
+		sidepanel.add(demolishButton, BorderLayout.SOUTH);
 		
 		ButtonListener listener = new ButtonListener();
 		buildButton.addActionListener(listener);
 		
-		//ButtonListener3 listener3 = new ButtonListener3();
-		//demolishButton.addActionListener(listener3);
+		ButtonListener2 listener2 = new ButtonListener2();
+		demolishButton.addActionListener(listener2);
+		
+		
+		
+		
+		//DEMO CODE
+		tempPlayer=new Player("tasos", null);
+		tempPlayer.properties.add((Property) Main.locations.get(1));
+		tempPlayer.properties.add((Property) Main.locations.get(3));
+		tempPlayer.properties.add((Property) Main.locations.get(5));
+		
+		
+	
+		
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -118,15 +136,7 @@ public class GUI extends JFrame{
 			
 			JFrame f = new JFrame();
 			JPanel panels=new JPanel();
-			
-			
-			//DEMO CODE
-			tempPlayer=new Player("tasos", null);
-			tempPlayer.properties.add((Property) Main.locations.get(1));
-			tempPlayer.properties.add((Property) Main.locations.get(3));
-			tempPlayer.properties.add((Property) Main.locations.get(5));
-			
-			
+
 			
 			JList<String> propertiestobuild= new JList<String>();
 			DefaultListModel<String> listprop = new DefaultListModel<>();
@@ -141,13 +151,15 @@ public class GUI extends JFrame{
 				}
 			}
 			propertiestobuild.setModel(listprop);
-			panels.add(propertiestobuild);
 			
 			
 			String[] choices = { "1 house", "2 houses", "3 houses", "4 houses", "Hotel" };
 			JComboBox<String> choicelist = new JComboBox<String>(choices);
+			
+			
 			panels.add(choicelist);
-
+			panels.add(propertiestobuild);
+			
 			choicelist.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent event) {
 			    	String selected = (String) choicelist.getSelectedItem();
@@ -196,12 +208,110 @@ public class GUI extends JFrame{
 		}
 	}
 	
-	class ButtonListener3 implements ActionListener{
+	class ButtonListener2 implements ActionListener{
 		public void actionPerformed(ActionEvent arg0) {
-			//DEMOLISH
+			//demolish
+			//ask for number 1-4 houses, number 5 hotel
 			
 			
-		}
+			JFrame f = new JFrame();
+			JPanel panels=new JPanel();
+
+			
+			JList<String> propertiestodemolish= new JList<String>();
+			DefaultListModel<String> listprop = new DefaultListModel<>();
+						
+			//βαζουμε τα props σε μια λιστα που επιλεγει
+			for (Property prop1:tempPlayer.properties) {
+				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
+					//listprop.addElement(prop1.name);
+				}
+				else {
+					listprop.addElement(prop1.name);
+				}
+			}
+			propertiestodemolish.setModel(listprop);
+			
+			ArrayList<String> choices=new ArrayList<String>();
+
+			for (Property prop1:tempPlayer.properties) {
+				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
+					//listprop.addElement(prop1.name);
+				}
+				else {
+		    		if (((Street)prop1).houses==1) {
+		    			choices.add("1 house");
+		    		}
+		    		if (((Street)prop1).houses==2) {
+		    			choices.add("2 houses");
+		    		}
+		    		if (((Street)prop1).houses==3) {
+		    			choices.add("3 houses");
+		    		}
+		    		if (((Street)prop1).houses==4) {
+		    			choices.add("4 houses");
+		    		}
+		    		if (((Street)prop1).hotel==1) {
+		    			choices.add("Hotel");
+		    		}
+				}
+				
+			}
+
+	    	String[] array = choices.toArray(new String[0]);
+			JComboBox<String> choicelist = new JComboBox<String>(array);
+
+
+			
+			
+			panels.add(choicelist);
+			panels.add(propertiestodemolish);
+			
+			choicelist.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent event) {
+			    	String selected = (String) choicelist.getSelectedItem();
+			    	if (selected=="1 house") {
+			    		number=1;
+			    	}
+			    	else if(selected=="2 houses") {
+			    		number=2;
+			    	}
+			    	else if(selected=="3 houses") {
+			    		number=3;
+			    	}
+			    	else if(selected=="4 houses") {
+			    		number=4;
+			    	}
+			    	else {
+			    		number=5;
+			    	}
+			    }
+			});			
+			
+			propertiestodemolish.addListSelectionListener(new ListSelectionListener() {
+	            @Override
+	            public void valueChanged(ListSelectionEvent arg0) {
+	                if (!arg0.getValueIsAdjusting()) {
+	                	for (int i=0; i<tempPlayer.properties.size(); i++) {
+	                		if (propertiestodemolish.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
+	                			((Street)tempPlayer.properties.get(i)).Build(tempPlayer, number);
+	                			System.out.println(number);
+	                			System.out.println(tempPlayer.properties.get(i).name);
+	                		}
+	                	}
+	                }
+	            }
+
+	        });		
+			
+			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			f.setSize(400,400);
+			f.setContentPane(panels);
+			f.setTitle("BUILD");
+			f.setVisible(true);
+			
+						
+				}
 	}
 
 	

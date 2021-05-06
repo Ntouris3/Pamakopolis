@@ -19,6 +19,5 @@ public abstract class Property extends Location{
 
 
 	public abstract int CalcRent (Player player);
-	//public abstract int Build (Player player, int number);
 	
 }

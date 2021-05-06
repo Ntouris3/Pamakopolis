@@ -5,8 +5,8 @@ public class Street extends Property{
 	public String colour;
 	private int propertiesInColour;
 	private int rent[];
-	private int houses;
-	private int hotel ;
+	public int houses;
+	public int hotel ;
 	public int houseCost;
 	public int hotelCost;
 
@@ -30,6 +30,7 @@ public class Street extends Property{
 		//GUI input for number of houses #1-4 and hotel #5
 		//αν θελει να χτισει ενα hotel κατευθειαν, τι γινεται??
 		//hotelcost πρεπει να ειναι housecost*5
+		//θελει pop up window επιβεβαιωσης
 		if (number==5) {
 			player.balance=player.balance-hotelCost;
 			hotel++;
