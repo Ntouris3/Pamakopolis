@@ -99,10 +99,10 @@ public class GUI extends JFrame{
 		}
 		
 		//TESTING MORTGAGE BUTTON BY GIVING RANDOM PROPERTIES TO PLAYER
-		//currPlayer.properties.add((Property) Main.locations.get(1));
-		//currPlayer.properties.add((Property) Main.locations.get(3));
-		//currPlayer.properties.add((Property) Main.locations.get(5));
-		//((Property) Main.locations.get(1)).isMortgaged=true;
+//		currPlayer.properties.add((Property) Main.locations.get(1));
+//		currPlayer.properties.add((Property) Main.locations.get(3));
+//		currPlayer.properties.add((Property) Main.locations.get(5));
+//		((Property) Main.locations.get(1)).isMortgaged=true;
 		
 		//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
 		if(currPlayer.properties.size()==0) {
