@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
@@ -79,33 +82,34 @@ public class GUI extends JFrame{
 		sidepanel.add(endTurnButton,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
-		sidepanel.add(mortgageButton,BorderLayout.WEST);
+		sidepanel.add(mortgageButton);
+		sidepanel.add(buyButton,BorderLayout.WEST);
 		
 		ButtonListener listener = new ButtonListener();
 		endTurnButton.addActionListener(listener);
 		
+		//Disabling buy button when player is in a position in which he cant buy a property//
 		if(Main.locations.get(currPlayer.position).getClass().equals(Location.class) || Main.locations.get(currPlayer.position).getClass().equals(GoToJail.class) || Main.locations.get(currPlayer.position).getClass().equals(Tax.class)) {
 			buyButton.setEnabled(false);
 		}
 		else { 
 			if(((Property)Main.locations.get(currPlayer.position)).getOwner() != null){
 				buyButton.setEnabled(false);
-			}
-			
+			}	
 		}
 		
-		currPlayer.properties.add((Property) Main.locations.get(1));
-		currPlayer.properties.add((Property) Main.locations.get(3));
-		currPlayer.properties.add((Property) Main.locations.get(5));
-		((Property) Main.locations.get(1)).setOwner(currPlayer);
-		((Property) Main.locations.get(3)).setOwner(currPlayer);
-		((Property) Main.locations.get(5)).setOwner(currPlayer);
+		//TESTING MORTGAGE BUTTON BY GIVING RANDOM PROPERTIES TO PLAYER
+		//currPlayer.properties.add((Property) Main.locations.get(1));
+		//currPlayer.properties.add((Property) Main.locations.get(3));
+		//currPlayer.properties.add((Property) Main.locations.get(5));
+		//((Property) Main.locations.get(1)).isMortgaged=true;
+		
+		//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
 		if(currPlayer.properties.size()==0) {
 			mortgageButton.setEnabled(false);
 		}
 		
-		
-		//Button Listeners//
+		//ROLL BUTTON
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
@@ -117,35 +121,69 @@ public class GUI extends JFrame{
 			}
 		});
 		
+		//BUY BUTTON
 		buyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
 			}
 		});
 		
+		//BUTTON THAT CREATES A FRAME FOR ALL THE MORTGAGE OPTIONS A PLAYER HAS
 		mortgageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame f = new JFrame();
-				JPanel mortgage = new JPanel();
+				JPanel p = new JPanel();
 				JButton b1 = new JButton("Mortgage");
 				JButton b2 = new JButton("Unmortgage");
 				JList <Property> list = new JList(currPlayer.properties.toArray());
 				DefaultListModel<Property> model;
 				
-				mortgage.add(list);
-				mortgage.add(b1);
-				mortgage.add(b2);
-				
+				p.add(list);
+				p.add(b1);
+				p.add(b2);
 				model = new DefaultListModel<Property>();
 				for(Property prop: currPlayer.properties) {
 					model.addElement(prop);
 				}
 				list.setModel(model);
+				
+				//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
+				MouseListener mouseListener = new MouseAdapter() {
+				    public void mouseClicked(MouseEvent e) {
+				        if (e.getClickCount() > 0) {
+				        	if(list.getSelectedValue().isMortgaged==true) {
+				        		b1.setEnabled(false);
+				        		b2.setEnabled(true);
+				        	}
+				        	else {
+				        		b2.setEnabled(false);
+				        		b1.setEnabled(true);
+				        	}
+				         }
+				    }
+				};
+				list.addMouseListener(mouseListener);
+				
+				//Mortgage Button//
+				b1.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Property pro = list.getSelectedValue();
+						currPlayer.AddToMortgage(pro);
+					}
+				});
+				
+				//UnMortgage Button//
+				b2.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Property pro = list.getSelectedValue();
+						currPlayer.Unmortgage(pro);
+					}
+				});
 					
 				f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 				f.pack();
 				f.setSize(400,400);
-				f.setContentPane(mortgage);
+				f.setContentPane(p);
 				f.setTitle("Mortgage");
 				f.setVisible(true);
 			}
