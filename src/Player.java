@@ -5,7 +5,9 @@ public class Player {
 	public Piece piece;
 	public int balance = 1500;
 	public boolean isInJail = false;
-    ArrayList<GetOutOfJailCard> jailCards = new ArrayList<GetOutOfJailCard>();
+    public ArrayList<GetOutOfJailCard> jailCards = new ArrayList<GetOutOfJailCard>();
+	public ArrayList <Street> streets = new ArrayList<Street>();
+	public ArrayList <Street> streetsToBuildIn = new ArrayList<Street>();
 	public int position = 0;
 	public ArrayList<Property> properties;
 	public int lastDice;
@@ -26,24 +28,25 @@ public class Player {
 	}
 	
 	public void Buy (Property prop) {
+		Class c = prop.getClass();
 		properties.add(prop);
-		this.ReduceBalance(prop.price);
+		ReduceBalance(prop.price);
 		prop.owner = this;
+		if (c.getName() == "Street")
+		{
+			streets.add((Street)prop);
+		}
 	}
 	
-	public void Sell (Property prop) {
-		properties.remove(prop);
-		this.ReduceBalance((int)0.5*(prop.price));
-	}
-	public void ChangePosition (int newPos) {
-		int temp = newPos % 40;
-		if (temp == newPos) {         
-				position = newPos;
+	public void ChangePosition (int newPosition) {
+		int temp = newPosition % 40;
+		if (temp == newPosition) {         
+			position = newPosition;
 			if (temp == 0) AddBalance(200);   //0 is the Start
 		}
 		else 
 		{
-			position = newPos % 40;
+			position = newPosition % 40;
 			AddBalance(200);
 		}
 	}
@@ -52,24 +55,74 @@ public class Player {
 		
 	}
 	
-	public void AddToMortgage(Property prop) {
-		if (!prop.isMortgaged)
-		{
-			AddBalance(prop.mortgage);	
-			prop.isMortgaged = true;
-		}
+	public void AddToMortgage(Property p) {
+		if (!p.isMortgaged){
+		AddBalance(p.mortgage);	
+		p.isMortgaged = true; 
+	  	}	
 	}
 	
-	public void Unmortgage (Property prop) {
-		if (prop.isMortgaged) {
-		  ReduceBalance((int)1.1*(prop.mortgage));
-		  prop.isMortgaged = false;  
-		}
+	public void Unmortgage (Property p) {
+		if (p.isMortgaged) {
+		  ReduceBalance((int)1.1*(p.mortgage));
+		  p.isMortgaged = false;  
+		} 
 	}
-	public ArrayList<Property> PropertiesToBuildIn (){
-		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
-		ArrayList<Property> list = new ArrayList<>();
-		return list;
+	public ArrayList<Street> PropertiesToBuildIn (){
+		int sumRed=0, sumBlue=0, sumGreen=0, sumOrange=0, 
+			sumBrown=0, sumYellow=0, sumPink=0, sumWhite=0;
+		for(int i=0; i<streets.size(); i++)
+		{
+			if(streets.get(i).colour == "Red")
+				sumRed++;
+			else if (streets.get(i).colour == "Blue")
+				sumBlue++;
+			else if (streets.get(i).colour == "Green")
+				sumGreen++;
+			else if (streets.get(i).colour == "Orange")
+				sumOrange++;
+			else if (streets.get(i).colour == "Brown")
+				sumBrown++;
+			else if (streets.get(i).colour == "Yellow")
+				sumYellow++;
+			else if (streets.get(i).colour == "Pink")
+				sumPink++;
+			else if (streets.get(i).colour == "White")
+				sumWhite++;
+		}
+		if (sumRed==3) {
+			for (Street s:streets)
+				if (s.colour == "Red")
+					streetsToBuildIn.add(s);}
+	    if (sumBlue==2) {
+			for (Street s:streets)
+				if (s.colour == "Blue")
+					streetsToBuildIn.add(s);}
+		if (sumGreen==3) {
+			for (Street s:streets)
+				if (s.colour == "Green")
+					streetsToBuildIn.add(s);}
+		if (sumOrange==3) {
+			for (Street s:streets)
+				if (s.colour == "Orange")
+					streetsToBuildIn.add(s);}
+		if (sumBrown==2) {
+			for (Street s:streets)
+				if (s.colour == "Brown")
+					streetsToBuildIn.add(s);}
+		if (sumYellow==3) {
+			for (Street s:streets)
+				if (s.colour == "Yellow")
+					streetsToBuildIn.add(s);}
+		if (sumPink==3) {
+			for (Street s:streets)
+				if (s.colour == "Pink")
+					streetsToBuildIn.add(s);}
+		if (sumWhite==3) {
+			for (Street s:streets)
+				if (s.colour == "White")
+					streetsToBuildIn.add(s);}
+		return streetsToBuildIn;
 	}
 	
 	public boolean isBankrupt () {
@@ -77,16 +130,17 @@ public class Player {
 		
 		for (int i=0; i<properties.size(); i++)
 		{
-			sum1 += properties.get(i).price;//mortgage
-		}
+			sum1 += properties.get(i).price; //den jerw an prepei na kratw thn timh tou property 
+		}                                        // h to sell price pou prepei na orisoume poso einai
 		
 		for (int i=0; i<streets.size();i++)
 		{
-			sum2 += (streets.get(i).hotelCost + streets.get(i).houseCost);
+			sum2 = sum2 + (streets.get(i).hotelCost + streets.get(i).houseCost);
 		}
 		
-		if (balance<0 && sum1==0 && sum2==0)
+		if (balance<0 && sum1==0 && sum2==00) //to 50 kai ta 0 ta evala dokimastika 
 			return true;
 		return false;
 	}
+	
 }

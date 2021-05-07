@@ -2,13 +2,13 @@ import java.util.ArrayList;
 
 public class Street extends Property{
 	
-	private String colour;
+	public String colour;
 	private int propertiesInColour;
 	private int rent[];
 	public int houses;
 	public int hotel ;
-	private int houseCost;
-	private int hotelCost;
+	public int houseCost;
+	public int hotelCost;
 
 	
 	
