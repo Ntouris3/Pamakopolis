@@ -152,14 +152,21 @@ public class GUI extends JFrame{
 			}
 			propertiestobuild.setModel(listprop);
 			
-			
+			//Φτιάχνουμε τις επιλογές
 			String[] choices = { "1 house", "2 houses", "3 houses", "4 houses", "Hotel" };
 			JComboBox<String> choicelist = new JComboBox<String>(choices);
 			
-			
-			panels.add(choicelist);
+			//Βάζουμε την λίστα props και τι θελει να χτίσει
+			//Να δουμε την Streets με τις χρεωσεις και να πεταει μηνυμα οταν δεν μπορει να χτισει κατι
 			panels.add(propertiestobuild);
+			panels.add(choicelist);
 			
+			//Κουμπί build
+			JButton BButton= new JButton("Build");
+			panels.add(BButton);
+
+			
+			//Επιλογή αριθμου χτισματος
 			choicelist.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent event) {
 			    	String selected = (String) choicelist.getSelectedItem();
@@ -179,28 +186,37 @@ public class GUI extends JFrame{
 			    		number=5;
 			    	}
 			    }
-			});			
+			});	
+
 			
+			//List listener
 			propertiestobuild.addListSelectionListener(new ListSelectionListener() {
 	            @Override
 	            public void valueChanged(ListSelectionEvent arg0) {
 	                if (!arg0.getValueIsAdjusting()) {
 	                	for (int i=0; i<tempPlayer.properties.size(); i++) {
 	                		if (propertiestobuild.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
-	                			((Street)tempPlayer.properties.get(i)).Build(tempPlayer, number);
-	                			System.out.println(number);
-	                			System.out.println(tempPlayer.properties.get(i).name);
+	                			int numb=i;
+	            				BButton.addActionListener(new ActionListener() {
+	            					public void actionPerformed(ActionEvent e) {
+	    	                			((Street)tempPlayer.properties.get(numb)).Build(tempPlayer, number);
+	    	                			System.out.println(tempPlayer.properties.get(numb).name);
+	    	                			System.out.println(number);
+	            					}
+	            				});
 	                		}
 	                	}
 	                }
 	            }
 
-	        });		
+	        });	
+			
+			
 			
 			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			f.setSize(400,400);
+			f.setSize(400,200);
 			f.setContentPane(panels);
-			f.setTitle("BUILD");
+			f.setTitle("Build");
 			f.setVisible(true);
 			
 						
@@ -218,7 +234,7 @@ public class GUI extends JFrame{
 			JPanel panels=new JPanel();
 
 			
-			JList<String> propertiestodemolish= new JList<String>();
+			JList<String> propertiestobuild= new JList<String>();
 			DefaultListModel<String> listprop = new DefaultListModel<>();
 						
 			//βαζουμε τα props σε μια λιστα που επιλεγει
@@ -230,43 +246,23 @@ public class GUI extends JFrame{
 					listprop.addElement(prop1.name);
 				}
 			}
-			propertiestodemolish.setModel(listprop);
+			propertiestobuild.setModel(listprop);
 			
-			ArrayList<String> choices=new ArrayList<String>();
-
-			for (Property prop1:tempPlayer.properties) {
-				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
-					//listprop.addElement(prop1.name);
-				}
-				else {
-		    		if (((Street)prop1).houses==1) {
-		    			choices.add("1 house");
-		    		}
-		    		if (((Street)prop1).houses==2) {
-		    			choices.add("2 houses");
-		    		}
-		    		if (((Street)prop1).houses==3) {
-		    			choices.add("3 houses");
-		    		}
-		    		if (((Street)prop1).houses==4) {
-		    			choices.add("4 houses");
-		    		}
-		    		if (((Street)prop1).hotel==1) {
-		    			choices.add("Hotel");
-		    		}
-				}
-				
-			}
-
-	    	String[] array = choices.toArray(new String[0]);
-			JComboBox<String> choicelist = new JComboBox<String>(array);
-
-
+			//Φτιάχνουμε τις επιλογές
+			String[] choices = { "1 house", "2 houses", "3 houses", "4 houses", "Hotel" };
+			JComboBox<String> choicelist = new JComboBox<String>(choices);
 			
-			
+			//Βάζουμε την λίστα props και τι θελει να χτίσει
+			//Να δουμε την Streets με τις χρεωσεις και να πεταει μηνυμα οταν δεν μπορει να χτισει κατι
+			panels.add(propertiestobuild);
 			panels.add(choicelist);
-			panels.add(propertiestodemolish);
 			
+			//Κουμπί build
+			JButton BButton= new JButton("Build");
+			panels.add(BButton);
+
+			
+			//Επιλογή αριθμου χτισματος
 			choicelist.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent event) {
 			    	String selected = (String) choicelist.getSelectedItem();
@@ -286,32 +282,41 @@ public class GUI extends JFrame{
 			    		number=5;
 			    	}
 			    }
-			});			
+			});	
+
 			
-			propertiestodemolish.addListSelectionListener(new ListSelectionListener() {
+			//List listener
+			propertiestobuild.addListSelectionListener(new ListSelectionListener() {
 	            @Override
 	            public void valueChanged(ListSelectionEvent arg0) {
 	                if (!arg0.getValueIsAdjusting()) {
 	                	for (int i=0; i<tempPlayer.properties.size(); i++) {
-	                		if (propertiestodemolish.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
-	                			((Street)tempPlayer.properties.get(i)).Build(tempPlayer, number);
-	                			System.out.println(number);
-	                			System.out.println(tempPlayer.properties.get(i).name);
+	                		if (propertiestobuild.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
+	                			int numb=i;
+	            				BButton.addActionListener(new ActionListener() {
+	            					public void actionPerformed(ActionEvent e) {
+	    	                			((Street)tempPlayer.properties.get(numb)).Build(tempPlayer, number);
+	    	                			System.out.println(tempPlayer.properties.get(numb).name);
+	    	                			System.out.println(number);
+	            					}
+	            				});
 	                		}
 	                	}
 	                }
 	            }
 
-	        });		
+	        });	
+			
+			
 			
 			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			f.setSize(400,400);
+			f.setSize(400,200);
 			f.setContentPane(panels);
-			f.setTitle("BUILD");
+			f.setTitle("Build");
 			f.setVisible(true);
 			
 						
-				}
+			}
 	}
 
 	
