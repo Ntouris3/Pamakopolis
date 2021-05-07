@@ -102,11 +102,11 @@ public class GUI extends JFrame{
 			}
 		});
 
-		curPlayer = new Player("teo", null);
-		curPlayer.position = 2;
-		curPlayer.jailCards.add(new GetOutOfJailCard("Chance_GOOJF.png"));
-		curPlayer.properties.add((Property) Main.locations.get(1));
-		curPlayer.properties.add((Property) Main.locations.get(3));
+		// curPlayer = new Player("teo", null);
+		// curPlayer.position = 2;
+		// curPlayer.jailCards.add(new GetOutOfJailCard("Chance_GOOJF.png"));
+		// curPlayer.properties.add((Property) Main.locations.get(1));
+		// curPlayer.properties.add((Property) Main.locations.get(3));
 		
 		for (Card thisc:Main.allChances) {
 			if (thisc instanceof GetOutOfJailCard) {
