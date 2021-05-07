@@ -1,13 +1,16 @@
 
 public class Tax extends Location {
 	
-	public void CalcTax (Player player) {
+	private int prices[];
+	
+	public int CalcTax (Player player) {
 		if (player.position == 2) {
-			player.ReduceBalance(200);
+			return prices[0];
 		}
 		
 		if (player.position == 37) {
-			player.ReduceBalance(100);
+			return prices[1];
 		}
+		return 0;
 	}
 }

@@ -12,7 +12,7 @@ public class GUI extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Player curPlayer;
+	private Player currPlayer;
 	
 	public JPanel panelbig = new JPanel();
 	public JLayeredPane gameP = new JLayeredPane();
@@ -102,15 +102,15 @@ public class GUI extends JFrame{
 			}
 		});
 
-		// curPlayer = new Player("teo", null);
-		// curPlayer.position = 2;
-		// curPlayer.jailCards.add(new GetOutOfJailCard("Chance_GOOJF.png"));
-		// curPlayer.properties.add((Property) Main.locations.get(1));
-		// curPlayer.properties.add((Property) Main.locations.get(3));
+//		 currPlayer = new Player("teo", null);
+//		 currPlayer.position = 2;
+//		 currPlayer.jailCards.add(new GetOutOfJailCard("Chance_GOOJF.png"));
+//		 currPlayer.properties.add((Property) Main.locations.get(1));
+//		 currPlayer.properties.add((Property) Main.locations.get(3));
 		
 		for (Card thisc:Main.allChances) {
 			if (thisc instanceof GetOutOfJailCard) {
-				curPlayer.jailCards.add((GetOutOfJailCard) thisc);
+				currPlayer.jailCards.add((GetOutOfJailCard) thisc);
 			}
 		}
 		
@@ -120,8 +120,8 @@ public class GUI extends JFrame{
 		ShowLocationInfoButtonListener l2 = new ShowLocationInfoButtonListener();
 		seeLocationInfoButton.addActionListener(l2);
 
-		if (curPlayer.position != 4 && curPlayer.position != 38 && curPlayer.position % 10 != 0) {
-			if (Main.locations.get(curPlayer.position) instanceof ChanceAndCommunityChest) {
+		if (currPlayer.position != 4 && currPlayer.position != 38 && currPlayer.position % 10 != 0) {
+			if (Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
 				seeLocationInfoButton.setText("Draw the card");
 			}else {
 				seeLocationInfoButton.setText("See Location Info");
@@ -170,7 +170,7 @@ public class GUI extends JFrame{
 			
 			JList<String> PropertiesJList = new JList<String>();
 			DefaultListModel<String> model = new DefaultListModel<String>();
-			for(Property thisProperty:curPlayer.properties) {
+			for(Property thisProperty:currPlayer.properties) {
 				if(thisProperty instanceof Street) {
 					model.addElement(thisProperty.name);					
 				}else
@@ -180,7 +180,7 @@ public class GUI extends JFrame{
 
 			clickOnPropertiesJListListener listener = new clickOnPropertiesJListListener(PropertiesJList,f);
 			PropertiesJList.addListSelectionListener(listener);
-			JTextField hasInJailCards = new JTextField("Has "+curPlayer.jailCards.size()+" get out of jail cards");
+			JTextField hasInJailCards = new JTextField("Has "+currPlayer.jailCards.size()+" get out of jail cards");
 			hasInJailCards.setEditable(false);
 			f.add(hasInJailCards);
 			f.setLayout(new FlowLayout());
@@ -206,7 +206,7 @@ public class GUI extends JFrame{
 				
 			    if (!e.getValueIsAdjusting()) {//This line prevents double events
 			    	
-			    	for(Property thisProperty: curPlayer.properties) {
+			    	for(Property thisProperty: currPlayer.properties) {
 			    		if (thisProperty.name.equals(PropertiesJList.getSelectedValue())) {
 			    			if (thisProperty instanceof Street) {
 
@@ -250,11 +250,11 @@ public class GUI extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			if (Main.locations.get(curPlayer.position) instanceof ChanceAndCommunityChest) {
+			if (Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
 				Card thisCard = Main.allCommunityChests.peek();									//PREPEI NA KLEI8EI !!PRIN!! KLEI8EI H cardFunction!!!!
 				cardImgName = thisCard.cardImgName;
-			}else if(Main.locations.get(curPlayer.position) instanceof Property){
-				Property tempLocation =  (Property) Main.locations.get(curPlayer.position);;
+			}else if(Main.locations.get(currPlayer.position) instanceof Property){
+				Property tempLocation =  (Property) Main.locations.get(currPlayer.position);;
 				cardImgName = tempLocation.cardImg;
 			}
 			new MyCanvas();
