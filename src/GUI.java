@@ -26,7 +26,7 @@ public class GUI extends JFrame{
 	private JButton rollDiceButton;
 	
 	private JButton buyButton;
-	private JButton seeLocationInfoButton = new JButton("See location info");
+	private JButton seeLocationInfoButton = new JButton("");
 	private JButton buildButton;
 	private JButton demolishButton;
 	private JButton mortgageButton;
@@ -103,7 +103,7 @@ public class GUI extends JFrame{
 		});
 
 		curPlayer = new Player("teo", null);
-		curPlayer.position = 1;
+		curPlayer.position = 2;
 		curPlayer.jailCards.add(new GetOutOfJailCard("Chance_GOOJF.png"));
 		curPlayer.properties.add((Property) Main.locations.get(1));
 		curPlayer.properties.add((Property) Main.locations.get(3));
@@ -120,7 +120,12 @@ public class GUI extends JFrame{
 		ShowLocationInfoButtonListener l2 = new ShowLocationInfoButtonListener();
 		seeLocationInfoButton.addActionListener(l2);
 
-		if (curPlayer.position !=	4 && curPlayer.position !=	38 && curPlayer.position % 10 != 0) {
+		if (curPlayer.position != 4 && curPlayer.position != 38 && curPlayer.position % 10 != 0) {
+			if (Main.locations.get(curPlayer.position) instanceof ChanceAndCommunityChest) {
+				seeLocationInfoButton.setText("Draw the card");
+			}else {
+				seeLocationInfoButton.setText("See Location Info");
+			}
 			sidepanel.add(seeLocationInfoButton);
 		}
 
@@ -248,12 +253,11 @@ public class GUI extends JFrame{
 			if (Main.locations.get(curPlayer.position) instanceof ChanceAndCommunityChest) {
 				Card thisCard = Main.allCommunityChests.peek();									//PREPEI NA KLEI8EI !!PRIN!! KLEI8EI H cardFunction!!!!
 				cardImgName = thisCard.cardImgName;
-				new MyCanvas();
 			}else if(Main.locations.get(curPlayer.position) instanceof Property){
 				Property tempLocation =  (Property) Main.locations.get(curPlayer.position);;
 				cardImgName = tempLocation.cardImg;
-				new MyCanvas2();
 			}
+			new MyCanvas();
 			
 		}
 		class MyCanvas extends Canvas{
@@ -264,35 +268,26 @@ public class GUI extends JFrame{
 				super();
 				JFrame f = new JFrame();
 				f.add(this);
-				f.setSize(360,239); 
+				if (cardImgName.matches(".*\\d.*") && !cardImgName.equals("Chance_GB3S.png") ) {
+					f.setSize(319,390);
+				}else{
+					f.setSize(360,239);
+				}
 				//f.setLayout(null);
 				f.setVisible(true);
 				
 			}
 			public void paint(Graphics g) {
 				Toolkit t=Toolkit.getDefaultToolkit();
-				Image i=t.getImage("src/Assets/CommunityChestsAndChances/"+cardImgName);
-
-				g.drawImage(i, 0,0,this);	
-			}
-		}
-		class MyCanvas2 extends Canvas{
-
-			public MyCanvas2() {
-				super();
-				JFrame f = new JFrame();
-				f.add(this);
-				f.setSize(319,390); 
-				f.setVisible(true);
+				Image i;
+				if (cardImgName.matches(".*\\d.*") && !cardImgName.equals("Chance_GB3S.png") ) {
+					i=t.getImage("src/Assets/CardImages/"+cardImgName);
+				}else {
 					
-			}
-			public void paint(Graphics g) {
-				Toolkit t=Toolkit.getDefaultToolkit();
-				Image i=t.getImage("src/Assets/CardImages/"+cardImgName);
-
+					i=t.getImage("src/Assets/CommunityChestsAndChances/"+cardImgName);
+				}
 				g.drawImage(i, 0,0,this);	
 			}
 		}
-	
 	}
 }
