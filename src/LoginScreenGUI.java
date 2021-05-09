@@ -20,7 +20,7 @@ public class LoginScreenGUI extends JFrame {
 	private DefaultListModel<ImageIcon> listModel = new DefaultListModel();
 	private JButton addPlayerButton = new JButton("Προσθήκη παίκτη");
 	private JButton startGameButton = new JButton("Έναρξη παιχνιδιού");
-	private Piece piece1,piece2,piece3,piece4,piece5,piece6;
+
 	
 	
 	
@@ -57,20 +57,7 @@ public class LoginScreenGUI extends JFrame {
 			e.printStackTrace();
 		}
 		
-		/*piece1 = new Piece("Car_adobespark.png");
-		piece2 = new Piece("Dog_adobespark.png");
-		piece3 = new Piece("Hat_adobespark.png");
-		piece4 = new Piece("Ship_adobespark.png");
-		piece5 = new Piece("Shoe_adobespark.png");
-		piece6 = new Piece("Thimble_adobespark.png");*/
-		/*
-		listModel.addElement(piece1.pieceimg);
-		listModel.addElement(piece2.pieceimg);
-		listModel.addElement(piece3.pieceimg);
-		listModel.addElement(piece4.pieceimg);
-		listModel.addElement(piece5.pieceimg);
-		listModel.addElement(piece6.pieceimg);
-		*/
+		
 		sel_piece = new JList<ImageIcon>(listModel);
 		sel_piece.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		sel_piece.setVisibleRowCount(1);
@@ -121,6 +108,8 @@ public class LoginScreenGUI extends JFrame {
 				listModel.removeElement(sel_piece.getSelectedValue());
 			}
 			
+			playerNameField.setText("Όνομα παίκτη ...");
+			
 		}
 		
 		public boolean playerExists(String aName) {
@@ -140,14 +129,14 @@ public class LoginScreenGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			/*if(Player.allPlayers.size()>2) {
-				new Gui(Player.allPlayers.getIndex(0));
-				
+			if(Main.allPlayers.size()>=2) {
+				new GUI();
+				dispose();
 				
 			}
 			else{
 				JOptionPane.showMessageDialog(panel, "Απαιτούνται τουλάχιστον 2 παίκτες για την έναρξη του παιχνιδιού!");
-			}*/
+			}
 			
 		}
 		
