@@ -6,6 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class GUI extends JFrame{
 	public Player currPlayer;
@@ -182,9 +184,10 @@ public class GUI extends JFrame{
 				list.setModel(model);
 				
 				//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
-				MouseListener mouseListener = new MouseAdapter() {
-				    public void mouseClicked(MouseEvent e) {
-				        	if(list.getSelectedValue().isMortgaged==true) {
+				list.addListSelectionListener( new ListSelectionListener() {
+					   @Override
+						public void valueChanged(ListSelectionEvent e) {
+						   if(list.getSelectedValue().isMortgaged==true) {
 				        		b2.setVisible(true);
 				        		b1.setVisible(false);
 				        		p.revalidate();
@@ -195,10 +198,10 @@ public class GUI extends JFrame{
 				        		b2.setVisible(false);
 				        		p.revalidate();
 								p.repaint();
-				        	}
-				         }
-					};
-				list.addMouseListener(mouseListener);
+				        	}	
+						}
+				   });
+			
 				
 				//Mortgage Button//
 				b1.addActionListener(new ActionListener() {
