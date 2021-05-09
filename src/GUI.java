@@ -96,8 +96,8 @@ public class GUI extends JFrame{
 		sidepanel.add(mortgageButton);
 		sidepanel.add(buyButton,BorderLayout.WEST);
 
-		sidepanel.add(buildButton);
-		sidepanel.add(demolishButton);
+		//sidepanel.add(buildButton);
+		//sidepanel.add(demolishButton);
 
 		
 		ButtonListener listener3 = new ButtonListener();
@@ -202,13 +202,6 @@ public class GUI extends JFrame{
 					}
 		});
 		
-		for (Card thisc:Main.allChances) {
-			if (thisc instanceof GetOutOfJailCard) {
-				currPlayer.jailCards.add((GetOutOfJailCard) thisc);
-			}
-		}
-		
-
 		//see Location Info Button
 		
 		ShowLocationInfoButtonListener l2 = new ShowLocationInfoButtonListener();
@@ -227,7 +220,7 @@ public class GUI extends JFrame{
 		
 		seeCardsButtonListener l3 = new seeCardsButtonListener();
 		seeCardsButton.addActionListener(l3);
-		sidepanel.add(seeCardsButton, BorderLayout.WEST);
+		//sidepanel.add(seeCardsButton, BorderLayout.WEST);
 		
 		
 		panelbig.setVisible(true);
