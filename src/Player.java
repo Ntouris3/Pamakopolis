@@ -30,10 +30,6 @@ public class Player {
 		this.ReduceBalance(balance);
 	}
 	
-	public void Sell (Property prop) {
-		properties.remove(prop);
-		this.ReduceBalance(balance);
-	}
 	public void ChangePosition (int newPosition) {
 		
 	}
