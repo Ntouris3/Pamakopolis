@@ -43,7 +43,9 @@ public class GUI extends JFrame{
 	
 	public GUI(){
 		buyButton = new JButton("BUY");
+		buyButton.setVisible(false);		
 		mortgageButton = new JButton("MORTGAGE");
+		mortgageButton.setVisible(false);
 		Main.allPlayers.add(new Player("Chris",new Piece(null)));
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		
@@ -65,7 +67,6 @@ public class GUI extends JFrame{
 		gameP.add(board , JLayeredPane.DEFAULT_LAYER);
 		
 		for(int i = 0 ; i<Main.allPlayers.size(); i++) {
-			
 			gameP.add(Main.allPlayers.get(i).piece , Integer.valueOf(i+1) );
 		
 		}
@@ -94,6 +95,49 @@ public class GUI extends JFrame{
 		//currPlayer.properties.add((Property) Main.locations.get(5));
 		//((Property) Main.locations.get(1)).isMortgaged=true;
 		
+		//Disabling buy button when player is in a position in which he cant buy a property//
+		if(Main.locations.get(currPlayer.position).getClass().equals(Street.class) || Main.locations.get(currPlayer.position).getClass().equals(Utility.class) || Main.locations.get(currPlayer.position).getClass().equals(Railroad.class)) {
+			if(((Property)Main.locations.get(currPlayer.position)).getOwner() == null){
+				buyButton.setVisible(true);
+				sidepanel.revalidate();
+				sidepanel.repaint();
+			}
+			else {
+				buyButton.setVisible(false);
+				sidepanel.revalidate();
+				sidepanel.repaint();
+				if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
+					//Paying Rent//
+					currPlayer.ReduceBalance(((Property)Main.locations.get(currPlayer.position)).CalcRent(currPlayer));
+					((Property)Main.locations.get(currPlayer.position)).getOwner().AddBalance(((Property)Main.locations.get(currPlayer.position)).CalcRent(currPlayer));
+				}
+				
+			}
+		}	
+		else {
+				buyButton.setVisible(false);
+				sidepanel.revalidate();
+				sidepanel.repaint();
+			}
+		
+		//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
+		if(currPlayer.properties.size()==0) {
+			mortgageButton.setVisible(false);
+			sidepanel.revalidate();
+			sidepanel.repaint();
+		}
+		else {
+			mortgageButton.setVisible(true);
+			sidepanel.revalidate();
+			sidepanel.repaint();
+		}
+		
+		//PAYING TAX WHEN HITTING TAX BLOCK//
+		if(Main.locations.get(currPlayer.position).getClass().equals((Tax.class))){
+			((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
+		}
+		
+		
 		//ROLL BUTTON
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -103,38 +147,6 @@ public class GUI extends JFrame{
 				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
 				int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
 				currPlayer.ChangePosition(newPos);
-				
-				//Disabling buy button when player is in a position in which he cant buy a property//
-				if(Main.locations.get(currPlayer.position).getClass().equals(Location.class) || Main.locations.get(currPlayer.position).getClass().equals(GoToJail.class) || Main.locations.get(currPlayer.position).getClass().equals(Tax.class) || Main.locations.get(currPlayer.position).getClass().equals(ChanceAndCommunityChest.class)) {
-					buyButton.setEnabled(false);
-					sidepanel.revalidate();
-					sidepanel.repaint();
-				}
-				else { 
-					if(((Property)Main.locations.get(currPlayer.position)).getOwner() != null){
-						buyButton.setEnabled(false);
-						sidepanel.revalidate();
-						sidepanel.repaint();
-						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
-							//Paying Rent//
-							currPlayer.ReduceBalance(((Property)Main.locations.get(currPlayer.position)).CalcRent(currPlayer));
-							((Property)Main.locations.get(currPlayer.position)).getOwner().AddBalance(((Property)Main.locations.get(currPlayer.position)).CalcRent(currPlayer));
-						}
-					}
-					
-				}
-				
-				//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
-				if(currPlayer.properties.size()==0) {
-					mortgageButton.setEnabled(false);
-					sidepanel.revalidate();
-					sidepanel.repaint();
-				}
-				
-				//PAYING TAX WHEN HITTING TAX BLOCK//
-				if(Main.locations.get(currPlayer.position).getClass().equals((Tax.class))){
-					((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
-				}
 			}
 		});
 		
@@ -151,7 +163,9 @@ public class GUI extends JFrame{
 				JFrame f = new JFrame();
 				JPanel p = new JPanel();
 				JButton b1 = new JButton("Mortgage");
+				b1.setVisible(false);
 				JButton b2 = new JButton("Unmortgage");
+				b2.setVisible(false);
 				JLabel label1 = new JLabel("                                    ");
 				JList <Property> list = new JList(currPlayer.properties.toArray());
 				DefaultListModel<Property> model;
@@ -170,18 +184,20 @@ public class GUI extends JFrame{
 				//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
 				MouseListener mouseListener = new MouseAdapter() {
 				    public void mouseClicked(MouseEvent e) {
-				        if (e.getClickCount() > 0) {
 				        	if(list.getSelectedValue().isMortgaged==true) {
-				        		b1.setEnabled(false);
-				        		b2.setEnabled(true);
+				        		b2.setVisible(true);
+				        		b1.setVisible(false);
+				        		p.revalidate();
+								p.repaint();
 				        	}
 				        	else {
-				        		b2.setEnabled(false);
-				        		b1.setEnabled(true);
+				        		b1.setVisible(true);
+				        		b2.setVisible(false);
+				        		p.revalidate();
+								p.repaint();
 				        	}
 				         }
-				    }
-				};
+					};
 				list.addMouseListener(mouseListener);
 				
 				//Mortgage Button//
