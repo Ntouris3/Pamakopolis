@@ -46,14 +46,14 @@ public class Player {
 	public void ChangePosition (int newPos) {
 		int temp = newPos % 40;
 		
-		this.piece.MoveOnBoard(this, newPos % 40);
+		this.piece.MoveOnBoard(this, temp);
 		if (temp == newPos) {         
 				this.position = newPos;
 			if (temp == 0) AddBalance(200);   //0 is the Start
 		}
 		else 
 		{
-			this.position = newPos % 40;
+			this.position = temp;
 			AddBalance(200);
 		}
 		
