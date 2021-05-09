@@ -77,7 +77,7 @@ public class Player {
 		  prop.isMortgaged = false;  
 		}
 	}
-	public ArrayList<Property> PropertiesToBuildIn (){
+	public ArrayList<Street> PropertiesToBuildIn (){
 		int sumRed=0, sumBlue=0, sumGreen=0, sumOrange=0, 
 			sumBrown=0, sumYellow=0, sumPink=0, sumWhite=0;
 		for(int i=0; i<streets.size(); i++)
