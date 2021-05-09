@@ -32,6 +32,8 @@ public class GUI extends JFrame{
 	
 	private JTextField ownedByField;
 	
+	public int currPlayerCounter = 0;
+	
 	String cardImgName;
 	JTextField tf = new JTextField();
 	
@@ -83,6 +85,7 @@ public class GUI extends JFrame{
 		panelbig.add(sidepanel , BorderLayout.EAST);
 
 		sidepanel.setLayout(new BorderLayout());
+		sidepanel.add(endTurnButton,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
 
@@ -95,6 +98,9 @@ public class GUI extends JFrame{
 		
 		ButtonListener2 listener2 = new ButtonListener2();
 		demolishButton.addActionListener(listener2);
+		
+		endTurnButtonListener listener = new ButtonListener();
+		endTurnButton.addActionListener(listener);
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -146,7 +152,7 @@ public class GUI extends JFrame{
 		this.setTitle("");
 		this.setContentPane(panelbig);
 	}
-	class ButtonListener implements ActionListener {
+	class endTurnButtonListener implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
