@@ -88,26 +88,11 @@ public class GUI extends JFrame{
 		ButtonListener listener = new ButtonListener();
 		endTurnButton.addActionListener(listener);
 		
-		//Disabling buy button when player is in a position in which he cant buy a property//
-		if(Main.locations.get(currPlayer.position).getClass().equals(Location.class) || Main.locations.get(currPlayer.position).getClass().equals(GoToJail.class) || Main.locations.get(currPlayer.position).getClass().equals(Tax.class) || Main.locations.get(currPlayer.position).getClass().equals(ChanceAndCommunityChest.class)) {
-			buyButton.setEnabled(false);
-		}
-		else { 
-			if(((Property)Main.locations.get(currPlayer.position)).getOwner() != null){
-				buyButton.setEnabled(false);
-			}	
-		}
-		
 		//TESTING MORTGAGE BUTTON BY GIVING RANDOM PROPERTIES TO PLAYER
-//		currPlayer.properties.add((Property) Main.locations.get(1));
-//		currPlayer.properties.add((Property) Main.locations.get(3));
-//		currPlayer.properties.add((Property) Main.locations.get(5));
-//		((Property) Main.locations.get(1)).isMortgaged=true;
-		
-		//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
-		if(currPlayer.properties.size()==0) {
-			mortgageButton.setEnabled(false);
-		}
+		//currPlayer.properties.add((Property) Main.locations.get(1));
+		//currPlayer.properties.add((Property) Main.locations.get(3));
+		//currPlayer.properties.add((Property) Main.locations.get(5));
+		//((Property) Main.locations.get(1)).isMortgaged=true;
 		
 		//ROLL BUTTON
 		rollButton.addActionListener(new ActionListener() {
@@ -118,6 +103,27 @@ public class GUI extends JFrame{
 				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
 				int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
 				currPlayer.ChangePosition(newPos);
+				
+				//Disabling buy button when player is in a position in which he cant buy a property//
+				if(Main.locations.get(currPlayer.position).getClass().equals(Location.class) || Main.locations.get(currPlayer.position).getClass().equals(GoToJail.class) || Main.locations.get(currPlayer.position).getClass().equals(Tax.class) || Main.locations.get(currPlayer.position).getClass().equals(ChanceAndCommunityChest.class)) {
+					buyButton.setEnabled(false);
+					sidepanel.revalidate();
+					sidepanel.repaint();
+				}
+				else { 
+					if(((Property)Main.locations.get(currPlayer.position)).getOwner() != null){
+						buyButton.setEnabled(false);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+					}	
+				}
+				
+				//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
+				if(currPlayer.properties.size()==0) {
+					mortgageButton.setEnabled(false);
+					sidepanel.revalidate();
+					sidepanel.repaint();
+				}
 			}
 		});
 		
