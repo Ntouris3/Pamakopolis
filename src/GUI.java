@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -50,6 +53,9 @@ public class GUI extends JFrame{
 	
 	
 	public GUI(){
+		buyButton = new JButton("BUY");
+		mortgageButton = new JButton("MORTGAGE");
+		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		jl.setBounds(6, 6, 700, 700);
 		jl.setPreferredSize(new Dimension(400, 400));
@@ -86,6 +92,9 @@ public class GUI extends JFrame{
 		sidepanel.add(endTurnButton,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
+		
+		sidepanel.add(mortgageButton);
+		sidepanel.add(buyButton,BorderLayout.WEST);
 
 		sidepanel.add(buildButton);
 		sidepanel.add(demolishButton);
@@ -100,6 +109,11 @@ public class GUI extends JFrame{
 		endTurnButtonListener listener = new endTurnButtonListener();
 		endTurnButton.addActionListener(listener);
 		
+		//PAYING TAX WHEN HITTING TAX BLOCK//
+		if(Main.locations.get(currPlayer.position).getClass().equals((Tax.class))){
+				((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
+		  }
+		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
@@ -110,7 +124,83 @@ public class GUI extends JFrame{
 				currPlayer.ChangePosition(newPos);
 			}
 		});
-
+		
+		//BUY BUTTON
+		buyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
+			}
+		});
+		
+		//BUTTON THAT CREATES A FRAME FOR ALL THE MORTGAGE OPTIONS A PLAYER HAS
+		mortgageButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame f = new JFrame();
+				JPanel p = new JPanel();
+				JButton b1 = new JButton("Mortgage");
+				b1.setVisible(false);
+				JButton b2 = new JButton("Unmortgage");
+				b2.setVisible(false);
+				JLabel label1 = new JLabel("                                    ");
+				JList <Property> list = new JList(currPlayer.properties.toArray());
+				DefaultListModel<Property> model;
+					
+				p.add(list);
+				p.add(b1);
+				p.add(b2);
+				p.add(label1);
+						
+				model = new DefaultListModel<Property>();
+				for(Property prop: currPlayer.properties) {
+					model.addElement(prop);
+				}
+				list.setModel(model);
+						
+						//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
+				MouseListener mouseListener = new MouseAdapter() {
+					  public void mouseClicked(MouseEvent e) {
+						       if(list.getSelectedValue().isMortgaged==true) {
+						        	b2.setVisible(true);
+						        	b1.setVisible(false);
+						        	p.revalidate();
+									p.repaint();
+						        }
+						        else {
+						        	b1.setVisible(true);
+						        	b2.setVisible(false);
+						        	p.revalidate();
+									p.repaint();
+						        }
+						        }
+						};
+						list.addMouseListener(mouseListener);
+						
+						//Mortgage Button//
+						b1.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								Property pro = list.getSelectedValue();
+								currPlayer.AddToMortgage(pro);
+								label1.setText(pro.name+" is now on Mortgage");
+							}
+						});
+						
+						//UnMortgage Button//
+						b2.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								Property pro = list.getSelectedValue();
+								currPlayer.Unmortgage(pro);
+								label1.setText(pro.name+" is no longer on Mortgage");
+							}
+						});
+							
+						f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+						f.pack();
+						f.setSize(400,400);
+						f.setContentPane(p);
+						f.setTitle("Mortgage");
+						f.setVisible(true);
+					}
+		});
 		
 		for (Card thisc:Main.allChances) {
 			if (thisc instanceof GetOutOfJailCard) {

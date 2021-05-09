@@ -44,7 +44,7 @@ public class Dice extends JPanel {
 			g.fillOval(getWidth()/2 + 10, getHeight()/2 + 10, 5, 5);
 			g.fillOval(getWidth()/2 - 5/2, getHeight()/2 - 5/2, 5, 5);
 		} else {
-			g.fillRect(getWidth()/2 - 15, getHeight()/2 + 10, 5, 5);
+			g.fillOval(getWidth()/2 - 15, getHeight()/2 + 10, 5, 5);
 			g.fillOval(getWidth()/2 + 10, getHeight()/2 - 15, 5, 5);
 			g.fillOval(getWidth()/2 - 15, getHeight()/2 - 15, 5, 5);
 			g.fillOval(getWidth()/2 + 10, getHeight()/2 + 10, 5, 5);
