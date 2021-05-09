@@ -3,15 +3,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class GUI extends JFrame{
-	private Player tempPlayer;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Player currPlayer;
 	
 	public JPanel panelbig = new JPanel();
 	public JLayeredPane gameP = new JLayeredPane();
 	public JPanel sidepanel = new JPanel();
 	//public Piece p = new Piece();
-	public JButton button = new JButton("Test");
+	public JButton button = new JButton("Test Button");
 	public JLayeredPane jl = new JLayeredPane();
 	public JButton rollButton = new JButton("Roll Dice");
 	private JPanel propertyOptionsPanel;
@@ -19,19 +26,19 @@ public class GUI extends JFrame{
 	private JButton rollDiceButton;
 	
 	private JButton buyButton;
-	private JButton seeLocationInfoButton;
+	private JButton seeLocationInfoButton = new JButton("");
 	private JButton buildButton;
 	private JButton demolishButton;
 	private JButton mortgageButton;
 	private JButton tradeButton;
-	private JButton seeCardsButton;
+	private JButton seeCardsButton = new JButton("See Cards");
 		
 	private JButton endTurnButton;
 	
 	private JTextField ownedByField;
 	
-	
-	
+	String cardImgName;
+	JTextField tf = new JTextField();
 	
 	
 	private JPanel playerInformationPanel;
@@ -95,11 +102,47 @@ public class GUI extends JFrame{
 			}
 		});
 
+//		 currPlayer = new Player("teo", null);
+//		 currPlayer.position = 2;
+//		 currPlayer.jailCards.add(new GetOutOfJailCard("Chance_GOOJF.png"));
+//		 currPlayer.properties.add((Property) Main.locations.get(1));
+//		 currPlayer.properties.add((Property) Main.locations.get(3));
+		
+		for (Card thisc:Main.allChances) {
+			if (thisc instanceof GetOutOfJailCard) {
+				currPlayer.jailCards.add((GetOutOfJailCard) thisc);
+			}
+		}
+		
+
+		//see Location Info Button
+		
+		ShowLocationInfoButtonListener l2 = new ShowLocationInfoButtonListener();
+		seeLocationInfoButton.addActionListener(l2);
+
+		if (currPlayer.position != 4 && currPlayer.position != 38 && currPlayer.position % 10 != 0) {
+			if (Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
+				seeLocationInfoButton.setText("Draw the card");
+			}else {
+				seeLocationInfoButton.setText("See Location Info");
+			}
+			sidepanel.add(seeLocationInfoButton);
+		}
+
+		//see cards button
+		
+		seeCardsButtonListener l3 = new seeCardsButtonListener();
+		seeCardsButton.addActionListener(l3);
+		sidepanel.add(seeCardsButton, BorderLayout.WEST);
+		
+		
 		panelbig.setVisible(true);
 		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000,1000);
+		//this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); 
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		this.setUndecorated(false);
 		this.setVisible(true);
 		this.setTitle("");
 		this.setContentPane(panelbig);
@@ -118,4 +161,133 @@ public class GUI extends JFrame{
 			
 		}
 	}
+	class seeCardsButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			JFrame f = new JFrame("Properties");
+			
+			JList<String> PropertiesJList = new JList<String>();
+			DefaultListModel<String> model = new DefaultListModel<String>();
+			for(Property thisProperty:currPlayer.properties) {
+				if(thisProperty instanceof Street) {
+					model.addElement(thisProperty.name);					
+				}else
+					model.addElement(thisProperty.name);
+			}	
+			PropertiesJList.setModel(model);
+
+			clickOnPropertiesJListListener listener = new clickOnPropertiesJListListener(PropertiesJList,f);
+			PropertiesJList.addListSelectionListener(listener);
+			JTextField hasInJailCards = new JTextField("Has "+currPlayer.jailCards.size()+" get out of jail cards");
+			hasInJailCards.setEditable(false);
+			f.add(hasInJailCards);
+			f.setLayout(new FlowLayout());
+			f.add(PropertiesJList);
+			f.setSize(400,400); 
+			f.setVisible(true);
+		}
+		class clickOnPropertiesJListListener implements  ListSelectionListener{
+
+			JList<String> PropertiesJList;
+			JFrame f;
+
+			public clickOnPropertiesJListListener(JList<String> PropertiesJList, JFrame f) {
+				// TODO Auto-generated method stub
+				this.PropertiesJList = PropertiesJList;
+				this.f = f;
+
+			}
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			    if (!e.getValueIsAdjusting()) {//This line prevents double events
+			    	
+			    	for(Property thisProperty: currPlayer.properties) {
+			    		if (thisProperty.name.equals(PropertiesJList.getSelectedValue())) {
+			    			if (thisProperty instanceof Street) {
+
+			    				JPanel p = new JPanel();
+			    				tf.setText(thisProperty.name+" has "+((Street) thisProperty).hotel +" hotels and "+((Street) thisProperty).houses+" houses");;
+				    			p.add(tf);
+			    				f.add(p);
+			    				tf.setEditable(false);
+				    			f.add(tf);
+				    			f.revalidate();
+			    			}
+			    			cardImgName = thisProperty.cardImg;
+			    			new MyCanvas();
+			    		}
+			    	}
+			    }
+
+			}
+			class MyCanvas extends Canvas{
+
+				public MyCanvas() {
+
+					super();
+					JFrame f = new JFrame();
+					f.add(this);
+					f.setSize(319,390); 
+					f.setVisible(true);
+					
+				}
+				public void paint(Graphics g) {
+					Toolkit t=Toolkit.getDefaultToolkit();
+					Image i=t.getImage("src/Assets/CardImages/"+cardImgName);
+
+					g.drawImage(i, 0,0,this);	
+				}
+			}
+		}
 	}
+	class ShowLocationInfoButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			if (Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
+				Card thisCard = Main.allCommunityChests.peek();									//PREPEI NA KLEI8EI !!PRIN!! KLEI8EI H cardFunction!!!!
+				cardImgName = thisCard.cardImgName;
+			}else if(Main.locations.get(currPlayer.position) instanceof Property){
+				Property tempLocation =  (Property) Main.locations.get(currPlayer.position);;
+				cardImgName = tempLocation.cardImg;
+			}
+			new MyCanvas();
+			
+		}
+		class MyCanvas extends Canvas{
+
+			public MyCanvas() {
+
+				//MyCanvas m = new MyCanvas();
+				super();
+				JFrame f = new JFrame();
+				f.add(this);
+				if (cardImgName.matches(".*\\d.*") && !cardImgName.equals("Chance_GB3S.png") ) {
+					f.setSize(319,390);
+				}else{
+					f.setSize(360,239);
+				}
+				//f.setLayout(null);
+				f.setVisible(true);
+				
+			}
+			public void paint(Graphics g) {
+				Toolkit t=Toolkit.getDefaultToolkit();
+				Image i;
+				if (cardImgName.matches(".*\\d.*") && !cardImgName.equals("Chance_GB3S.png") ) {
+					i=t.getImage("src/Assets/CardImages/"+cardImgName);
+				}else {
+					
+					i=t.getImage("src/Assets/CommunityChestsAndChances/"+cardImgName);
+				}
+				g.drawImage(i, 0,0,this);	
+			}
+		}
+	}
+}
