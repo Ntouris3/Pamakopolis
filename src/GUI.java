@@ -7,24 +7,18 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class GUI extends JFrame{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	private Player currPlayer;
 	
-	public JPanel panelbig = new JPanel();
-	public JLayeredPane gameP = new JLayeredPane();
+	public static JPanel panelbig = new JPanel();
+	public static JLayeredPane gameP = new JLayeredPane();
 	public JPanel sidepanel = new JPanel();
-	//public Piece p = new Piece();
-	public JButton button = new JButton("Test Button");
-	public JLayeredPane jl = new JLayeredPane();
-	public JButton rollButton = new JButton("Roll Dice");
 	private JPanel propertyOptionsPanel;
-	
-	private JButton rollDiceButton;
-	
+	public JLayeredPane jl = new JLayeredPane();
+	public JButton rollButton = new JButton("Roll Dice");	
+
 	private JButton buyButton;
 	private JButton seeLocationInfoButton = new JButton("");
 	private JButton buildButton;
@@ -33,7 +27,7 @@ public class GUI extends JFrame{
 	private JButton tradeButton;
 	private JButton seeCardsButton = new JButton("See Cards");
 		
-	private JButton endTurnButton;
+	private JButton endTurnButton = new JButton("End Turn");
 	
 	private JTextField ownedByField;
 	
@@ -47,16 +41,14 @@ public class GUI extends JFrame{
 	
 	private JPanel boardPanel;
 	private Board board = new Board();
-	private Piece player1Piece;
-	private Piece player2Piece;
-	private Piece player3Piece;
-	private Piece player4Piece;
+
 	private Dice dice1 = new Dice(150, 180, 40, 40);
 	private Dice dice2 = new Dice(210, 180, 40, 40);
 	
 	
 	public GUI(){
-		jl.setBounds(6, 6, 632, 630);
+		currPlayer = Main.allPlayers.get(currPlayerCounter);
+		jl.setBounds(6, 6, 700, 700);
 		jl.setPreferredSize(new Dimension(400, 400));
 
 		Dice dice1 = new Dice(150, 180, 40, 40);
@@ -66,20 +58,20 @@ public class GUI extends JFrame{
 		jl.add(dice2);
 
 		gameP.setBounds(0, 0, 700, 700);
-		
-		
 		gameP.setVisible(true);
 		
-		board.setOpaque(true);//���� ���� ��� ����� ImagePanel
-		board.setBounds(0, 0, 700, 700);//���� ���� ��� ����� ImagePanel
-		
+		board.setOpaque(true);
+		board.setBounds(0, 0, 700, 700);		
 		
 		gameP.add(board , JLayeredPane.DEFAULT_LAYER);
-		//gameP.add(p, JLayeredPane.DRAG_LAYER);
 		
+		for(int i = 0 ; i<Main.allPlayers.size(); i++) {
+			
+			gameP.add(Main.allPlayers.get(i).piece , Integer.valueOf(i+1) );
+		
+		}
 		board.repaint();
-		//p.repaint();
-		//gameP.repaint();
+
 		
 		panelbig.setLayout(new BorderLayout());
 		panelbig.add(gameP , BorderLayout.CENTER);
@@ -99,14 +91,13 @@ public class GUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
 				dice2.rollDice();
+				dice1.paintImmediately(getX(), getY(), getWidth(), getHeight());
+				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
+				int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
+				currPlayer.ChangePosition(newPos);
 			}
 		});
 
-//		 currPlayer = new Player("teo", null);
-//		 currPlayer.position = 2;
-//		 currPlayer.jailCards.add(new GetOutOfJailCard("Chance_GOOJF.png"));
-//		 currPlayer.properties.add((Property) Main.locations.get(1));
-//		 currPlayer.properties.add((Property) Main.locations.get(3));
 		
 		for (Card thisc:Main.allChances) {
 			if (thisc instanceof GetOutOfJailCard) {
@@ -140,7 +131,6 @@ public class GUI extends JFrame{
 		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//this.setSize(Toolkit.getDefaultToolkit().getScreenSize()); 
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		this.setUndecorated(false);
 		this.setVisible(true);
@@ -148,17 +138,17 @@ public class GUI extends JFrame{
 		this.setContentPane(panelbig);
 	}
 	class ButtonListener implements ActionListener {
-		/*
-		 * ��������� �� ����� ���� 50 + 50 (����� ������ ������� ��� �� ����� ��� �������� ��� ������� ,
-		 * �� ������ �� ���������� ��� �� ��� ������ ��� ������) ��� ������
-		 * ���������� ��� �� components ��� �� ����� � ����������.
-		 * 
-		 */
+		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-		
+			currPlayerCounter++;
 			
+			if(currPlayerCounter == Main.allPlayers.size()) {
+				currPlayerCounter = 0;
+			}
+			
+			currPlayer = Main.allPlayers.get(currPlayerCounter);
 		}
 	}
 	class seeCardsButtonListener implements ActionListener {
