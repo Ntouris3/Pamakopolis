@@ -1,5 +1,5 @@
 
-public class Tax extends Location {
+public class Tax extends Location{
 	
 	public void CalcTax (Player player) {
 		if (player.position == 2) {
