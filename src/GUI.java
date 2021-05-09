@@ -115,7 +115,13 @@ public class GUI extends JFrame{
 						buyButton.setEnabled(false);
 						sidepanel.revalidate();
 						sidepanel.repaint();
-					}	
+						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
+							//Paying Rent//
+							currPlayer.ReduceBalance(((Property)Main.locations.get(currPlayer.position)).CalcRent(currPlayer));
+							((Property)Main.locations.get(currPlayer.position)).getOwner().AddBalance(((Property)Main.locations.get(currPlayer.position)).CalcRent(currPlayer));
+						}
+					}
+					
 				}
 				
 				//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
@@ -123,6 +129,11 @@ public class GUI extends JFrame{
 					mortgageButton.setEnabled(false);
 					sidepanel.revalidate();
 					sidepanel.repaint();
+				}
+				
+				//PAYING TAX WHEN HITTING TAX BLOCK//
+				if(Main.locations.get(currPlayer.position).getClass().equals((Tax.class))){
+					((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
 				}
 			}
 		});
