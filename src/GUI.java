@@ -31,9 +31,7 @@ public class GUI extends JFrame{
 	private JButton endTurnButton = new JButton("End Turn");
 	
 	private JTextField ownedByField;
-	
-	public int currPlayerCounter = 0;
-	
+		
 	String cardImgName;
 	JTextField tf = new JTextField();
 	
@@ -99,7 +97,7 @@ public class GUI extends JFrame{
 		ButtonListener2 listener2 = new ButtonListener2();
 		demolishButton.addActionListener(listener2);
 		
-		endTurnButtonListener listener = new ButtonListener();
+		endTurnButtonListener listener = new endTurnButtonListener();
 		endTurnButton.addActionListener(listener);
 		
 		rollButton.addActionListener(new ActionListener() {
@@ -310,8 +308,8 @@ public class GUI extends JFrame{
 			JList<String> propertiestobuild= new JList<String>();
 			DefaultListModel<String> listprop = new DefaultListModel<>();
 						
-			//βαζουμε τα props σε μια λιστα που επιλεγει
-			for (Property prop1:tempPlayer.properties) {
+			//Ξ²Ξ±Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ± props ΟƒΞµ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± Ο€ΞΏΟ… ΞµΟ€ΞΉΞ»ΞµΞ³ΞµΞΉ
+			for (Property prop1:currPlayer.properties) {
 				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
 					//listprop.addElement(prop1.name);
 				}
@@ -321,21 +319,21 @@ public class GUI extends JFrame{
 			}
 			propertiestobuild.setModel(listprop);
 			
-			//Φτιάχνουμε τις επιλογές
+			//Ξ¦Ο„ΞΉΞ¬Ο‡Ξ½ΞΏΟ…ΞΌΞµ Ο„ΞΉΟ‚ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ­Ο‚
 			String[] choices = { "1 house", "2 houses", "3 houses", "4 houses", "Hotel" };
 			JComboBox<String> choicelist = new JComboBox<String>(choices);
 			
-			//Βάζουμε την λίστα props και τι θελει να χτίσει
-			//Να δουμε την Streets με τις χρεωσεις και να πεταει μηνυμα οταν δεν μπορει να χτισει κατι
+			//Ξ’Ξ¬Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ·Ξ½ Ξ»Ξ―ΟƒΟ„Ξ± props ΞΊΞ±ΞΉ Ο„ΞΉ ΞΈΞµΞ»ΞµΞΉ Ξ½Ξ± Ο‡Ο„Ξ―ΟƒΞµΞΉ
+			//Ξ�Ξ± Ξ΄ΞΏΟ…ΞΌΞµ Ο„Ξ·Ξ½ Streets ΞΌΞµ Ο„ΞΉΟ‚ Ο‡Ο�ΞµΟ‰ΟƒΞµΞΉΟ‚ ΞΊΞ±ΞΉ Ξ½Ξ± Ο€ΞµΟ„Ξ±ΞµΞΉ ΞΌΞ·Ξ½Ο…ΞΌΞ± ΞΏΟ„Ξ±Ξ½ Ξ΄ΞµΞ½ ΞΌΟ€ΞΏΟ�ΞµΞΉ Ξ½Ξ± Ο‡Ο„ΞΉΟƒΞµΞΉ ΞΊΞ±Ο„ΞΉ
 			panels.add(propertiestobuild);
 			panels.add(choicelist);
 			
-			//Κουμπί build
+			//Ξ�ΞΏΟ…ΞΌΟ€Ξ― build
 			JButton BButton= new JButton("Build");
 			panels.add(BButton);
 
 			
-			//Επιλογή αριθμου χτισματος
+			//Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ±Ο�ΞΉΞΈΞΌΞΏΟ… Ο‡Ο„ΞΉΟƒΞΌΞ±Ο„ΞΏΟ‚
 			choicelist.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent event) {
 			    	String selected = (String) choicelist.getSelectedItem();
@@ -363,13 +361,13 @@ public class GUI extends JFrame{
 	            @Override
 	            public void valueChanged(ListSelectionEvent arg0) {
 	                if (!arg0.getValueIsAdjusting()) {
-	                	for (int i=0; i<tempPlayer.properties.size(); i++) {
-	                		if (propertiestobuild.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
+	                	for (int i=0; i<currPlayer.properties.size(); i++) {
+	                		if (propertiestobuild.getSelectedValue().toString().equals(currPlayer.properties.get(i).name)) {
 	                			int numb=i;
 	            				BButton.addActionListener(new ActionListener() {
 	            					public void actionPerformed(ActionEvent e) {
-	    	                			((Street)tempPlayer.properties.get(numb)).Build(tempPlayer, number);
-	    	                			System.out.println(tempPlayer.properties.get(numb).name);
+	    	                			((Street)currPlayer.properties.get(numb)).Build(currPlayer, number);
+	    	                			System.out.println(currPlayer.properties.get(numb).name);
 	    	                			System.out.println(number);
 	            					}
 	            				});
@@ -406,8 +404,8 @@ public class GUI extends JFrame{
 			JList<String> propertiestodemolish= new JList<String>();
 			DefaultListModel<String> listprop = new DefaultListModel<>();
 						
-			//βαζουμε τα props σε μια λιστα που επιλεγει
-			for (Property prop1:tempPlayer.properties) {
+			//Ξ²Ξ±Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ± props ΟƒΞµ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± Ο€ΞΏΟ… ΞµΟ€ΞΉΞ»ΞµΞ³ΞµΞΉ
+			for (Property prop1:currPlayer.properties) {
 				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
 					//listprop.addElement(prop1.name);
 				}
@@ -417,9 +415,9 @@ public class GUI extends JFrame{
 			}
 			propertiestodemolish.setModel(listprop);
 			
-			//Φτιάχνουμε τις επιλογές
+			//Ξ¦Ο„ΞΉΞ¬Ο‡Ξ½ΞΏΟ…ΞΌΞµ Ο„ΞΉΟ‚ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ­Ο‚
 			ArrayList<String> choices=new ArrayList<String>();
-			for (Property prop1:tempPlayer.properties) {
+			for (Property prop1:currPlayer.properties) {
 				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
 					//listprop.addElement(prop1.name);
 				}
@@ -442,16 +440,16 @@ public class GUI extends JFrame{
 				}
 				
 			}
-			//Μετατροπή σε string!
+			//Ξ�ΞµΟ„Ξ±Ο„Ο�ΞΏΟ€Ξ® ΟƒΞµ string!
 	    	String[] array = choices.toArray(new String[0]);
 			JComboBox<String> choicelist = new JComboBox<String>(array);
 
 
-			//Βάζουμε την λίστα props και τι μπορεί να κανει demolish
+			//Ξ’Ξ¬Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ·Ξ½ Ξ»Ξ―ΟƒΟ„Ξ± props ΞΊΞ±ΞΉ Ο„ΞΉ ΞΌΟ€ΞΏΟ�ΞµΞ― Ξ½Ξ± ΞΊΞ±Ξ½ΞµΞΉ demolish
 			panels.add(choicelist);
 			panels.add(propertiestodemolish);
 			
-			//Κουμπί demolish
+			//Ξ�ΞΏΟ…ΞΌΟ€Ξ― demolish
 			JButton DButton= new JButton("Demolish");
 			panels.add(DButton);
 
@@ -481,13 +479,13 @@ public class GUI extends JFrame{
 	            @Override
 	            public void valueChanged(ListSelectionEvent arg0) {
 	                if (!arg0.getValueIsAdjusting()) {
-	                	for (int i=0; i<tempPlayer.properties.size(); i++) {
-	                		if (propertiestodemolish.getSelectedValue().toString().equals(tempPlayer.properties.get(i).name)) {
+	                	for (int i=0; i<currPlayer.properties.size(); i++) {
+	                		if (propertiestodemolish.getSelectedValue().toString().equals(currPlayer.properties.get(i).name)) {
 	                			int numb=i;
 	            				DButton.addActionListener(new ActionListener() {
 	            					public void actionPerformed(ActionEvent e) {
-	    	                			((Street)tempPlayer.properties.get(numb)).Demolish(tempPlayer, number);
-	    	                			System.out.println(tempPlayer.properties.get(numb).name);
+	    	                			((Street)currPlayer.properties.get(numb)).Demolish(currPlayer, number);
+	    	                			System.out.println(currPlayer.properties.get(numb).name);
 	    	                			System.out.println(number);
 	            					}
 	            				});
