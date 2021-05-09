@@ -133,15 +133,15 @@ public class Player {
 		
 		for (int i=0; i<properties.size(); i++)
 		{
-			sum1 += properties.get(i).price; //den jerw an prepei na kratw thn timh tou property 
-		}                                        // h to sell price pou prepei na orisoume poso einai
+			sum1 += properties.get(i).price;  
+		}                                        
 		
 		for (int i=0; i<streets.size();i++)
 		{
-			sum2 = sum2 + (streets.get(i).hotelCost + streets.get(i).houseCost);
+			sum2 += (streets.get(i).hotelCost + streets.get(i).houseCost);
 		}
 		
-		if (balance<0 && sum1==0 && sum2==00) //to 50 kai ta 0 ta evala dokimastika 
+		if (balance<0 && sum1==0 && sum2==0) //to 50 kai ta 0 ta evala dokimastika 
 			return true;
 		return false;
 	}
