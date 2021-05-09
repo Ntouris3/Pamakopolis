@@ -5,8 +5,8 @@ public class Street extends Property{
 	private String colour;
 	private int propertiesInColour;
 	private int rent[];
-	private int houses;
-	private int hotel ;
+	public int houses;
+	public int hotel ;
 	private int houseCost;
 	private int hotelCost;
 
