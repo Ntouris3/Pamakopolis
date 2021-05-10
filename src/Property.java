@@ -37,4 +37,8 @@ public abstract class Property extends Location{
 	}
 
 	
+	public String toString() {
+		return name;
+		
+	}
 }

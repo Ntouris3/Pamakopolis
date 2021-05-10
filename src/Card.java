@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public abstract class Card{ 
+public abstract class Card implements Serializable{ 
 	/*
 	 * abstract superclass for all cards
 	*/

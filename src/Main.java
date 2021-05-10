@@ -1,5 +1,3 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,13 +8,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
 
 public class Main {
 	
@@ -28,75 +19,14 @@ public class Main {
 	
 	public static void main(String[] args) {	
 
-		//allChances.add(new GetOutOfJailCard("ATestName"));
-		
-//		File file = new File("Locations.ser");
-//		
-//		try {
-//			FileInputStream fIn = new FileInputStream(file);
-//			ObjectInputStream in = new ObjectInputStream(fIn);
-//			
-//			locations = (ArrayList<Location>) in.readObject();
-//			in.close();
-//			fIn.close();
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//
-//		//Loading the card files
-//		File file1 = new File("AllChances.ser");
-//				
-//		try {
-//			FileInputStream fIn = new FileInputStream(file1);
-//			ObjectInputStream in = new ObjectInputStream(fIn);
-//					
-//			allChances = (Stack<Card>) in.readObject();
-//			in.close();
-//			fIn.close();
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		File file2 = new File("allCommunityChests.ser");
-//				
-//		try {
-//			FileInputStream fIn = new FileInputStream(file2);
-//			ObjectInputStream in = new ObjectInputStream(fIn);
-//			
-//			allCommunityChests = (Stack<Card>) in.readObject();
-//			in.close();
-//			fIn.close();
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
 		
 		
 		createData();
-		//new LoginScreenGUI();
+		new LoginScreenGUI();
 
-		new GUI();
+		//new GUI();
+
 
 	}
 	
@@ -130,7 +60,7 @@ public class Main {
 		
 		Location l1 = new Location();
 		locations.add(l1);
-		Street s1 = new Street("Mediterranean Avenue","1.png",null,60,30,false,"Brown",2,rent1,0,0,50,250);
+		Street s1 = new Street("Mediterranean Avenue","1.png", null,60,30,false,"Brown",2,rent1,0,0,50,250);
 		locations.add(s1);
 		ChanceAndCommunityChest c = new ChanceAndCommunityChest();
 		locations.add(c);
@@ -209,24 +139,7 @@ public class Main {
 		Street s22 = new Street("Boardwalk","28.png", null,400,200,false,"Blue",2,rent22,0,0,200,1000);
 		locations.add(s22);
 		
-//		File file = new File("Locations.ser");
-//		
-//		try {
-//			FileOutputStream fOut = new FileOutputStream(file);
-//			ObjectOutputStream out = new ObjectOutputStream(fOut);
-//			
-//			out.writeObject(p);
-//			
-//			out.close();
-//			fOut.close();
-//			System.out.println("Locations have been stored");
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
 		
 		//create cards data
 		GetOutOfJailCard card1 = new GetOutOfJailCard("Chance_GOOJF.png");
@@ -287,7 +200,5 @@ public class Main {
 		
 	}
 	
-	
-	
-	
+	 
 }
