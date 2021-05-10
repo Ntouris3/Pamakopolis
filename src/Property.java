@@ -18,7 +18,7 @@ public abstract class Property extends Location{
 	}
 
 
-	public abstract int CalcRent (Player player);
+	public abstract void CalcRent (Player player);
 
 
 	public Player getOwner() {
@@ -35,10 +35,6 @@ public abstract class Property extends Location{
 		return name;
 		
 	}
-
 	
-	public String toString() {
-		return name;
-		
-	}
+	
 }

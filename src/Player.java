@@ -64,11 +64,11 @@ public class Player {
 	}
 	
 	public void AddToMortgage(Property prop) {
-	if (!prop.isMortgaged)
-		{
-			AddBalance(prop.mortgage);	
-			prop.isMortgaged = true;
-		}	
+		if (!prop.isMortgaged)
+			{
+				AddBalance(prop.mortgage);	
+				prop.isMortgaged = true;
+			}	
 	}
 	
 	public void Unmortgage (Property prop) {

@@ -54,7 +54,9 @@ public class GUI extends JFrame{
 	
 	public GUI(){
 		buyButton = new JButton("BUY");
+		buyButton.setVisible(false);
 		mortgageButton = new JButton("MORTGAGE");
+		mortgageButton.setVisible(false);
 		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		jl.setBounds(6, 6, 700, 700);
@@ -109,10 +111,8 @@ public class GUI extends JFrame{
 		endTurnButtonListener listener = new endTurnButtonListener();
 		endTurnButton.addActionListener(listener);
 		
-		//PAYING TAX WHEN HITTING TAX BLOCK//
-		if(Main.locations.get(currPlayer.position).getClass().equals((Tax.class))){
-				((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
-		  }
+		
+		
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -121,7 +121,63 @@ public class GUI extends JFrame{
 				dice1.paintImmediately(getX(), getY(), getWidth(), getHeight());
 				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
 				int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
+				currPlayer.lastDice = dice1.getFaceValue() + dice2.getFaceValue();
 				currPlayer.ChangePosition(newPos);
+				
+				//Disabling Buy Button And Paying off rent//
+				if(Main.locations.get(currPlayer.position) instanceof Street || Main.locations.get(currPlayer.position) instanceof Utility || Main.locations.get(currPlayer.position) instanceof Railroad) {
+					if(((Property)Main.locations.get(currPlayer.position)).getOwner() == null){
+						buyButton.setVisible(true);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+					}
+					else {
+						buyButton.setVisible(false);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
+							//Paying Rent//
+							if(Main.locations.get(currPlayer.position) instanceof Street) {
+								((Street)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
+								System.out.println("Rent payed");
+							}
+							else if(Main.locations.get(currPlayer.position) instanceof Utility){
+								((Utility)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
+								System.out.println("Rent payed");
+							}
+							else {
+								((Railroad)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
+								System.out.println("Rent payed");
+							}
+							
+						}
+						
+					}
+				}	
+				else {
+						buyButton.setVisible(false);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+				}
+				
+				
+				//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
+				if(currPlayer.properties.size()==0) {
+					mortgageButton.setVisible(false);
+					sidepanel.revalidate();
+					sidepanel.repaint();
+				}
+				else {
+					mortgageButton.setVisible(true);
+					sidepanel.revalidate();
+					sidepanel.repaint();
+				}
+				
+				//PAYING TAX WHEN HITTING TAX BLOCK//
+				if(Main.locations.get(currPlayer.position) instanceof Tax ){
+					((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
+					System.out.println("Tax payed");
+				}
 			}
 		});
 		
@@ -129,6 +185,10 @@ public class GUI extends JFrame{
 		buyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
+				buyButton.setVisible(false);
+				mortgageButton.setVisible(true);
+				sidepanel.revalidate();
+				sidepanel.repaint();
 			}
 		});
 		
@@ -156,42 +216,51 @@ public class GUI extends JFrame{
 				}
 				list.setModel(model);
 						
-						//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
-				MouseListener mouseListener = new MouseAdapter() {
-					  public void mouseClicked(MouseEvent e) {
-						       if(list.getSelectedValue().isMortgaged==true) {
-						        	b2.setVisible(true);
-						        	b1.setVisible(false);
-						        	p.revalidate();
-									p.repaint();
-						        }
-						        else {
-						        	b1.setVisible(true);
-						        	b2.setVisible(false);
-						        	p.revalidate();
-									p.repaint();
-						        }
-						        }
-						};
-						list.addMouseListener(mouseListener);
-						
-						//Mortgage Button//
-						b1.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								Property pro = list.getSelectedValue();
-								currPlayer.AddToMortgage(pro);
-								label1.setText(pro.name+" is now on Mortgage");
-							}
-						});
-						
-						//UnMortgage Button//
-						b2.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								Property pro = list.getSelectedValue();
-								currPlayer.Unmortgage(pro);
-								label1.setText(pro.name+" is no longer on Mortgage");
-							}
-						});
+				//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
+				list.addListSelectionListener( new ListSelectionListener() {
+					   @Override
+						public void valueChanged(ListSelectionEvent e) {
+						   if(list.getSelectedValue().isMortgaged==true) {
+				        		b2.setVisible(true);
+				        		b1.setVisible(false);
+				        		p.revalidate();
+								p.repaint();
+				        	}
+				        	else {
+				        		b1.setVisible(true);
+				        		b2.setVisible(false);
+				        		p.revalidate();
+								p.repaint();
+				        	}	
+						}
+				});
+				
+				
+				//Mortgage Button//
+				b1.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Property pro = list.getSelectedValue();
+						currPlayer.AddToMortgage(pro);
+						label1.setText(pro.name+" is now on Mortgage");
+						b2.setVisible(true);
+		        		b1.setVisible(false);
+		        		p.revalidate();
+						p.repaint();
+					}
+				});
+				
+				//UnMortgage Button//
+				b2.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Property pro = list.getSelectedValue();
+						currPlayer.Unmortgage(pro);
+						label1.setText(pro.name+" is no longer on Mortgage");
+						b1.setVisible(true);
+		        		b2.setVisible(false);
+		        		p.revalidate();
+						p.repaint();
+					}
+				});
 							
 						f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 						f.pack();

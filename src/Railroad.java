@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-
 public class Railroad extends Property{
 
-	private int rent;
-	private static int totalRailroads=2;
+	public int rent;
+
 
 	
 	public Railroad (String name, String cardImg, Player owner, int price, int mortgage, boolean isMortgaged, int rent) {
@@ -12,20 +10,16 @@ public class Railroad extends Property{
 	}
 
 
-	public int CalcRent(Player player) {
-		 
-		ArrayList<Player> players= new ArrayList<Player>(Main.allPlayers);
+	public void CalcRent(Player player) {
 		int sum=0;
-		for (Player player1:players) {
-			for(int i=0; i<=player1.properties.size(); i++) {
-				if (player1.properties.get(i).price==rent) {
-					sum++;
-				}
-			}
-		}
 		
-		return (sum*rent);
-
+			for(int i=0; i<owner.properties.size(); i++) {
+				if(owner.properties.get(i) instanceof Railroad) {
+					sum++;
+				}		
+			}
+		player.ReduceBalance(sum*rent);
+		owner.AddBalance(sum*rent);
 	}
 					
 		

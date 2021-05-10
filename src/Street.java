@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 
 public class Street extends Property{
 	
@@ -19,7 +19,7 @@ public class Street extends Property{
 		super(name, cardImg, owner, price, mortgage, isMortgaged);
 		this.colour = colour;
 		this.propertiesInColour = propertiesInColour;
-		rent =  new int[6];
+		this.rent =  rent;
 		this.houses = houses;
 		this.hotel = hotel;
 		this.houseCost = houseCost;
@@ -52,17 +52,17 @@ public class Street extends Property{
 	}
 
 
-	public int CalcRent(Player player) {
+	public void CalcRent(Player player) {
 		int sum=0;
 		
 		if (hotel==1) {
-			sum=sum+rent[5];
+			sum=rent[5];
 		}
 		else if(hotel==0) {
-			sum=sum+rent[houses];			
+			sum=rent[houses];			
 		}
-		
-		return sum;
+		player.ReduceBalance(sum);
+		this.owner.AddBalance(sum);	
 	}
 	
 
