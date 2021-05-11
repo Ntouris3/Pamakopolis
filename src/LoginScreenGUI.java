@@ -4,7 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -18,8 +19,8 @@ public class LoginScreenGUI extends JFrame {
 	private JLabel playerName,choosePiece;
 	private JList sel_piece;
 	private DefaultListModel<ImageIcon> listModel = new DefaultListModel();
-	private JButton addPlayerButton = new JButton("Προσθήκη παίκτη");
-	private JButton startGameButton = new JButton("Έναρξη παιχνιδιού");
+	private JButton addPlayerButton = new JButton("οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½");
+	private JButton startGameButton = new JButton("οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½");
 
 	
 	
@@ -33,15 +34,20 @@ public class LoginScreenGUI extends JFrame {
 		playerName = new JLabel();
 		
 		
-		playerNameField = new JTextField("Όνομα παίκτη ...");
+		playerNameField = new JTextField("οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ ...");
 	
+		playerNameField.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                playerNameField.setText("");
+            }
+        });
 		namePanel.add(playerNameField , BorderLayout.CENTER);
 		
 		//panel.add();
 		panel.add(namePanel);
 		
 		choosePiece = new JLabel();
-		choosePiece.setText("Επιλέξτε πιόνι:");
+		choosePiece.setText("οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½:");
 		choosePiece.setHorizontalAlignment(JLabel.CENTER);
 		
 		
@@ -63,11 +69,11 @@ public class LoginScreenGUI extends JFrame {
 		sel_piece.setVisibleRowCount(1);
 		
 		
-		ButtonListener listener = new ButtonListener(); //Για το addPlayerButton
+		ButtonListener listener = new ButtonListener(); //οΏ½οΏ½οΏ½ οΏ½οΏ½ addPlayerButton
 		addPlayerButton.addActionListener(listener);
 		panel.add(choosePiece);
 		
-		ButtonListener2 listener2 = new ButtonListener2(); //Για το startGameButton
+		ButtonListener2 listener2 = new ButtonListener2(); //οΏ½οΏ½οΏ½ οΏ½οΏ½ startGameButton
 		startGameButton.addActionListener(listener2);
 		panel.add(sel_piece);
 		
@@ -82,7 +88,7 @@ public class LoginScreenGUI extends JFrame {
 		this.setContentPane(panel);
 		this.setSize(700,400);
 		this.setVisible(true);
-		this.setTitle("Ξεκίνημα Παιχνιδιού");
+		this.setTitle("οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	
@@ -90,25 +96,25 @@ public class LoginScreenGUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(sel_piece.getSelectedValue()==null || playerNameField.getText().isEmpty() || playerNameField.getText().equals("Όνομα παίκτη ...")){
+			if(sel_piece.getSelectedValue()==null || playerNameField.getText().isEmpty() || playerNameField.getText().equals("οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ ...")){
 				
 				
 				if(Main.allPlayers.size()==6) {
-					JOptionPane.showMessageDialog(panel, "Φτάσατε τον μέγιστο αριθμό παικτών");
+					JOptionPane.showMessageDialog(panel, "οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½");
 				}
 				else {
-					JOptionPane.showMessageDialog(panel, "Πρέπει να επιλέξετε και όνομα και πιόνι!");
+					JOptionPane.showMessageDialog(panel, "οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½!");
 				}
 			}
 			else if(playerExists(playerNameField.getText())) {
-				JOptionPane.showMessageDialog(panel, "Ο παίκτης " + playerNameField.getText() + " υπάρχει ήδη! Παρακαλούμε διαλέξτε άλλο όνομα.");
+				JOptionPane.showMessageDialog(panel, "οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ " + playerNameField.getText() + " οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½! οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½.");
 			}
 			else {
 				new Player(playerNameField.getText() , new Piece ((ImageIcon)sel_piece.getSelectedValue()));
 				listModel.removeElement(sel_piece.getSelectedValue());
 			}
 			
-			playerNameField.setText("Όνομα παίκτη ...");
+			playerNameField.setText("οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ ...");
 			
 		}
 		
@@ -135,7 +141,7 @@ public class LoginScreenGUI extends JFrame {
 				
 			}
 			else{
-				JOptionPane.showMessageDialog(panel, "Απαιτούνται τουλάχιστον 2 παίκτες για την έναρξη του παιχνιδιού!");
+				JOptionPane.showMessageDialog(panel, "οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 2 οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½!");
 			}
 			
 		}

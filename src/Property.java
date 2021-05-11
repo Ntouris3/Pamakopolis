@@ -20,4 +20,8 @@ public abstract class Property extends Location{
 
 	public abstract int CalcRent (Player player);
 	
+	public String toString() {
+		return name;
+		
+	}
 }

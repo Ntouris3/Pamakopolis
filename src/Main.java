@@ -23,9 +23,10 @@ public class Main {
 		
 		
 		createData();
-		//new LoginScreenGUI();
+		new LoginScreenGUI();
 
-		new GUI();
+		//new GUI();
+
 
 	}
 	

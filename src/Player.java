@@ -9,6 +9,8 @@ public class Player {
 	public int position = 0;
 	public ArrayList<Property> properties;
 	public int lastDice;
+	public ArrayList <Street> streets = new ArrayList<Street>();
+	public ArrayList <Street> streetsToBuildIn = new ArrayList<Street>();
 	
 	public Player(String name, Piece piece) {
 	
@@ -19,7 +21,7 @@ public class Player {
 	}
 	
 	public void AddBalance (int amount) {
-		balance = balance + amount;
+		balance += amount;
 	}
 	
 	public void ReduceBalance (int amount) {
@@ -27,9 +29,15 @@ public class Player {
 	}
 	
 	public void Buy (Property prop) {
+		
+		Class c = prop.getClass();
 		properties.add(prop);
-		this.ReduceBalance(balance);
+		ReduceBalance(prop.price);
 		prop.owner = this;
+		if (prop instanceof Street)
+		{
+			streets.add((Street)prop);
+		}
 	}
 	
 
@@ -38,14 +46,14 @@ public class Player {
 	public void ChangePosition (int newPos) {
 		int temp = newPos % 40;
 		
-		this.piece.MoveOnBoard(this, newPos % 40);
+		this.piece.MoveOnBoard(this, temp);
 		if (temp == newPos) {         
 				this.position = newPos;
 			if (temp == 0) AddBalance(200);   //0 is the Start
 		}
 		else 
 		{
-			this.position = newPos % 40;
+			this.position = temp;
 			AddBalance(200);
 		}
 		
@@ -69,10 +77,61 @@ public class Player {
 		  prop.isMortgaged = false;  
 		}
 	}
-	public ArrayList<Property> PropertiesToBuildIn (){
-		// svhste to otan einai na grapsete to kwdika , to egrapsa gia na mhn vgazei errros
-		ArrayList<Property> list = new ArrayList<>();
-		return list;
+	public ArrayList<Street> PropertiesToBuildIn (){
+		int sumRed=0, sumBlue=0, sumGreen=0, sumOrange=0, 
+			sumBrown=0, sumYellow=0, sumPink=0, sumWhite=0;
+		for(int i=0; i<streets.size(); i++)
+		{
+			if(streets.get(i).colour == "Red")
+				sumRed++;
+			else if (streets.get(i).colour == "Blue")
+				sumBlue++;
+			else if (streets.get(i).colour == "Green")
+				sumGreen++;
+			else if (streets.get(i).colour == "Orange")
+				sumOrange++;
+			else if (streets.get(i).colour == "Brown")
+				sumBrown++;
+			else if (streets.get(i).colour == "Yellow")
+				sumYellow++;
+			else if (streets.get(i).colour == "Pink")
+				sumPink++;
+			else if (streets.get(i).colour == "White")
+				sumWhite++;
+		}
+		if (sumRed==3) {
+			for (Street s:streets)
+				if (s.colour == "Red")
+					streetsToBuildIn.add(s);}
+	    if (sumBlue==2) {
+			for (Street s:streets)
+				if (s.colour == "Blue")
+					streetsToBuildIn.add(s);}
+		if (sumGreen==3) {
+			for (Street s:streets)
+				if (s.colour == "Green")
+					streetsToBuildIn.add(s);}
+		if (sumOrange==3) {
+			for (Street s:streets)
+				if (s.colour == "Orange")
+					streetsToBuildIn.add(s);}
+		if (sumBrown==2) {
+			for (Street s:streets)
+				if (s.colour == "Brown")
+					streetsToBuildIn.add(s);}
+		if (sumYellow==3) {
+			for (Street s:streets)
+				if (s.colour == "Yellow")
+					streetsToBuildIn.add(s);}
+		if (sumPink==3) {
+			for (Street s:streets)
+				if (s.colour == "Pink")
+					streetsToBuildIn.add(s);}
+		if (sumWhite==3) {
+			for (Street s:streets)
+				if (s.colour == "Cyan")
+					streetsToBuildIn.add(s);}
+		return streetsToBuildIn;
 	}
 	
 	public boolean isBankrupt () {
@@ -80,7 +139,7 @@ public class Player {
 		
 		for (int i=0; i<properties.size(); i++)
 		{
-			sum1 += properties.get(i).price;//mortgage
+			sum1 += properties.get(i).price; //mortgage
 		}
 		
 		for (int i=0; i<streets.size();i++)
@@ -88,7 +147,7 @@ public class Player {
 			sum2 += (streets.get(i).hotelCost + streets.get(i).houseCost);
 		}
 		
-		if (balance<0 && sum1==0 && sum2==0)
+		if ( balance<0 && sum1==0 && sum2==0 )
 			return true;
 		return false;
 	}

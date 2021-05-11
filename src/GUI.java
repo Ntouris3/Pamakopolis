@@ -1,14 +1,18 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
+import javax.swing.JComboBox;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class GUI extends JFrame{
 
-	private static final long serialVersionUID = 1L;
+public class GUI extends JFrame{
 
 	private Player currPlayer;
 	
@@ -21,8 +25,8 @@ public class GUI extends JFrame{
 
 	private JButton buyButton;
 	private JButton seeLocationInfoButton = new JButton("");
-	private JButton buildButton;
-	private JButton demolishButton;
+	private JButton buildButton= new JButton("Build");
+	private JButton demolishButton= new JButton("Demolish");
 	private JButton mortgageButton;
 	private JButton tradeButton;
 	private JButton seeCardsButton = new JButton("See Cards");
@@ -30,7 +34,7 @@ public class GUI extends JFrame{
 	private JButton endTurnButton = new JButton("End Turn");
 	
 	private JTextField ownedByField;
-	
+		
 	String cardImgName;
 	JTextField tf = new JTextField();
 	
@@ -44,9 +48,14 @@ public class GUI extends JFrame{
 
 	private Dice dice1 = new Dice(150, 180, 40, 40);
 	private Dice dice2 = new Dice(210, 180, 40, 40);
+	public int number;
+	public int currPlayerCounter=0;
 	
 	
 	public GUI(){
+		buyButton = new JButton("BUY");
+		mortgageButton = new JButton("MORTGAGE");
+		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		jl.setBounds(6, 6, 700, 700);
 		jl.setPreferredSize(new Dimension(400, 400));
@@ -80,12 +89,30 @@ public class GUI extends JFrame{
 		panelbig.add(sidepanel , BorderLayout.EAST);
 
 		sidepanel.setLayout(new BorderLayout());
-		sidepanel.add(button,BorderLayout.SOUTH);
+		sidepanel.add(endTurnButton,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
+		
+		sidepanel.add(mortgageButton);
+		sidepanel.add(buyButton,BorderLayout.WEST);
 
-		ButtonListener listener = new ButtonListener();
-		button.addActionListener(listener);
+		//sidepanel.add(buildButton);
+		//sidepanel.add(demolishButton);
+
+		
+		ButtonListener listener3 = new ButtonListener();
+		buildButton.addActionListener(listener3);
+		
+		ButtonListener2 listener2 = new ButtonListener2();
+		demolishButton.addActionListener(listener2);
+		
+		endTurnButtonListener listener = new endTurnButtonListener();
+		endTurnButton.addActionListener(listener);
+		
+		//PAYING TAX WHEN HITTING TAX BLOCK//
+		if(Main.locations.get(currPlayer.position).getClass().equals((Tax.class))){
+				((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
+		  }
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -97,15 +124,84 @@ public class GUI extends JFrame{
 				currPlayer.ChangePosition(newPos);
 			}
 		});
-
 		
-		for (Card thisc:Main.allChances) {
-			if (thisc instanceof GetOutOfJailCard) {
-				currPlayer.jailCards.add((GetOutOfJailCard) thisc);
+		//BUY BUTTON
+		buyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
 			}
-		}
+		});
 		
-
+		//BUTTON THAT CREATES A FRAME FOR ALL THE MORTGAGE OPTIONS A PLAYER HAS
+		mortgageButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame f = new JFrame();
+				JPanel p = new JPanel();
+				JButton b1 = new JButton("Mortgage");
+				b1.setVisible(false);
+				JButton b2 = new JButton("Unmortgage");
+				b2.setVisible(false);
+				JLabel label1 = new JLabel("                                    ");
+				JList <Property> list = new JList(currPlayer.properties.toArray());
+				DefaultListModel<Property> model;
+					
+				p.add(list);
+				p.add(b1);
+				p.add(b2);
+				p.add(label1);
+						
+				model = new DefaultListModel<Property>();
+				for(Property prop: currPlayer.properties) {
+					model.addElement(prop);
+				}
+				list.setModel(model);
+						
+						//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
+				MouseListener mouseListener = new MouseAdapter() {
+					  public void mouseClicked(MouseEvent e) {
+						       if(list.getSelectedValue().isMortgaged==true) {
+						        	b2.setVisible(true);
+						        	b1.setVisible(false);
+						        	p.revalidate();
+									p.repaint();
+						        }
+						        else {
+						        	b1.setVisible(true);
+						        	b2.setVisible(false);
+						        	p.revalidate();
+									p.repaint();
+						        }
+						        }
+						};
+						list.addMouseListener(mouseListener);
+						
+						//Mortgage Button//
+						b1.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								Property pro = list.getSelectedValue();
+								currPlayer.AddToMortgage(pro);
+								label1.setText(pro.name+" is now on Mortgage");
+							}
+						});
+						
+						//UnMortgage Button//
+						b2.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								Property pro = list.getSelectedValue();
+								currPlayer.Unmortgage(pro);
+								label1.setText(pro.name+" is no longer on Mortgage");
+							}
+						});
+							
+						f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+						f.pack();
+						f.setSize(400,400);
+						f.setContentPane(p);
+						f.setTitle("Mortgage");
+						f.setVisible(true);
+					}
+		});
+		
 		//see Location Info Button
 		
 		ShowLocationInfoButtonListener l2 = new ShowLocationInfoButtonListener();
@@ -124,7 +220,7 @@ public class GUI extends JFrame{
 		
 		seeCardsButtonListener l3 = new seeCardsButtonListener();
 		seeCardsButton.addActionListener(l3);
-		sidepanel.add(seeCardsButton, BorderLayout.WEST);
+		//sidepanel.add(seeCardsButton, BorderLayout.WEST);
 		
 		
 		panelbig.setVisible(true);
@@ -137,7 +233,7 @@ public class GUI extends JFrame{
 		this.setTitle("");
 		this.setContentPane(panelbig);
 	}
-	class ButtonListener implements ActionListener {
+	class endTurnButtonListener implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -280,4 +376,222 @@ public class GUI extends JFrame{
 			}
 		}
 	}
+	
+	
+	class ButtonListener implements ActionListener{
+		public void actionPerformed(ActionEvent arg0) {
+			//BUILD
+			//ask for number 1-4 houses, number 5 hotel
+			
+			
+			JFrame f = new JFrame();
+			JPanel panels=new JPanel();
+
+			
+			JList<String> propertiestobuild= new JList<String>();
+			DefaultListModel<String> listprop = new DefaultListModel<>();
+						
+			//Ξ²Ξ±Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ± props ΟƒΞµ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± Ο€ΞΏΟ… ΞµΟ€ΞΉΞ»ΞµΞ³ΞµΞΉ
+			for (Property prop1:currPlayer.properties) {
+				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
+					//listprop.addElement(prop1.name);
+				}
+				else {
+					listprop.addElement(prop1.name);
+				}
+			}
+			propertiestobuild.setModel(listprop);
+			
+			//Ξ¦Ο„ΞΉΞ¬Ο‡Ξ½ΞΏΟ…ΞΌΞµ Ο„ΞΉΟ‚ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ­Ο‚
+			String[] choices = { "1 house", "2 houses", "3 houses", "4 houses", "Hotel" };
+			JComboBox<String> choicelist = new JComboBox<String>(choices);
+			
+			//Ξ’Ξ¬Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ·Ξ½ Ξ»Ξ―ΟƒΟ„Ξ± props ΞΊΞ±ΞΉ Ο„ΞΉ ΞΈΞµΞ»ΞµΞΉ Ξ½Ξ± Ο‡Ο„Ξ―ΟƒΞµΞΉ
+			//Ξ�Ξ± Ξ΄ΞΏΟ…ΞΌΞµ Ο„Ξ·Ξ½ Streets ΞΌΞµ Ο„ΞΉΟ‚ Ο‡Ο�ΞµΟ‰ΟƒΞµΞΉΟ‚ ΞΊΞ±ΞΉ Ξ½Ξ± Ο€ΞµΟ„Ξ±ΞµΞΉ ΞΌΞ·Ξ½Ο…ΞΌΞ± ΞΏΟ„Ξ±Ξ½ Ξ΄ΞµΞ½ ΞΌΟ€ΞΏΟ�ΞµΞΉ Ξ½Ξ± Ο‡Ο„ΞΉΟƒΞµΞΉ ΞΊΞ±Ο„ΞΉ
+			panels.add(propertiestobuild);
+			panels.add(choicelist);
+			
+			//Ξ�ΞΏΟ…ΞΌΟ€Ξ― build
+			JButton BButton= new JButton("Build");
+			panels.add(BButton);
+
+			
+			//Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ±Ο�ΞΉΞΈΞΌΞΏΟ… Ο‡Ο„ΞΉΟƒΞΌΞ±Ο„ΞΏΟ‚
+			choicelist.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent event) {
+			    	String selected = (String) choicelist.getSelectedItem();
+			    	if (selected=="1 house") {
+			    		number=1;
+			    	}
+			    	else if(selected=="2 houses") {
+			    		number=2;
+			    	}
+			    	else if(selected=="3 houses") {
+			    		number=3;
+			    	}
+			    	else if(selected=="4 houses") {
+			    		number=4;
+			    	}
+			    	else {
+			    		number=5;
+			    	}
+			    }
+			});	
+
+			
+			//List listener
+			propertiestobuild.addListSelectionListener(new ListSelectionListener() {
+	            @Override
+	            public void valueChanged(ListSelectionEvent arg0) {
+	                if (!arg0.getValueIsAdjusting()) {
+	                	for (int i=0; i<currPlayer.properties.size(); i++) {
+	                		if (propertiestobuild.getSelectedValue().toString().equals(currPlayer.properties.get(i).name)) {
+	                			int numb=i;
+	            				BButton.addActionListener(new ActionListener() {
+	            					public void actionPerformed(ActionEvent e) {
+	    	                			((Street)currPlayer.properties.get(numb)).Build(currPlayer, number);
+	    	                			System.out.println(currPlayer.properties.get(numb).name);
+	    	                			System.out.println(number);
+	            					}
+	            				});
+	                		}
+	                	}
+	                }
+	            }
+
+	        });	
+			
+			
+			
+			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			f.setSize(400,200);
+			f.setContentPane(panels);
+			f.setTitle("Build");
+			f.setVisible(true);
+			
+						
+			
+		}
+	}
+	
+	class ButtonListener2 implements ActionListener{
+		public void actionPerformed(ActionEvent arg0) {
+			//demolish
+			//ask for number 1-4 houses, number 5 hotel
+			
+			
+			JFrame f = new JFrame();
+			JPanel panels=new JPanel();
+
+			
+			JList<String> propertiestodemolish= new JList<String>();
+			DefaultListModel<String> listprop = new DefaultListModel<>();
+						
+			//Ξ²Ξ±Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ± props ΟƒΞµ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± Ο€ΞΏΟ… ΞµΟ€ΞΉΞ»ΞµΞ³ΞµΞΉ
+			for (Property prop1:currPlayer.properties) {
+				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
+					//listprop.addElement(prop1.name);
+				}
+				else {
+					listprop.addElement(prop1.name);
+				}
+			}
+			propertiestodemolish.setModel(listprop);
+			
+			//Ξ¦Ο„ΞΉΞ¬Ο‡Ξ½ΞΏΟ…ΞΌΞµ Ο„ΞΉΟ‚ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ­Ο‚
+			ArrayList<String> choices=new ArrayList<String>();
+			for (Property prop1:currPlayer.properties) {
+				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
+					//listprop.addElement(prop1.name);
+				}
+				else {
+		    		if (((Street)prop1).houses==1) {
+		    			choices.add("1 house");
+		    		}
+		    		if (((Street)prop1).houses==2) {
+		    			choices.add("2 houses");
+		    		}
+		    		if (((Street)prop1).houses==3) {
+		    			choices.add("3 houses");
+		    		}
+		    		if (((Street)prop1).houses==4) {
+		    			choices.add("4 houses");
+		    		}
+		    		if (((Street)prop1).hotel==1) {
+		    			choices.add("Hotel");
+		    		}
+				}
+				
+			}
+			//Ξ�ΞµΟ„Ξ±Ο„Ο�ΞΏΟ€Ξ® ΟƒΞµ string!
+	    	String[] array = choices.toArray(new String[0]);
+			JComboBox<String> choicelist = new JComboBox<String>(array);
+
+
+			//Ξ’Ξ¬Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ·Ξ½ Ξ»Ξ―ΟƒΟ„Ξ± props ΞΊΞ±ΞΉ Ο„ΞΉ ΞΌΟ€ΞΏΟ�ΞµΞ― Ξ½Ξ± ΞΊΞ±Ξ½ΞµΞΉ demolish
+			panels.add(choicelist);
+			panels.add(propertiestodemolish);
+			
+			//Ξ�ΞΏΟ…ΞΌΟ€Ξ― demolish
+			JButton DButton= new JButton("Demolish");
+			panels.add(DButton);
+
+			
+			choicelist.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent event) {
+			    	String selected = (String) choicelist.getSelectedItem();
+			    	if (selected=="1 house") {
+			    		number=1;
+			    	}
+			    	else if(selected=="2 houses") {
+			    		number=2;
+			    	}
+			    	else if(selected=="3 houses") {
+			    		number=3;
+			    	}
+			    	else if(selected=="4 houses") {
+			    		number=4;
+			    	}
+			    	else {
+			    		number=5;
+			    	}
+			    }
+			});			
+			
+			propertiestodemolish.addListSelectionListener(new ListSelectionListener() {
+	            @Override
+	            public void valueChanged(ListSelectionEvent arg0) {
+	                if (!arg0.getValueIsAdjusting()) {
+	                	for (int i=0; i<currPlayer.properties.size(); i++) {
+	                		if (propertiestodemolish.getSelectedValue().toString().equals(currPlayer.properties.get(i).name)) {
+	                			int numb=i;
+	            				DButton.addActionListener(new ActionListener() {
+	            					public void actionPerformed(ActionEvent e) {
+	    	                			((Street)currPlayer.properties.get(numb)).Demolish(currPlayer, number);
+	    	                			System.out.println(currPlayer.properties.get(numb).name);
+	    	                			System.out.println(number);
+	            					}
+	            				});
+	                		}
+	                	}
+	                }
+	            }
+
+	        });		
+			
+			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			f.setSize(400,200);
+			f.setContentPane(panels);
+			f.setTitle("Demolish");
+			f.setVisible(true);
+			
+						
+				}
+	}
+	
+	
+	
+	
+	
+	
 }
