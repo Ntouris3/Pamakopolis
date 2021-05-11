@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -15,12 +16,13 @@ public class LoginScreenGUI extends JFrame {
 	private JPanel panel = new JPanel();
 	private JPanel namePanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
+	private JPanel piecePanel = new JPanel();
 	private JTextField playerNameField;
-	private JLabel playerName,choosePiece;
+	private JLabel choosePiece;
 	private JList sel_piece;
 	private DefaultListModel<ImageIcon> listModel = new DefaultListModel();
-	private JButton addPlayerButton = new JButton("�������� ������");
-	private JButton startGameButton = new JButton("������ ����������");
+	private JButton addPlayerButton = new JButton("Add Player");
+	private JButton startGameButton = new JButton("Start Game");
 
 	
 	
@@ -31,10 +33,7 @@ public class LoginScreenGUI extends JFrame {
 		
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		
-		playerName = new JLabel();
-		
-		
-		playerNameField = new JTextField("����� ������ ...");
+		playerNameField = new JTextField("Enter name here...");
 	
 		playerNameField.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
@@ -43,12 +42,12 @@ public class LoginScreenGUI extends JFrame {
         });
 		namePanel.add(playerNameField , BorderLayout.CENTER);
 		
-		//panel.add();
+		
 		panel.add(namePanel);
 		
-		choosePiece = new JLabel();
-		choosePiece.setText("�������� �����:");
-		choosePiece.setHorizontalAlignment(JLabel.CENTER);
+		choosePiece = new JLabel("Select Piece" , JLabel.CENTER);
+		
+		choosePiece.setAlignmentX(CENTER_ALIGNMENT);
 		
 		
 		
@@ -69,26 +68,23 @@ public class LoginScreenGUI extends JFrame {
 		sel_piece.setVisibleRowCount(1);
 		
 		
-		ButtonListener listener = new ButtonListener(); //��� �� addPlayerButton
+		
+		ButtonListener listener = new ButtonListener(); //For the addPlayerButton
 		addPlayerButton.addActionListener(listener);
 		panel.add(choosePiece);
 		
-		ButtonListener2 listener2 = new ButtonListener2(); //��� �� startGameButton
+		ButtonListener2 listener2 = new ButtonListener2(); //For the startGameButton
 		startGameButton.addActionListener(listener2);
 		panel.add(sel_piece);
-		
-		
 		
 		buttonPanel.add(addPlayerButton);
 		buttonPanel.add(startGameButton);
 		panel.add(buttonPanel);
 		
-		
-		
 		this.setContentPane(panel);
 		this.setSize(700,400);
 		this.setVisible(true);
-		this.setTitle("�������� ����������");
+		this.setTitle("Start Screen");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	
@@ -96,25 +92,25 @@ public class LoginScreenGUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(sel_piece.getSelectedValue()==null || playerNameField.getText().isEmpty() || playerNameField.getText().equals("����� ������ ...")){
+			if(sel_piece.getSelectedValue()==null || playerNameField.getText().isEmpty() || playerNameField.getText().equals("Enter name here...")){
 				
 				
 				if(Main.allPlayers.size()==6) {
-					JOptionPane.showMessageDialog(panel, "������� ��� ������� ������ �������");
+					JOptionPane.showMessageDialog(panel, "The maximum amount of players is reached!");
 				}
 				else {
-					JOptionPane.showMessageDialog(panel, "������ �� ��������� ��� ����� ��� �����!");
+					JOptionPane.showMessageDialog(panel, "You have to choose a name and a piece!");
 				}
 			}
 			else if(playerExists(playerNameField.getText())) {
-				JOptionPane.showMessageDialog(panel, "� ������� " + playerNameField.getText() + " ������� ���! ����������� �������� ���� �����.");
+				JOptionPane.showMessageDialog(panel, "A player with the name " + playerNameField.getText() + " already exists!");
 			}
 			else {
 				new Player(playerNameField.getText() , new Piece ((ImageIcon)sel_piece.getSelectedValue()));
 				listModel.removeElement(sel_piece.getSelectedValue());
 			}
 			
-			playerNameField.setText("����� ������ ...");
+			playerNameField.setText("Enter name here...");
 			
 		}
 		
@@ -141,7 +137,7 @@ public class LoginScreenGUI extends JFrame {
 				
 			}
 			else{
-				JOptionPane.showMessageDialog(panel, "����������� ����������� 2 ������� ��� ��� ������ ��� ����������!");
+				JOptionPane.showMessageDialog(panel, "There must be at least 2 players to start the game!");
 			}
 			
 		}

@@ -89,7 +89,7 @@ public class GUI extends JFrame{
 		panelbig.add(sidepanel , BorderLayout.EAST);
 
 		sidepanel.setLayout(new BorderLayout());
-		sidepanel.add(endTurnButton,BorderLayout.SOUTH);
+		//sidepanel.add(endTurnButton,BorderLayout.SOUTH);
 		sidepanel.add(rollButton, BorderLayout.NORTH);
 		sidepanel.add(jl, BorderLayout.EAST);
 		
@@ -122,6 +122,7 @@ public class GUI extends JFrame{
 				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
 				int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
 				currPlayer.ChangePosition(newPos);
+				sidepanel.add(endTurnButton,BorderLayout.SOUTH);
 			}
 		});
 		
