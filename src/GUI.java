@@ -135,8 +135,8 @@ public class GUI extends JFrame{
 						buyButton.setVisible(false);
 						sidepanel.revalidate();
 						sidepanel.repaint();
+						//Paying The Rent//
 						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
-							//Paying Rent//
 							if(Main.locations.get(currPlayer.position) instanceof Street) {
 								((Street)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
 								System.out.println("Rent payed");
@@ -149,7 +149,6 @@ public class GUI extends JFrame{
 								((Railroad)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
 								System.out.println("Rent payed");
 							}
-							
 						}
 						
 					}
@@ -184,11 +183,17 @@ public class GUI extends JFrame{
 		//BUY BUTTON
 		buyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
-				buyButton.setVisible(false);
-				mortgageButton.setVisible(true);
-				sidepanel.revalidate();
-				sidepanel.repaint();
+				if(((Property)Main.locations.get(currPlayer.position)).getPrice()>currPlayer.balance) {
+					JOptionPane.showMessageDialog (null, "Not Enough Balance to aquire this property", "Low Balance", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
+					buyButton.setVisible(false);
+					mortgageButton.setVisible(true);
+					sidepanel.revalidate();
+					sidepanel.repaint();
+				}
+				
 			}
 		});
 		
@@ -314,6 +319,8 @@ public class GUI extends JFrame{
 			}
 			
 			currPlayer = Main.allPlayers.get(currPlayerCounter);
+			buyButton.setVisible(false);
+			mortgageButton.setVisible(false);
 		}
 	}
 	class seeCardsButtonListener implements ActionListener {

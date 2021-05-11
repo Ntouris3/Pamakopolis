@@ -35,6 +35,16 @@ public abstract class Property extends Location{
 		return name;
 		
 	}
+
+	public int getPrice() {
+		return price;
+	}
+
+
+	
+
+
+	
 	
 	
 }

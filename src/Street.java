@@ -1,4 +1,4 @@
-
+import javax.swing.JOptionPane;
 
 public class Street extends Property{
 	
@@ -61,8 +61,14 @@ public class Street extends Property{
 		else if(hotel==0) {
 			sum=rent[houses];			
 		}
-		player.ReduceBalance(sum);
-		this.owner.AddBalance(sum);	
+		
+		if(player.balance>=sum) {
+			player.ReduceBalance(sum);
+			owner.AddBalance(sum);
+		}
+		else {
+			JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
+		}
 	}
 	
 

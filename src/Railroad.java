@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 public class Railroad extends Property{
 
 	public int rent;
@@ -18,8 +20,14 @@ public class Railroad extends Property{
 					sum++;
 				}		
 			}
-		player.ReduceBalance(sum*rent);
-		owner.AddBalance(sum*rent);
+		if(player.balance>=sum*rent) {
+			player.ReduceBalance(sum*rent);
+			owner.AddBalance(sum*rent);
+		}
+		else {
+			JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
+		}
+		
 	}
 					
 		
