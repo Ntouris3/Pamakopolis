@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.JComboBox;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -61,7 +60,6 @@ public class GUI extends JFrame{
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		jl.setBounds(6, 6, 700, 700);
 		jl.setPreferredSize(new Dimension(400, 400));
-
 		Dice dice1 = new Dice(150, 180, 40, 40);
 		jl.add(dice1);
 
@@ -111,8 +109,7 @@ public class GUI extends JFrame{
 		endTurnButtonListener listener = new endTurnButtonListener();
 		endTurnButton.addActionListener(listener);
 		
-		
-		
+	
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -177,6 +174,33 @@ public class GUI extends JFrame{
 					((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
 					System.out.println("Tax payed");
 				}
+				
+				//Chance And Community Chest/
+				if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
+					Main.allCommunityChests.element().cardFunction(currPlayer);
+				}
+				else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
+					Main.allChances.element().cardFunction(currPlayer);
+				}
+				
+				//Go To Prison Block//
+				if(currPlayer.position == 30) {
+					currPlayer.isInJail = true;
+					currPlayer.ChangePosition(10);
+				}
+				
+				
+				if(currPlayer.position == 10) {
+					if(currPlayer.isInJail==true) {
+						mortgageButton.setVisible(false);
+						buyButton.setVisible(false);
+						rollButton.setVisible(false);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+						JOptionPane.showMessageDialog(null,"You are now in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+					}	
+				}
+					
 			}
 		});
 		
@@ -319,6 +343,20 @@ public class GUI extends JFrame{
 			}
 			
 			currPlayer = Main.allPlayers.get(currPlayerCounter);
+		
+			if(currPlayer.jailTurns==3) {
+				JOptionPane.showMessageDialog(null,"You waited 3 rounds, you are now free","Alert",JOptionPane.INFORMATION_MESSAGE);
+				currPlayer.isInJail=false;
+			}
+			
+			if(currPlayer.isInJail==true) {
+				rollButton.setVisible(false);
+				currPlayer.ShowJailFrame();
+			}
+			else {
+				rollButton.setVisible(true);
+			}
+			
 			buyButton.setVisible(false);
 			mortgageButton.setVisible(false);
 		}

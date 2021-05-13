@@ -6,10 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 public class Dice extends JPanel {
-	
-	/**
-	 * 
-	 */
+
 	
 	
 	private int faceValue = 1;
