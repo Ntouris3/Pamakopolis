@@ -1,13 +1,22 @@
+import javax.swing.JOptionPane;
 
-public class Tax extends Location {
+public class Tax extends Location{
 	
 	public void CalcTax (Player player) {
-		if (player.position == 2) {
-			player.ReduceBalance(200);
+		int tax =0;
+		if (player.position == 4) {
+			tax = 200;
 		}
 		
-		if (player.position == 37) {
-			player.ReduceBalance(100);
+		if (player.position == 38) {
+			tax =100;
+		}
+		
+		if(player.balance>=tax) {
+			player.ReduceBalance(tax);
+		}
+		else {
+			JOptionPane.showMessageDialog(null,"You can't afford to pay the tax","Alert",JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }

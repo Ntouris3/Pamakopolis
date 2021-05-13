@@ -1,4 +1,11 @@
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.*;
+
 
 public class Player {
 	public String name;
@@ -11,6 +18,7 @@ public class Player {
 	public int lastDice;
 	public ArrayList <Street> streets = new ArrayList<Street>();
 	public ArrayList <Street> streetsToBuildIn = new ArrayList<Street>();
+	public int jailTurns = 0;
 	
 	public Player(String name, Piece piece) {
 	
@@ -64,11 +72,11 @@ public class Player {
 	}
 	
 	public void AddToMortgage(Property prop) {
-	if (!prop.isMortgaged)
-		{
-			AddBalance(prop.mortgage);	
-			prop.isMortgaged = true;
-		}	
+		if (!prop.isMortgaged)
+			{
+				AddBalance(prop.mortgage);	
+				prop.isMortgaged = true;
+			}	
 	}
 	
 	public void Unmortgage (Property prop) {
@@ -150,5 +158,95 @@ public class Player {
 		if ( balance<0 && sum1==0 && sum2==0 )
 			return true;
 		return false;
+	}
+	
+	public void ShowJailFrame() {
+		JFrame f = new JFrame();
+		JPanel p = new JPanel();
+		JButton b2 = new JButton("Pay Jail Fee");
+		JButton b1 = new JButton("Use Get Out Of Jail Card");
+		JButton b3 = new JButton("Roll Dice");
+	
+		JLayeredPane jl = new JLayeredPane();
+		
+		if(this.jailCards.size()==0) {
+			b1.setVisible(false);
+		}
+		
+		if(this.balance<50) {
+			b2.setVisible(false);
+		}
+		
+		jl.setPreferredSize(new Dimension(120,41));
+		Dice dice1 = new Dice(0,0, 40, 40);
+		jl.add(dice1);
+		Dice dice2 = new Dice(80, 0, 40, 40);
+		jl.add(dice2);
+		
+		p.setLayout(new FlowLayout());
+		p.add(b1);
+		p.add(b2);
+		p.add(b3);
+		p.add(jl);
+		
+		
+		
+		
+	
+		
+		this.jailTurns++;
+		
+		
+		b1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(jailCards.get(0).getCardImgName()=="Chance_GOOJF") {
+					Main.allChances.add(jailCards.get(0));
+				}
+				else {
+					Main.allCommunityChests.add(jailCards.get(0));
+				}
+				jailCards.remove(0);
+				isInJail=false;
+				jailTurns=0;
+				JOptionPane.showMessageDialog(null,"You succesfully used your card to get out of jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+				f.dispose();
+			}
+		});
+		
+
+		b2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReduceBalance(50);
+				isInJail=false;
+				jailTurns=0;
+				JOptionPane.showMessageDialog(null,"You succesfully payed the fee and got out of jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+				f.dispose();
+			}
+		});
+		
+		b3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dice1.rollDice();
+				dice2.rollDice();
+				if(dice1.getFaceValue()==dice2.getFaceValue()) {
+					isInJail = false;
+					jailTurns = 0;
+					JOptionPane.showMessageDialog(null,"You got out of jail thanks to your dice roll","Alert",JOptionPane.INFORMATION_MESSAGE);
+					f.dispose();
+				}
+				else {
+					b3.setVisible(false);
+					p.revalidate();
+					p.repaint();
+				}
+				
+			}	
+		});
+		
+		
+		f.setVisible(true);
+		f.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		f.setTitle("Jail");
+		f.setContentPane(p);
 	}
 }

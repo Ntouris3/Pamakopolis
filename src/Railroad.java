@@ -1,31 +1,33 @@
-import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class Railroad extends Property{
 
-	private int rent;
-	private static int totalRailroads=2;
+	public int rent;
+
 
 	
-	public Railroad(String name, String cardImg, Player owner, int price, int mortgage, boolean isMortgaged, int rent) {
+	public Railroad (String name, String cardImg, Player owner, int price, int mortgage, boolean isMortgaged, int rent) {
 		super(name, cardImg, owner, price, mortgage, isMortgaged);
 		this.rent = rent;
 	}
 
 
-	public int CalcRent(Player player) {
-		 
-		ArrayList<Player> players= new ArrayList<Player>(Main.allPlayers);
+	public void CalcRent(Player player) {
 		int sum=0;
-		for (Player player1:players) {
-			for(int i=0; i<=player1.properties.size(); i++) {
-				if (player1.properties.get(i).price==rent) {
+		
+			for(int i=0; i<owner.properties.size(); i++) {
+				if(owner.properties.get(i) instanceof Railroad) {
 					sum++;
-				}
+				}		
 			}
+		if(player.balance>=sum*rent) {
+			player.ReduceBalance(sum*rent);
+			owner.AddBalance(sum*rent);
+		}
+		else {
+			JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
 		}
 		
-		return (sum*rent);
-
 	}
 					
 		

@@ -1,9 +1,8 @@
-import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class Utility extends Property{
 
-	private int rent;
-	private static int totalUtilities = 2;
+	public int rent;
 
 	
 	public Utility(String name, String cardImg, Player owner, int price, int mortgage, boolean isMortgaged, int rent) {
@@ -11,30 +10,38 @@ public class Utility extends Property{
 		this.rent = rent;
 	}
 
-	public int CalcRent(Player player) {
-		ArrayList<Player> players= new ArrayList<Player>(Main.allPlayers);
+	public void CalcRent(Player player) {
 		boolean flag=false;
-		for (Player player1:players) {
-			for(int i=0; i<=player1.properties.size(); i++) {
-				if(player1.properties.get(i).name.equals("Electric Company")) {
-					for(int j=0; j<=player1.properties.size(); j++) {
-						if(player1.properties.get(j).name.equals("Water Works")) {
-							flag=true;
-							break;
-						}
+		
+		
+		for(int i=0; i<=owner.properties.size(); i++) {
+			if(owner.properties.get(i).name.equals("Electric Company")) {
+				for(int j=0; j<owner.properties.size(); j++) {
+					if(owner.properties.get(j).name.equals("Water Works")) {
+						flag=true;
+						break;
 					}
 				}
-			
 			}
 		}
-		
 		if (flag) {
-			return player.lastDice*10;
+			if(player.balance>player.lastDice*10) {
+				player.ReduceBalance(player.lastDice*10);
+				owner.AddBalance(player.lastDice*10);
+			}
+			else {
+				JOptionPane.showMessageDialog(null,"You don't have enough money to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
+			}	
 		}
-		else
-			return player.lastDice*4;
-				
-		
+		else {
+			if(player.balance>=player.lastDice*4) {
+				player.ReduceBalance(player.lastDice*4);
+				owner.AddBalance(player.lastDice*4);
+			}
+			else {
+				JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
+			}	
+		}
 	}
 
 }

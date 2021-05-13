@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.JComboBox;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -54,12 +53,13 @@ public class GUI extends JFrame{
 	
 	public GUI(){
 		buyButton = new JButton("BUY");
+		buyButton.setVisible(false);
 		mortgageButton = new JButton("MORTGAGE");
+		mortgageButton.setVisible(false);
 		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		jl.setBounds(6, 6, 700, 700);
 		jl.setPreferredSize(new Dimension(400, 400));
-
 		Dice dice1 = new Dice(150, 180, 40, 40);
 		jl.add(dice1);
 
@@ -109,10 +109,7 @@ public class GUI extends JFrame{
 		endTurnButtonListener listener = new endTurnButtonListener();
 		endTurnButton.addActionListener(listener);
 		
-		//PAYING TAX WHEN HITTING TAX BLOCK//
-		if(Main.locations.get(currPlayer.position).getClass().equals((Tax.class))){
-				((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
-		  }
+	
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -121,14 +118,106 @@ public class GUI extends JFrame{
 				dice1.paintImmediately(getX(), getY(), getWidth(), getHeight());
 				dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
 				int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
+				currPlayer.lastDice = dice1.getFaceValue() + dice2.getFaceValue();
 				currPlayer.ChangePosition(newPos);
+				
+				//Disabling Buy Button And Paying off rent//
+				if(Main.locations.get(currPlayer.position) instanceof Street || Main.locations.get(currPlayer.position) instanceof Utility || Main.locations.get(currPlayer.position) instanceof Railroad) {
+					if(((Property)Main.locations.get(currPlayer.position)).getOwner() == null){
+						buyButton.setVisible(true);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+					}
+					else {
+						buyButton.setVisible(false);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+						//Paying The Rent//
+						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
+							if(Main.locations.get(currPlayer.position) instanceof Street) {
+								((Street)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
+								System.out.println("Rent payed");
+							}
+							else if(Main.locations.get(currPlayer.position) instanceof Utility){
+								((Utility)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
+								System.out.println("Rent payed");
+							}
+							else {
+								((Railroad)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
+								System.out.println("Rent payed");
+							}
+						}
+						
+					}
+				}	
+				else {
+						buyButton.setVisible(false);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+				}
+				
+				
+				//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
+				if(currPlayer.properties.size()==0) {
+					mortgageButton.setVisible(false);
+					sidepanel.revalidate();
+					sidepanel.repaint();
+				}
+				else {
+					mortgageButton.setVisible(true);
+					sidepanel.revalidate();
+					sidepanel.repaint();
+				}
+				
+				//PAYING TAX WHEN HITTING TAX BLOCK//
+				if(Main.locations.get(currPlayer.position) instanceof Tax ){
+					((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
+					System.out.println("Tax payed");
+				}
+				
+				//Chance And Community Chest/
+				if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
+					Main.allCommunityChests.element().cardFunction(currPlayer);
+				}
+				else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
+					Main.allChances.element().cardFunction(currPlayer);
+				}
+				
+				//Go To Prison Block//
+				if(currPlayer.position == 30) {
+					currPlayer.isInJail = true;
+					currPlayer.ChangePosition(10);
+				}
+				
+				
+				if(currPlayer.position == 10) {
+					if(currPlayer.isInJail==true) {
+						mortgageButton.setVisible(false);
+						buyButton.setVisible(false);
+						rollButton.setVisible(false);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+						JOptionPane.showMessageDialog(null,"You are now in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+					}	
+				}
+					
 			}
 		});
 		
 		//BUY BUTTON
 		buyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
+				if(((Property)Main.locations.get(currPlayer.position)).getPrice()>currPlayer.balance) {
+					JOptionPane.showMessageDialog (null, "Not Enough Balance to aquire this property", "Low Balance", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
+					buyButton.setVisible(false);
+					mortgageButton.setVisible(true);
+					sidepanel.revalidate();
+					sidepanel.repaint();
+				}
+				
 			}
 		});
 		
@@ -156,42 +245,51 @@ public class GUI extends JFrame{
 				}
 				list.setModel(model);
 						
-						//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
-				MouseListener mouseListener = new MouseAdapter() {
-					  public void mouseClicked(MouseEvent e) {
-						       if(list.getSelectedValue().isMortgaged==true) {
-						        	b2.setVisible(true);
-						        	b1.setVisible(false);
-						        	p.revalidate();
-									p.repaint();
-						        }
-						        else {
-						        	b1.setVisible(true);
-						        	b2.setVisible(false);
-						        	p.revalidate();
-									p.repaint();
-						        }
-						        }
-						};
-						list.addMouseListener(mouseListener);
-						
-						//Mortgage Button//
-						b1.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								Property pro = list.getSelectedValue();
-								currPlayer.AddToMortgage(pro);
-								label1.setText(pro.name+" is now on Mortgage");
-							}
-						});
-						
-						//UnMortgage Button//
-						b2.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								Property pro = list.getSelectedValue();
-								currPlayer.Unmortgage(pro);
-								label1.setText(pro.name+" is no longer on Mortgage");
-							}
-						});
+				//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
+				list.addListSelectionListener( new ListSelectionListener() {
+					   @Override
+						public void valueChanged(ListSelectionEvent e) {
+						   if(list.getSelectedValue().isMortgaged==true) {
+				        		b2.setVisible(true);
+				        		b1.setVisible(false);
+				        		p.revalidate();
+								p.repaint();
+				        	}
+				        	else {
+				        		b1.setVisible(true);
+				        		b2.setVisible(false);
+				        		p.revalidate();
+								p.repaint();
+				        	}	
+						}
+				});
+				
+				
+				//Mortgage Button//
+				b1.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Property pro = list.getSelectedValue();
+						currPlayer.AddToMortgage(pro);
+						label1.setText(pro.name+" is now on Mortgage");
+						b2.setVisible(true);
+		        		b1.setVisible(false);
+		        		p.revalidate();
+						p.repaint();
+					}
+				});
+				
+				//UnMortgage Button//
+				b2.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Property pro = list.getSelectedValue();
+						currPlayer.Unmortgage(pro);
+						label1.setText(pro.name+" is no longer on Mortgage");
+						b1.setVisible(true);
+		        		b2.setVisible(false);
+		        		p.revalidate();
+						p.repaint();
+					}
+				});
 							
 						f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 						f.pack();
@@ -245,6 +343,22 @@ public class GUI extends JFrame{
 			}
 			
 			currPlayer = Main.allPlayers.get(currPlayerCounter);
+		
+			if(currPlayer.jailTurns==3) {
+				JOptionPane.showMessageDialog(null,"You waited 3 rounds, you are now free","Alert",JOptionPane.INFORMATION_MESSAGE);
+				currPlayer.isInJail=false;
+			}
+			
+			if(currPlayer.isInJail==true) {
+				rollButton.setVisible(false);
+				currPlayer.ShowJailFrame();
+			}
+			else {
+				rollButton.setVisible(true);
+			}
+			
+			buyButton.setVisible(false);
+			mortgageButton.setVisible(false);
 		}
 	}
 	class seeCardsButtonListener implements ActionListener {

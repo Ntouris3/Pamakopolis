@@ -28,4 +28,8 @@ public abstract class Card implements Serializable{
 			System.out.println("Error");
 		}
 	}
+
+	public String getCardImgName() {
+		return cardImgName;
+	}
 }

@@ -1,4 +1,3 @@
-
 public class GoToJail extends Location{
 	
 	
