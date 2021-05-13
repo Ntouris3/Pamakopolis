@@ -351,14 +351,21 @@ public class GUI extends JFrame{
 			
 			if(currPlayer.isInJail==true) {
 				rollButton.setVisible(false);
+				mortgageButton.setVisible(false);
+				sidepanel.revalidate();
+				sidepanel.repaint();
 				currPlayer.ShowJailFrame();
 			}
 			else {
 				rollButton.setVisible(true);
+				mortgageButton.setVisible(true);
+				sidepanel.revalidate();
+				sidepanel.repaint();
 			}
-			
 			buyButton.setVisible(false);
-			mortgageButton.setVisible(false);
+			if(currPlayer.properties.size()==0) {
+				mortgageButton.setVisible(false);
+			}
 		}
 	}
 	class seeCardsButtonListener implements ActionListener {

@@ -57,7 +57,7 @@ public class Player {
 		this.piece.MoveOnBoard(this, temp);
 		if (temp == newPos) {         
 				this.position = newPos;
-			if (temp == 0) AddBalance(200);   //0 is the Start
+			if (temp == 0 && this.isInJail==false) AddBalance(200);   //0 is the Start
 		}
 		else 
 		{
@@ -163,18 +163,19 @@ public class Player {
 	public void ShowJailFrame() {
 		JFrame f = new JFrame();
 		JPanel p = new JPanel();
-		JButton b2 = new JButton("Pay Jail Fee");
-		JButton b1 = new JButton("Use Get Out Of Jail Card");
-		JButton b3 = new JButton("Roll Dice");
-	
+		JButton payButton = new JButton("Pay Jail Fee");
+		JButton useCardButton = new JButton("Use Get Out Of Jail Card");
+		JButton rollButton = new JButton("Roll Dice");
+		JButton exitButton = new JButton("Exit");
+		
 		JLayeredPane jl = new JLayeredPane();
 		
 		if(this.jailCards.size()==0) {
-			b1.setVisible(false);
+			useCardButton.setVisible(false);
 		}
 		
 		if(this.balance<50) {
-			b2.setVisible(false);
+			payButton.setVisible(false);
 		}
 		
 		jl.setPreferredSize(new Dimension(120,41));
@@ -184,9 +185,10 @@ public class Player {
 		jl.add(dice2);
 		
 		p.setLayout(new FlowLayout());
-		p.add(b1);
-		p.add(b2);
-		p.add(b3);
+		p.add(useCardButton);
+		p.add(payButton);
+		p.add(rollButton);
+		p.add(exitButton);
 		p.add(jl);
 		
 		
@@ -197,7 +199,7 @@ public class Player {
 		this.jailTurns++;
 		
 		
-		b1.addActionListener(new ActionListener() {
+		useCardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(jailCards.get(0).getCardImgName()=="Chance_GOOJF") {
 					Main.allChances.add(jailCards.get(0));
@@ -214,7 +216,7 @@ public class Player {
 		});
 		
 
-		b2.addActionListener(new ActionListener() {
+		payButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ReduceBalance(50);
 				isInJail=false;
@@ -224,7 +226,7 @@ public class Player {
 			}
 		});
 		
-		b3.addActionListener(new ActionListener() {
+		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
 				dice2.rollDice();
@@ -235,12 +237,18 @@ public class Player {
 					f.dispose();
 				}
 				else {
-					b3.setVisible(false);
+					rollButton.setVisible(false);
 					p.revalidate();
 					p.repaint();
 				}
 				
 			}	
+		});
+		
+		exitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				f.dispose();
+			}
 		});
 		
 		
