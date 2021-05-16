@@ -192,7 +192,6 @@ public class GUI extends JFrame{
 				
 				if(currPlayer.position == 10) {
 					if(currPlayer.isInJail==true) {
-						mortgageButton.setVisible(false);
 						buyButton.setVisible(false);
 						rollButton.setVisible(false);
 						sidepanel.revalidate();
@@ -355,6 +354,12 @@ public class GUI extends JFrame{
 				rollButton.setVisible(true);
 				sidepanel.revalidate();
 				sidepanel.repaint();
+			}
+			if(currPlayer.properties.size()<=0) {
+				mortgageButton.setVisible(false);
+			}
+			else {
+				mortgageButton.setVisible(true);
 			}
 			buyButton.setVisible(false);
 		}

@@ -251,7 +251,7 @@ public class Player {
 						f.dispose();
 						ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
 					}
-					JOptionPane.showMessageDialog(null,"You didn't throw doubles thus/n You remain in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null,"You didn't throw doubles thus\nYou remain in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 					f.dispose();
 				}
 			}	
