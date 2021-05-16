@@ -160,13 +160,15 @@ public class Player {
 		return false;
 	}
 	
-	public void ShowJailFrame() {
+	public void ShowJailFrame(JButton button) {
 		JFrame f = new JFrame();
 		JPanel p = new JPanel();
+		JLabel playerName = new JLabel("Name: "+this.name);
+		JLabel playerBalance = new JLabel("Balance: "+this.balance+"$");
 		JButton payButton = new JButton("Pay Jail Fee");
 		JButton useCardButton = new JButton("Use Get Out Of Jail Card");
 		JButton rollButton = new JButton("Roll Dice");
-		JButton exitButton = new JButton("Exit");
+		
 		
 		JLayeredPane jl = new JLayeredPane();
 		
@@ -185,10 +187,11 @@ public class Player {
 		jl.add(dice2);
 		
 		p.setLayout(new FlowLayout());
+		p.add(playerName);
+		p.add(playerBalance);
 		p.add(useCardButton);
 		p.add(payButton);
 		p.add(rollButton);
-		p.add(exitButton);
 		p.add(jl);
 		
 		
@@ -210,6 +213,7 @@ public class Player {
 				jailCards.remove(0);
 				isInJail=false;
 				jailTurns=0;
+				button.setVisible(true);
 				JOptionPane.showMessageDialog(null,"You succesfully used your card to get out of jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 				f.dispose();
 			}
@@ -221,6 +225,7 @@ public class Player {
 				ReduceBalance(50);
 				isInJail=false;
 				jailTurns=0;
+				button.setVisible(true);
 				JOptionPane.showMessageDialog(null,"You succesfully payed the fee and got out of jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 				f.dispose();
 			}
@@ -235,21 +240,24 @@ public class Player {
 					jailTurns = 0;
 					JOptionPane.showMessageDialog(null,"You got out of jail thanks to your dice roll","Alert",JOptionPane.INFORMATION_MESSAGE);
 					f.dispose();
+					ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
 				}
 				else {
-					rollButton.setVisible(false);
-					p.revalidate();
-					p.repaint();
+					if(jailTurns==3) {
+						isInJail = false;
+						jailTurns = 0;
+						ReduceBalance(50);
+						JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50$ have been removed from you balance /n You can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+						f.dispose();
+						ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+					}
+					JOptionPane.showMessageDialog(null,"You didn't throw doubles thus/n You remain in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+					f.dispose();
 				}
-				
 			}	
 		});
 		
-		exitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				f.dispose();
-			}
-		});
+		
 		
 		
 		f.setVisible(true);

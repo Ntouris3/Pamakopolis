@@ -62,7 +62,7 @@ public class GUI extends JFrame{
 		jl.setPreferredSize(new Dimension(400, 400));
 		Dice dice1 = new Dice(150, 180, 40, 40);
 		jl.add(dice1);
-
+		
 		Dice dice2 = new Dice(210, 180, 40, 40);
 		jl.add(dice2);
 
@@ -109,7 +109,7 @@ public class GUI extends JFrame{
 		endTurnButtonListener listener = new endTurnButtonListener();
 		endTurnButton.addActionListener(listener);
 		
-	
+		
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -133,8 +133,8 @@ public class GUI extends JFrame{
 						sidepanel.revalidate();
 						sidepanel.repaint();
 						//Paying The Rent//
-						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
-							if(Main.locations.get(currPlayer.position) instanceof Street) {
+						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer && ((Property)Main.locations.get(currPlayer.position)).isMortgaged==false) {
+							if(Main.locations.get(currPlayer.position) instanceof Street ) {
 								((Street)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
 								System.out.println("Rent payed");
 							}
@@ -344,28 +344,19 @@ public class GUI extends JFrame{
 			
 			currPlayer = Main.allPlayers.get(currPlayerCounter);
 		
-			if(currPlayer.jailTurns==3) {
-				JOptionPane.showMessageDialog(null,"You waited 3 rounds, you are now free","Alert",JOptionPane.INFORMATION_MESSAGE);
-				currPlayer.isInJail=false;
-			}
 			
 			if(currPlayer.isInJail==true) {
 				rollButton.setVisible(false);
-				mortgageButton.setVisible(false);
 				sidepanel.revalidate();
 				sidepanel.repaint();
-				currPlayer.ShowJailFrame();
+				currPlayer.ShowJailFrame(rollButton);
 			}
 			else {
 				rollButton.setVisible(true);
-				mortgageButton.setVisible(true);
 				sidepanel.revalidate();
 				sidepanel.repaint();
 			}
 			buyButton.setVisible(false);
-			if(currPlayer.properties.size()==0) {
-				mortgageButton.setVisible(false);
-			}
 		}
 	}
 	class seeCardsButtonListener implements ActionListener {
