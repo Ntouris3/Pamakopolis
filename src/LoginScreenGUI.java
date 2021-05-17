@@ -19,8 +19,8 @@ public class LoginScreenGUI extends JFrame {
 	private JLabel playerName,choosePiece;
 	private JList sel_piece;
 	private DefaultListModel<ImageIcon> listModel = new DefaultListModel();
-	private JButton addPlayerButton = new JButton("�������� ������");
-	private JButton startGameButton = new JButton("������ ����������");
+	private JButton addPlayerButton = new JButton("Add player");
+	private JButton startGameButton = new JButton("Start game");
 
 	
 	
@@ -34,7 +34,7 @@ public class LoginScreenGUI extends JFrame {
 		playerName = new JLabel();
 		
 		
-		playerNameField = new JTextField("����� ������ ...");
+		playerNameField = new JTextField("Enter player's name ...");
 	
 		playerNameField.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
@@ -47,7 +47,7 @@ public class LoginScreenGUI extends JFrame {
 		panel.add(namePanel);
 		
 		choosePiece = new JLabel();
-		choosePiece.setText("�������� �����:");
+		choosePiece.setText("Choose piece:");
 		choosePiece.setHorizontalAlignment(JLabel.CENTER);
 		
 		
@@ -88,7 +88,7 @@ public class LoginScreenGUI extends JFrame {
 		this.setContentPane(panel);
 		this.setSize(700,400);
 		this.setVisible(true);
-		this.setTitle("�������� ����������");
+		this.setTitle("Create players");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	
