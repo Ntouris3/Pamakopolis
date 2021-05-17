@@ -27,12 +27,13 @@ public class GUI extends JFrame{
 	private JButton buildButton= new JButton("Build");
 	private JButton demolishButton= new JButton("Demolish");
 	private JButton mortgageButton;
-	private JButton tradeButton;
 	private JButton seeCardsButton = new JButton("See Cards");
 		
 	private JButton endTurnButton = new JButton("End Turn");
 	
 	private JTextField ownedByField;
+	
+	private JButton tradeButton = new JButton("Trade Properties");
 		
 	String cardImgName;
 	JTextField tf = new JTextField();
@@ -56,6 +57,12 @@ public class GUI extends JFrame{
 		buyButton.setVisible(false);
 		mortgageButton = new JButton("MORTGAGE");
 		mortgageButton.setVisible(false);
+		
+//		Player p1 = new Player("Teo", new Piece(null));
+//		Main.allPlayers.add(p1);
+//		Player p2 = new Player("Joy", new Piece(null));
+//		Main.allPlayers.add(p2);
+		
 		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		jl.setBounds(6, 6, 700, 700);
@@ -99,6 +106,8 @@ public class GUI extends JFrame{
 		//sidepanel.add(buildButton);
 		//sidepanel.add(demolishButton);
 
+		
+		
 		
 		ButtonListener listener3 = new ButtonListener();
 		buildButton.addActionListener(listener3);
@@ -321,6 +330,13 @@ public class GUI extends JFrame{
 		//sidepanel.add(seeCardsButton, BorderLayout.WEST);
 		
 		
+
+		//trade button
+		tradeButtonListener l4 = new tradeButtonListener();
+		tradeButton.addActionListener(l4);
+		sidepanel.add(tradeButton);
+		tradeButton.setVisible(true);
+
 		panelbig.setVisible(true);
 		
 		
@@ -330,6 +346,135 @@ public class GUI extends JFrame{
 		this.setVisible(true);
 		this.setTitle("");
 		this.setContentPane(panelbig);
+	}
+	
+	class tradeButtonListener implements ActionListener{
+		Player otherPlayer = null;
+		JFrame tradeFrame;
+		JButton requestTrade = new JButton();
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			tradeFrame = new JFrame("Choose a player");
+			
+			JList<String> playersJList = new JList<String>();
+			DefaultListModel<String> model = new DefaultListModel<String>();
+			for(Player thisPlayer:Main.allPlayers) {
+				if (!(thisPlayer.equals(currPlayer)))
+					model.addElement(thisPlayer.name);
+			}	
+			playersJList.setModel(model);
+
+			tradeFrame.add(playersJList);	
+			
+			playersJList.addListSelectionListener(new clickOnPlayerListener(playersJList));
+			
+			requestTrade.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JFrame f = new JFrame();
+					JTextField t = new JTextField("Does player "+ otherPlayer.name+" accept the trading?");
+					t.setEditable(false);
+					f.add(t);
+					JButton b = new JButton("Reject");
+					b.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {f.dispose();}});
+					f.add(b);
+					
+					JButton b1 = new JButton("Accept");
+					b1.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							f.dispose();
+							tradeFrame.getContentPane().invalidate();
+							tradeFrame.getContentPane().validate();
+							tradeFrame.getContentPane().repaint();
+							
+							JPanel leftPanel = new JPanel();
+							JPanel rightPanel = new JPanel();
+							
+							JTextField test = new JTextField("tesilugbs");
+							JTextField test2 = new JTextField("tesilugbs");
+							leftPanel.add(test);
+							rightPanel.add(test2);
+							JList<String> currPlayerPropertiesJList = new JList<String>();
+							DefaultListModel<String> model1 = new DefaultListModel<String>();
+							for(Property thisProperty:currPlayer.properties) {
+								model1.addElement(thisProperty.name);
+							}
+							
+							currPlayerPropertiesJList.setModel(model1);
+
+							leftPanel.add(currPlayerPropertiesJList);
+							
+							
+							
+							
+							
+							JList<String> otherPropertiesJList = new JList<String>();
+							DefaultListModel<String> model2 = new DefaultListModel<String>();
+							for(Property thisProperty:otherPlayer.properties) {
+								model2.addElement(thisProperty.name);
+							}
+							
+							otherPropertiesJList.setModel(model2);
+
+							rightPanel.add(currPlayerPropertiesJList);
+							leftPanel.setVisible(true);
+							rightPanel.setVisible(true);
+							JPanel newJPanel = new JPanel();
+							newJPanel.setVisible(true);
+							newJPanel.add(leftPanel);
+							newJPanel.add(rightPanel);
+							tradeFrame.add(newJPanel);
+							tradeFrame.setContentPane(newJPanel);
+							tradeFrame.revalidate();
+							tradeFrame.repaint();
+						}});
+					f.add(b1);
+					
+					f.setLayout(new FlowLayout());
+					f.setSize(400,200); 
+					f.setVisible(true);
+				}
+			});
+			
+			
+			
+
+			tradeFrame.setLayout(new FlowLayout());
+			tradeFrame.setSize(400,400); 
+			tradeFrame.setVisible(true);
+		}
+		class clickOnPlayerListener implements  ListSelectionListener{
+			
+			JList<String> playersJList;
+			
+			
+			public clickOnPlayerListener(JList<String> playersJList) {
+				this.playersJList = playersJList;
+			}
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
+				if (!e.getValueIsAdjusting()) {//This line prevents double events
+					for (Player thisPlayer : Main.allPlayers) {
+						if (thisPlayer.name.equals(playersJList.getSelectedValue())) {
+							otherPlayer = thisPlayer;
+							if (otherPlayer!= null) {
+								requestTrade.setText("Request trade from "+otherPlayer.name);
+								
+								
+								tradeFrame.add(requestTrade);
+								tradeFrame.revalidate();			
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	class endTurnButtonListener implements ActionListener {
 		
@@ -420,6 +565,7 @@ public class GUI extends JFrame{
 			    			}
 			    			cardImgName = thisProperty.cardImg;
 			    			new MyCanvas();
+			    			break;
 			    		}
 			    	}
 			    }
