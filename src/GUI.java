@@ -65,7 +65,7 @@ public class GUI extends JFrame{
 		
 		Dice dice2 = new Dice(210, 180, 40, 40);
 		jl.add(dice2);
-
+		
 		gameP.setBounds(0, 0, 700, 700);
 		gameP.setVisible(true);
 		
@@ -224,15 +224,38 @@ public class GUI extends JFrame{
 		mortgageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame f = new JFrame();
-				JPanel p = new JPanel();
+				
+				JLabel nameLabel = new JLabel("Name:"+currPlayer.name);
+				nameLabel.setOpaque(true);
+				nameLabel.setBackground(Color.white);
+				nameLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+				
+				JLabel balanceLabel = new JLabel("Balance:"+String.valueOf(currPlayer.balance)+"$");
+				balanceLabel.setOpaque(true);
+				balanceLabel.setBackground(Color.white);
+				balanceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+				
+				ImagePanel p = new ImagePanel(new ImageIcon(getClass()
+		                .getResource("/Assets/mortgages.jpg"))
+		                .getImage());
+				
+				
 				JButton b1 = new JButton("Mortgage");
 				b1.setVisible(false);
+				
 				JButton b2 = new JButton("Unmortgage");
 				b2.setVisible(false);
-				JLabel label1 = new JLabel("                                    ");
+				
+				JLabel label1 = new JLabel("");
+				label1.setOpaque(true);
+				label1.setBackground(Color.white);
+				
 				JList <Property> list = new JList(currPlayer.properties.toArray());
 				DefaultListModel<Property> model;
-					
+				
+				p.setLayout(new FlowLayout());
+				p.add(nameLabel);
+				p.add(balanceLabel);
 				p.add(list);
 				p.add(b1);
 				p.add(b2);
@@ -272,6 +295,7 @@ public class GUI extends JFrame{
 						label1.setText(pro.name+" is now on Mortgage");
 						b2.setVisible(true);
 		        		b1.setVisible(false);
+		        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"$");
 		        		p.revalidate();
 						p.repaint();
 					}
@@ -281,21 +305,28 @@ public class GUI extends JFrame{
 				b2.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Property pro = list.getSelectedValue();
-						currPlayer.Unmortgage(pro);
-						label1.setText(pro.name+" is no longer on Mortgage");
-						b1.setVisible(true);
-		        		b2.setVisible(false);
-		        		p.revalidate();
-						p.repaint();
+						if(currPlayer.balance>=pro.mortgage) {
+							currPlayer.Unmortgage(pro);
+							label1.setText(pro.name+" is no longer on Mortgage");
+							b1.setVisible(true);
+			        		b2.setVisible(false);
+			        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"$");
+			        		p.revalidate();
+							p.repaint();
+						}
+						else {
+							JOptionPane.showMessageDialog (null, "Not Enough Balance to unmortgage this property", "Low Balance", JOptionPane.ERROR_MESSAGE);
+						}
+						
 					}
 				});
 							
 						f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-						f.pack();
-						f.setSize(400,400);
+						f.setSize(p.getSize());
 						f.setContentPane(p);
 						f.setTitle("Mortgage");
 						f.setVisible(true);
+						f.setResizable(false);
 					}
 		});
 		
@@ -321,8 +352,8 @@ public class GUI extends JFrame{
 		
 		
 		panelbig.setVisible(true);
-		
-		
+		sidepanel.setBackground(Color.DARK_GRAY);
+		panelbig.setBackground(Color.DARK_GRAY);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		this.setUndecorated(false);
@@ -706,7 +737,26 @@ public class GUI extends JFrame{
 				}
 	}
 	
-	
+	 class ImagePanel extends JPanel {
+
+		  private Image img;
+		  public ImagePanel(String img) {
+		    this(new ImageIcon(img).getImage());
+		  }
+		  public ImagePanel(Image img) {
+		    this.img = img;
+		    Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
+		    setPreferredSize(size);
+		    setMinimumSize(size);
+		    setMaximumSize(size);
+		    setSize(size);
+		    setLayout(null);
+		  }
+		  @Override
+		  public void paintComponent(Graphics g) {
+		    g.drawImage(img, 0, 0, null);
+		  }
+	}
 	
 	
 	

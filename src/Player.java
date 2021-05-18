@@ -1,6 +1,9 @@
-import java.awt.Component;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -161,16 +164,22 @@ public class Player {
 	}
 	
 	public void ShowJailFrame(JButton button) {
+		
 		JFrame f = new JFrame();
-		JPanel p = new JPanel();
+		ImagePane p = new ImagePane(new ImageIcon(getClass()
+                .getResource("/Assets/jail.jpg"))
+                .getImage());
 		JLabel playerName = new JLabel("Name: "+this.name);
 		JLabel playerBalance = new JLabel("Balance: "+this.balance+"$");
 		JButton payButton = new JButton("Pay Jail Fee");
 		JButton useCardButton = new JButton("Use Get Out Of Jail Card");
 		JButton rollButton = new JButton("Roll Dice");
-		
-		
 		JLayeredPane jl = new JLayeredPane();
+		
+		playerName.setForeground(Color.white);
+		playerBalance.setForeground(Color.white);
+		playerName.setFont(new Font("Serif", Font.PLAIN,30));
+		playerBalance.setFont(new Font("Serif", Font.PLAIN, 30));
 		
 		if(this.jailCards.size()==0) {
 			useCardButton.setVisible(false);
@@ -181,8 +190,10 @@ public class Player {
 		}
 		
 		jl.setPreferredSize(new Dimension(120,41));
+		
 		Dice dice1 = new Dice(0,0, 40, 40);
 		jl.add(dice1);
+		
 		Dice dice2 = new Dice(80, 0, 40, 40);
 		jl.add(dice2);
 		
@@ -259,10 +270,33 @@ public class Player {
 		
 		
 		
-		
 		f.setVisible(true);
-		f.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		f.setSize(p.getSize()); 
+		f.setResizable(false);
 		f.setTitle("Jail");
 		f.setContentPane(p);
 	}
+}
+
+class ImagePane extends JPanel {
+
+	
+	
+	private Image img;
+	  public ImagePane(String img) {
+	    this(new ImageIcon(img).getImage());
+	  }
+	  public ImagePane(Image img) {
+	    this.img = img;
+	    Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
+	    setPreferredSize(size);
+	    setMinimumSize(size);
+	    setMaximumSize(size);
+	    setSize(size);
+	    setLayout(null);
+	  }
+	  @Override
+	  public void paintComponent(Graphics g) {
+	    g.drawImage(img, 0, 0, null);
+	  }
 }
