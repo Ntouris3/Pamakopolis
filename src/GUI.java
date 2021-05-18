@@ -236,7 +236,7 @@ public class GUI extends JFrame{
 				balanceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 				
 				ImagePanel p = new ImagePanel(new ImageIcon(getClass()
-		                .getResource("/Assets/mortgages.jpg"))
+		                .getResource("/Assets/mortgage.jpg"))
 		                .getImage());
 				
 				

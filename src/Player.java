@@ -84,7 +84,7 @@ public class Player {
 	
 	public void Unmortgage (Property prop) {
 		if (prop.isMortgaged) {
-		  ReduceBalance((int)1.1*(prop.mortgage));
+		  ReduceBalance((int) (1.1*prop.mortgage));
 		  prop.isMortgaged = false;  
 		}
 	}
