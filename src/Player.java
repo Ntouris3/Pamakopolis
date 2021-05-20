@@ -167,7 +167,7 @@ public class Player {
 		
 		JFrame f = new JFrame();
 		ImagePane p = new ImagePane(new ImageIcon(getClass()
-                .getResource("/Assets/jail.jpg"))
+                .getResource("jail.jpg"))
                 .getImage());
 		JLabel playerName = new JLabel("Name: "+this.name);
 		JLabel playerBalance = new JLabel("Balance: "+this.balance+"$");
@@ -262,8 +262,11 @@ public class Player {
 						f.dispose();
 						ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
 					}
-					JOptionPane.showMessageDialog(null,"You didn't throw doubles thus\nYou remain in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
-					f.dispose();
+					else {
+						JOptionPane.showMessageDialog(null,"You didn't throw doubles thus/nYou remain in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+						f.dispose();
+					}
+					
 				}
 			}	
 		});

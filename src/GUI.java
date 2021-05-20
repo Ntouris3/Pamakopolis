@@ -236,7 +236,7 @@ public class GUI extends JFrame{
 				balanceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 				
 				ImagePanel p = new ImagePanel(new ImageIcon(getClass()
-		                .getResource("/Assets/mortgage.jpg"))
+		                .getResource("mortgage.jpg"))
 		                .getImage());
 				
 				
@@ -305,7 +305,7 @@ public class GUI extends JFrame{
 				b2.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Property pro = list.getSelectedValue();
-						if(currPlayer.balance>=pro.mortgage) {
+						if(currPlayer.balance>=pro.mortgage*1.1) {
 							currPlayer.Unmortgage(pro);
 							label1.setText(pro.name+" is no longer on Mortgage");
 							b1.setVisible(true);
