@@ -67,7 +67,46 @@ public class Player {
 		
 	}
 	
-	public void Trade (Player otherPlayer) {
+	public void Trade (Player otherPlayer, ArrayList<Property> currToOtherLocation, ArrayList<GetOutOfJailCard> currToOtherJailCards, int currToOtherMoney,
+			ArrayList<Property> otherToCurrLocation, ArrayList<GetOutOfJailCard> otherToCurrJailCards, int otherToCurrMoney) {
+		int noTrade = 0;
+		if (!(currToOtherLocation.isEmpty())) {
+			this.properties.removeAll(currToOtherLocation);
+			otherPlayer.properties.addAll(currToOtherLocation);
+		}else {
+			noTrade++;
+		}
+		if (!(currToOtherJailCards.isEmpty())) {
+			this.jailCards.removeAll(currToOtherJailCards);
+			otherPlayer.jailCards.addAll(currToOtherJailCards);
+		}else {
+			noTrade++;
+		}
+		this.ReduceBalance(currToOtherMoney);
+		otherPlayer.AddBalance(currToOtherMoney);
+		if(currToOtherMoney == 0)
+			noTrade++;
+		
+		if (!(otherToCurrLocation.isEmpty())) {
+			otherPlayer.properties.removeAll(otherToCurrLocation);
+			this.properties.addAll(otherToCurrLocation);
+		}else {
+			noTrade++;
+		}
+		if (!(otherToCurrJailCards.isEmpty())) {
+			otherPlayer.jailCards.removeAll(otherToCurrJailCards);
+			this.jailCards.addAll(otherToCurrJailCards);
+		}else {
+			noTrade++;
+		}
+		otherPlayer.ReduceBalance(otherToCurrMoney);
+		this.AddBalance(otherToCurrMoney);
+		if (otherToCurrMoney == 0)
+			noTrade++;
+		if (noTrade == 6)
+			JOptionPane.showMessageDialog(null, "No trade was input");
+		else
+			JOptionPane.showMessageDialog(null, "Trade Succeed");
 		
 	}
 	

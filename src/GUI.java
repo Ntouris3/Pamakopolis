@@ -64,11 +64,6 @@ public class GUI extends JFrame{
 		mortgageButton = new JButton("MORTGAGE");
 		mortgageButton.setVisible(false);
 		
-//		Player p1 = new Player("Teo", new Piece(null));
-//		Main.allPlayers.add(p1);
-//		Player p2 = new Player("Joy", new Piece(null));
-//		Main.allPlayers.add(p2);
-		
 		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		jl.setBounds(6, 6, 700, 700);
@@ -358,10 +353,18 @@ public class GUI extends JFrame{
 		Player otherPlayer = null;
 		JFrame tradeFrame;
 		JButton requestTrade = new JButton();
+		JFrame f = new JFrame();
+		JTextField t = new JTextField();
+		JButton b = new JButton("Reject");
+		JButton b1 = new JButton("Accept");
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			tradeFrame = new JFrame("Choose a player");
+			tradeFrame = new JFrame("Trading Process");
+			
+			JTextArea messageArea = new JTextArea("Select a player:");
+			messageArea.setEditable(false);
+			tradeFrame.add(messageArea);
 			
 			JList<String> playersJList = new JList<String>();
 			DefaultListModel<String> model = new DefaultListModel<String>();
@@ -381,19 +384,16 @@ public class GUI extends JFrame{
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
-
-					
-					JFrame f = new JFrame();
-					JTextField t = new JTextField("Does player "+ otherPlayer.name+" accept the trading?");
+						
+					t.setText("Does player "+ otherPlayer.name+" accept the trading?");
 					t.setEditable(false);
 					f.add(t);
-					JButton b = new JButton("Reject");
+					
 					b.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {f.dispose();}});
 					f.add(b);
 					
-					JButton b1 = new JButton("Accept");
+					
 					b1.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							f.dispose();
@@ -405,11 +405,11 @@ public class GUI extends JFrame{
 							JPanel rightPanel = new JPanel();
 							
 							
-							ArrayList<Location> currToOtherLocation = new ArrayList<Location>();
+							ArrayList<Property> currToOtherLocation = new ArrayList<Property>();
 							
 							ArrayList<GetOutOfJailCard> currToOtherJailCards = new ArrayList<GetOutOfJailCard>();
 							
-							ArrayList<Location> otherToCurrLocation = new ArrayList<Location>();
+							ArrayList<Property> otherToCurrLocation = new ArrayList<Property>();
 							
 							ArrayList<GetOutOfJailCard> otherToCurrJailCards = new ArrayList<GetOutOfJailCard>();
 							
@@ -430,6 +430,10 @@ public class GUI extends JFrame{
 //							otherPlayer.properties.add((Property) Main.locations.get(3));
 //							otherPlayer.properties.add((Property) Main.locations.get(8));
 //							otherPlayer.properties.add((Property) Main.locations.get(9));
+							
+							JTextArea mess2Area = new JTextArea("Player "+ currPlayer.name +"'s tangible assets");
+							mess2Area.setEditable(false);
+							leftPanel.add(mess2Area);
 							
 							JList<String> currPlayerPropertiesJList = new JList<String>();
 							DefaultListModel<String> model1 = new DefaultListModel<String>();
@@ -479,7 +483,12 @@ public class GUI extends JFrame{
 							currPlayersBalanceField.setEditable(false);
 							leftPanel.add(currPlayersBalanceField);
 							
-							JTextField currPlayerTradeMoneyFiled = new JTextField("0");
+							JTextField currPlayerTradeMoneyFiled = new JTextField("Enter money...");
+							currPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
+					            public void mouseClicked(MouseEvent e){
+					            	currPlayerTradeMoneyFiled.setText("");
+					            }
+					        });
 							currPlayerTradeMoneyFiled.setColumns(10);
 							
 							
@@ -549,6 +558,12 @@ public class GUI extends JFrame{
 
 							leftPanel.add(currPlayerJailCardsJList);
 							
+							
+							JTextArea mess3Area = new JTextArea("Player "+ otherPlayer.name +"'s tangible assets");
+							mess3Area.setEditable(false);
+							rightPanel.add(mess3Area);
+							
+							
 							JList<String> otherPropertiesJList = new JList<String>();
 							DefaultListModel<String> model2 = new DefaultListModel<String>();
 							for(Property thisProperty:otherPlayer.properties) {
@@ -592,7 +607,12 @@ public class GUI extends JFrame{
 							otherPlayersBalanceField.setEditable(false);
 							rightPanel.add(otherPlayersBalanceField);
 							
-							JTextField otherPlayerTradeMoneyFiled = new JTextField("0");
+							JTextField otherPlayerTradeMoneyFiled = new JTextField("Enter money...");
+							otherPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
+					            public void mouseClicked(MouseEvent e){
+					            	otherPlayerTradeMoneyFiled.setText("");
+					            }
+					        });
 							otherPlayerTradeMoneyFiled.setColumns(10);
 							
 							((AbstractDocument)otherPlayerTradeMoneyFiled.getDocument()).setDocumentFilter(new DocumentFilter(){
@@ -678,33 +698,36 @@ public class GUI extends JFrame{
 							JButton acceptTradeButton = new JButton("Trade");
 							acceptTradeButton.addActionListener(new ActionListener() {
 								public void actionPerformed(ActionEvent e) {
+									if (!isNumeric(currPlayerTradeMoneyFiled.getText())) {
+										currPlayerTradeMoneyFiled.setText("0");
+									}
+									
+									if (!isNumeric(otherPlayerTradeMoneyFiled.getText())) {
+										otherPlayerTradeMoneyFiled.setText("0");
+									}
+									
 									currToOtherMoney = Integer.parseInt(currPlayerTradeMoneyFiled.getText());
 									otherToCurrMoney = Integer.parseInt(otherPlayerTradeMoneyFiled.getText());
-									
-									System.out.println(currToOtherLocation);
-									System.out.println(otherToCurrLocation);
-									System.out.println(currToOtherJailCards);
-									System.out.println(otherToCurrJailCards);
 
-									System.out.println(currToOtherMoney);
-									System.out.println(otherToCurrMoney);
-									
-
-									
-									
-									currPlayer.Trade(otherPlayer);
+									if (currToOtherMoney <= currPlayer.balance && otherToCurrMoney <= otherPlayer.balance) {
+										currPlayer.Trade(otherPlayer, currToOtherLocation, currToOtherJailCards, currToOtherMoney, otherToCurrLocation, otherToCurrJailCards, otherToCurrMoney);
+										tradeFrame.dispose();
+									}else {
+										JOptionPane.showMessageDialog(null, "Not valid input");
+									}
 								}});
 							newJPanel.add(acceptTradeButton);
 							tradeFrame.add(newJPanel);
 							tradeFrame.setContentPane(newJPanel);
 							tradeFrame.revalidate();
-							tradeFrame.repaint();
+
 						}});
 					f.add(b1);
 					
 					f.setLayout(new FlowLayout());
 					f.setSize(400,200); 
 					f.setVisible(true);
+					
 				}
 			});
 			
@@ -715,6 +738,19 @@ public class GUI extends JFrame{
 			tradeFrame.setSize(400,400); 
 			tradeFrame.setVisible(true);
 		}
+		
+		public boolean isNumeric(String strNum) {
+		    if (strNum.equals(null)) {
+		        return false;
+		    }
+		    try {
+		        double d = Double.parseDouble(strNum);
+		    } catch (NumberFormatException nfe) {
+		        return false;
+		    }
+		    return true;
+		}
+		
 		class clickOnPlayerListener implements  ListSelectionListener{
 			
 			JList<String> playersJList;
