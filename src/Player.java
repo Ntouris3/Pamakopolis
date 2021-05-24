@@ -257,12 +257,12 @@ public class Player {
 						isInJail = false;
 						jailTurns = 0;
 						ReduceBalance(50);
-						JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50$ have been removed from you balance /n You can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50$ have been removed from you balance\nYou can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 						f.dispose();
 						ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
 					}
 					else {
-						JOptionPane.showMessageDialog(null,"You didn't throw doubles thus/nYou remain in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"You didn't throw doubles thus\nYou remain in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 						f.dispose();
 					}
 					
