@@ -176,8 +176,7 @@ public class Player {
 		JButton rollButton = new JButton("Roll Dice");
 		JLayeredPane jl = new JLayeredPane();
 		
-		playerName.setForeground(Color.white);
-		playerBalance.setForeground(Color.white);
+		
 		playerName.setFont(new Font("Serif", Font.PLAIN,30));
 		playerBalance.setFont(new Font("Serif", Font.PLAIN, 30));
 		
