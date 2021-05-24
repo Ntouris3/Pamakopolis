@@ -62,7 +62,7 @@ public class GUI extends JFrame{
 		jl.setPreferredSize(new Dimension(400, 400));
 		Dice dice1 = new Dice(150, 180, 40, 40);
 		jl.add(dice1);
-		
+		currPlayer.ShowJailFrame(buyButton);
 		Dice dice2 = new Dice(210, 180, 40, 40);
 		jl.add(dice2);
 		
@@ -226,18 +226,12 @@ public class GUI extends JFrame{
 				JFrame f = new JFrame();
 				
 				JLabel nameLabel = new JLabel("Name:"+currPlayer.name);
-				nameLabel.setOpaque(true);
-				nameLabel.setBackground(Color.white);
 				nameLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 				
 				JLabel balanceLabel = new JLabel("Balance:"+String.valueOf(currPlayer.balance)+"$");
-				balanceLabel.setOpaque(true);
-				balanceLabel.setBackground(Color.white);
 				balanceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 				
-				ImagePanel p = new ImagePanel(new ImageIcon(getClass()
-		                .getResource("mortgage.jpg"))
-		                .getImage());
+				JPanel p = new JPanel();
 				
 				
 				JButton b1 = new JButton("Mortgage");
@@ -247,9 +241,7 @@ public class GUI extends JFrame{
 				b2.setVisible(false);
 				
 				JLabel label1 = new JLabel("");
-				label1.setOpaque(true);
-				label1.setBackground(Color.white);
-				
+	
 				JList <Property> list = new JList(currPlayer.properties.toArray());
 				DefaultListModel<Property> model;
 				
@@ -322,7 +314,7 @@ public class GUI extends JFrame{
 				});
 							
 						f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-						f.setSize(p.getSize());
+						f.setSize(350,500); 
 						f.setContentPane(p);
 						f.setTitle("Mortgage");
 						f.setVisible(true);
@@ -735,30 +727,5 @@ public class GUI extends JFrame{
 			
 						
 				}
-	}
-	
-	 class ImagePanel extends JPanel {
-
-		  private Image img;
-		  public ImagePanel(String img) {
-		    this(new ImageIcon(img).getImage());
-		  }
-		  public ImagePanel(Image img) {
-		    this.img = img;
-		    Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
-		    setPreferredSize(size);
-		    setMinimumSize(size);
-		    setMaximumSize(size);
-		    setSize(size);
-		    setLayout(null);
-		  }
-		  @Override
-		  public void paintComponent(Graphics g) {
-		    g.drawImage(img, 0, 0, null);
-		  }
-	}
-	
-	
-	
-	
+	}	
 }
