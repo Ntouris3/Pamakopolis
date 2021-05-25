@@ -5,10 +5,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 
 
 public class GUI extends JFrame{
@@ -27,12 +33,13 @@ public class GUI extends JFrame{
 	private JButton buildButton= new JButton("Build");
 	private JButton demolishButton= new JButton("Demolish");
 	private JButton mortgageButton;
-	private JButton tradeButton;
 	private JButton seeCardsButton = new JButton("See Cards");
 		
 	private JButton endTurnButton = new JButton("End Turn");
 	
 	private JTextField ownedByField;
+	
+	private JButton tradeButton = new JButton("Trade Properties");
 		
 	String cardImgName;
 	JTextField tf = new JTextField();
@@ -56,6 +63,7 @@ public class GUI extends JFrame{
 		buyButton.setVisible(false);
 		mortgageButton = new JButton("MORTGAGE");
 		mortgageButton.setVisible(false);
+		
 		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		jl.setBounds(6, 6, 700, 700);
@@ -99,6 +107,8 @@ public class GUI extends JFrame{
 		//sidepanel.add(buildButton);
 		//sidepanel.add(demolishButton);
 
+		
+		
 		
 		ButtonListener listener3 = new ButtonListener();
 		buildButton.addActionListener(listener3);
@@ -321,6 +331,13 @@ public class GUI extends JFrame{
 		//sidepanel.add(seeCardsButton, BorderLayout.WEST);
 		
 		
+
+		//trade button
+		tradeButtonListener l4 = new tradeButtonListener();
+		tradeButton.addActionListener(l4);
+		sidepanel.add(tradeButton);
+		tradeButton.setVisible(true);
+
 		panelbig.setVisible(true);
 		
 		
@@ -330,6 +347,439 @@ public class GUI extends JFrame{
 		this.setVisible(true);
 		this.setTitle("");
 		this.setContentPane(panelbig);
+	}
+	
+	class tradeButtonListener implements ActionListener{
+		Player otherPlayer = null;
+		JFrame tradeFrame;
+		JButton requestTrade = new JButton();
+		JFrame f = new JFrame();
+		JTextField t = new JTextField();
+		JButton b = new JButton("Reject");
+		JButton b1 = new JButton("Accept");
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			tradeFrame = new JFrame("Trading Process");
+			
+			JTextArea messageArea = new JTextArea("Select a player:");
+			messageArea.setEditable(false);
+			tradeFrame.add(messageArea);
+			
+			JList<String> playersJList = new JList<String>();
+			DefaultListModel<String> model = new DefaultListModel<String>();
+			for(Player thisPlayer:Main.allPlayers) {
+				if (!(thisPlayer.equals(currPlayer)))
+					model.addElement(thisPlayer.name);
+			}	
+			playersJList.setModel(model);
+
+			tradeFrame.add(playersJList);	
+			
+			playersJList.addListSelectionListener(new clickOnPlayerListener(playersJList));
+			
+			requestTrade.addActionListener(new ActionListener() {
+				int currToOtherMoney = 0;
+				int otherToCurrMoney = 0;
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+						
+					t.setText("Does player "+ otherPlayer.name+" accept the trading?");
+					t.setEditable(false);
+					f.add(t);
+					
+					b.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {f.dispose();}});
+					f.add(b);
+					
+					
+					b1.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							f.dispose();
+							tradeFrame.getContentPane().invalidate();
+							tradeFrame.getContentPane().validate();
+							tradeFrame.getContentPane().repaint();
+							
+							JPanel leftPanel = new JPanel();
+							JPanel rightPanel = new JPanel();
+							
+							
+							ArrayList<Property> currToOtherLocation = new ArrayList<Property>();
+							
+							ArrayList<GetOutOfJailCard> currToOtherJailCards = new ArrayList<GetOutOfJailCard>();
+							
+							ArrayList<Property> otherToCurrLocation = new ArrayList<Property>();
+							
+							ArrayList<GetOutOfJailCard> otherToCurrJailCards = new ArrayList<GetOutOfJailCard>();
+							
+
+//							for(Card thisCard: Main.allChances) {
+//								if (thisCard instanceof GetOutOfJailCard) {
+//									currPlayer.jailCards.add((GetOutOfJailCard) thisCard);
+//								}
+//							}
+//							for(Card thisCard: Main.allCommunityChests) {
+//								if (thisCard instanceof GetOutOfJailCard) {
+//									otherPlayer.jailCards.add((GetOutOfJailCard) thisCard);
+//								}
+//							}
+//							currPlayer.properties.add((Property) Main.locations.get(1));
+//							currPlayer.properties.add((Property) Main.locations.get(5));
+//							currPlayer.properties.add((Property) Main.locations.get(6));							
+//							otherPlayer.properties.add((Property) Main.locations.get(3));
+//							otherPlayer.properties.add((Property) Main.locations.get(8));
+//							otherPlayer.properties.add((Property) Main.locations.get(9));
+							
+							JTextArea mess2Area = new JTextArea("Player "+ currPlayer.name +"'s tangible assets");
+							mess2Area.setEditable(false);
+							leftPanel.add(mess2Area);
+							
+							JList<String> currPlayerPropertiesJList = new JList<String>();
+							DefaultListModel<String> model1 = new DefaultListModel<String>();
+							for(Property thisProperty:currPlayer.properties) {
+								model1.addElement(thisProperty.name);
+							}
+							currPlayerPropertiesJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+							
+							currPlayerPropertiesJList.setModel(model1);
+							
+							currPlayerPropertiesJList.setSelectionModel(new DefaultListSelectionModel() {
+							    @Override
+							    public void setSelectionInterval(int index0, int index1) {
+							        if(super.isSelectedIndex(index0)) {
+							            super.removeSelectionInterval(index0, index1);
+							        }
+							        else {
+							            super.addSelectionInterval(index0, index1);
+							        }
+							    }});
+							
+							currPlayerPropertiesJList.addListSelectionListener(new ListSelectionListener() {
+								
+								@Override
+								public void valueChanged(ListSelectionEvent e) {
+									// TODO Auto-generated method stub
+									if (!e.getValueIsAdjusting()) {
+										
+										for (String thisPropertyName : currPlayerPropertiesJList.getSelectedValuesList() ) {
+											for (Property thisProperty : currPlayer.properties) {
+												if (thisPropertyName.equals(thisProperty.name) && !(currToOtherLocation.contains(thisProperty))) {
+													currToOtherLocation.add(thisProperty);
+													break;
+												}
+											}
+										}
+										
+										;
+									}
+								}
+							});
+							
+							leftPanel.add(currPlayerPropertiesJList);
+							
+							JTextField currPlayersBalanceField = new JTextField("Player "+currPlayer.name+" has "+ currPlayer.balance+"€");
+							currPlayersBalanceField.setEditable(false);
+							leftPanel.add(currPlayersBalanceField);
+							
+							JTextField currPlayerTradeMoneyFiled = new JTextField("Enter money...");
+							currPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
+					            public void mouseClicked(MouseEvent e){
+					            	currPlayerTradeMoneyFiled.setText("");
+					            }
+					        });
+							currPlayerTradeMoneyFiled.setColumns(10);
+							
+							
+							((AbstractDocument)currPlayerTradeMoneyFiled.getDocument()).setDocumentFilter(new DocumentFilter(){
+						        Pattern regEx = Pattern.compile("\\d*");
+
+						        @Override
+						        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {          
+						            Matcher matcher = regEx.matcher(text);
+						            if(!matcher.matches()){
+						                return;
+						            }
+						            super.replace(fb, offset, length, text, attrs);
+						        }
+						    });
+							
+							leftPanel.add(currPlayerTradeMoneyFiled);
+							
+							JList<String> currPlayerJailCardsJList = new JList<String>();
+							DefaultListModel<String> model3 = new DefaultListModel<String>();
+							for(GetOutOfJailCard thiscard:currPlayer.jailCards) {
+								
+									if (thiscard.cardImgName.equals("Chance_GOOJF.png")) {
+										model3.addElement("Chance Get out of Jail Card");
+									}else {
+										model3.addElement("Community Chest Get out of Jail Card");
+									}
+								
+							}
+							currPlayerJailCardsJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+							currPlayerJailCardsJList.setSelectionModel(new DefaultListSelectionModel() {
+							    @Override
+							    public void setSelectionInterval(int index0, int index1) {
+							        if(super.isSelectedIndex(index0)) {
+							            super.removeSelectionInterval(index0, index1);
+							        }
+							        else {
+							            super.addSelectionInterval(index0, index1);
+							        }
+							    }});
+							currPlayerJailCardsJList.addListSelectionListener(new ListSelectionListener() {
+								
+								@Override
+								public void valueChanged(ListSelectionEvent e) {
+									// TODO Auto-generated method stub
+									if (!e.getValueIsAdjusting()) {
+										
+										
+										for (String thisJailCardName : currPlayerJailCardsJList.getSelectedValuesList() ) {
+											String s ;
+											if (thisJailCardName.equals("Chance Get out of Jail Card")) {
+												s = new String("Chance_GOOJF.png");
+											}else {
+												s = new String("Community_Chest_GOOJF.png");
+											}
+											for (GetOutOfJailCard thisJailCard : currPlayer.jailCards) {
+												if (s.equals(thisJailCard.cardImgName) && !(currToOtherJailCards.contains(thisJailCard))) {
+													currToOtherJailCards.add(thisJailCard);
+													break;
+												}
+											}
+										}
+									}
+								}
+							});
+							currPlayerJailCardsJList.setModel(model3);
+
+							leftPanel.add(currPlayerJailCardsJList);
+							
+							
+							JTextArea mess3Area = new JTextArea("Player "+ otherPlayer.name +"'s tangible assets");
+							mess3Area.setEditable(false);
+							rightPanel.add(mess3Area);
+							
+							
+							JList<String> otherPropertiesJList = new JList<String>();
+							DefaultListModel<String> model2 = new DefaultListModel<String>();
+							for(Property thisProperty:otherPlayer.properties) {
+								model2.addElement(thisProperty.name);
+							}
+							otherPropertiesJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+							
+							otherPropertiesJList.setSelectionModel(new DefaultListSelectionModel() {
+							    @Override
+							    public void setSelectionInterval(int index0, int index1) {
+							        if(super.isSelectedIndex(index0)) {
+							            super.removeSelectionInterval(index0, index1);
+							        }
+							        else {
+							            super.addSelectionInterval(index0, index1);
+							        }
+							    }});
+							
+							otherPropertiesJList.addListSelectionListener(new ListSelectionListener() {
+								
+								@Override
+								public void valueChanged(ListSelectionEvent e) {
+									// TODO Auto-generated method stub
+									if (!e.getValueIsAdjusting()) {
+										
+										for (String thisPropertyName : otherPropertiesJList.getSelectedValuesList() ) {
+											for (Property thisProperty : otherPlayer.properties) {
+												if (thisPropertyName.equals(thisProperty.name) && !(otherToCurrLocation.contains(thisProperty))) {
+													otherToCurrLocation.add(thisProperty);
+													break;
+												}
+											}
+										}
+									}
+								}
+							});
+							otherPropertiesJList.setModel(model2);
+
+							rightPanel.add(otherPropertiesJList);
+							JTextField otherPlayersBalanceField = new JTextField("Player "+otherPlayer.name+" has "+ otherPlayer.balance+"€");
+							otherPlayersBalanceField.setEditable(false);
+							rightPanel.add(otherPlayersBalanceField);
+							
+							JTextField otherPlayerTradeMoneyFiled = new JTextField("Enter money...");
+							otherPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
+					            public void mouseClicked(MouseEvent e){
+					            	otherPlayerTradeMoneyFiled.setText("");
+					            }
+					        });
+							otherPlayerTradeMoneyFiled.setColumns(10);
+							
+							((AbstractDocument)otherPlayerTradeMoneyFiled.getDocument()).setDocumentFilter(new DocumentFilter(){
+						        Pattern regEx = Pattern.compile("\\d*");
+
+						        @Override
+						        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {          
+						            Matcher matcher = regEx.matcher(text);
+						            if(!matcher.matches()){
+						                return;
+						            }
+						            super.replace(fb, offset, length, text, attrs);
+						        }
+						    });
+							
+							rightPanel.add(otherPlayerTradeMoneyFiled);
+							
+							JList<String> otherPlayerJailCardsJList = new JList<String>();
+							DefaultListModel<String> model4 = new DefaultListModel<String>();
+							for(GetOutOfJailCard thiscard: otherPlayer.jailCards) {
+									if (thiscard.cardImgName.equals("Chance_GOOJF.png")) {
+										model4.addElement("Chance Get out of Jail Card");
+									}else {
+										model4.addElement("Community Chest Get out of Jail Card");
+									}
+								
+							}
+							otherPlayerJailCardsJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+							otherPlayerJailCardsJList.setSelectionModel(new DefaultListSelectionModel() {
+							    @Override
+							    public void setSelectionInterval(int index0, int index1) {
+							        if(super.isSelectedIndex(index0)) {
+							            super.removeSelectionInterval(index0, index1);
+							        }
+							        else {
+							            super.addSelectionInterval(index0, index1);
+							        }
+							    }});
+							otherPlayerJailCardsJList.addListSelectionListener(new ListSelectionListener() {
+								
+								@Override
+								public void valueChanged(ListSelectionEvent e) {
+									// TODO Auto-generated method stub
+									if (!e.getValueIsAdjusting()) {
+										
+										for (String thisJailCardName : otherPlayerJailCardsJList.getSelectedValuesList() ) {
+											String s ;
+											if (thisJailCardName.equals("Chance Get out of Jail Card")) {
+												s = new String("Chance_GOOJF.png");
+											}else {
+												s = new String("Community_Chest_GOOJF.png");
+											}
+											for (GetOutOfJailCard thisJailCard : otherPlayer.jailCards) {
+												if (s.equals(thisJailCard.cardImgName) && !(otherToCurrJailCards.contains(thisJailCard))) {
+													otherToCurrJailCards.add(thisJailCard);
+													break;
+												}
+											}
+										}
+									}
+								}
+							});
+							otherPlayerJailCardsJList.setModel(model4);
+
+							rightPanel.add(otherPlayerJailCardsJList);
+							
+							
+							leftPanel.setVisible(true);
+							rightPanel.setVisible(true);
+							leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
+							rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
+							
+							JPanel newJPanel = new JPanel();
+							newJPanel.setVisible(true);
+							newJPanel.setLayout(new FlowLayout());
+							newJPanel.add(leftPanel);
+							newJPanel.add(rightPanel);
+							
+							JButton rejectButton = new JButton("Reject");
+							rejectButton.addActionListener(new ActionListener() {
+								public void actionPerformed(ActionEvent e) {tradeFrame.dispose();}});
+							newJPanel.add(rejectButton);
+							JButton acceptTradeButton = new JButton("Trade");
+							acceptTradeButton.addActionListener(new ActionListener() {
+								public void actionPerformed(ActionEvent e) {
+									if (!isNumeric(currPlayerTradeMoneyFiled.getText())) {
+										currPlayerTradeMoneyFiled.setText("0");
+									}
+									
+									if (!isNumeric(otherPlayerTradeMoneyFiled.getText())) {
+										otherPlayerTradeMoneyFiled.setText("0");
+									}
+									
+									currToOtherMoney = Integer.parseInt(currPlayerTradeMoneyFiled.getText());
+									otherToCurrMoney = Integer.parseInt(otherPlayerTradeMoneyFiled.getText());
+
+									if (currToOtherMoney <= currPlayer.balance && otherToCurrMoney <= otherPlayer.balance) {
+										currPlayer.Trade(otherPlayer, currToOtherLocation, currToOtherJailCards, currToOtherMoney, otherToCurrLocation, otherToCurrJailCards, otherToCurrMoney);
+										tradeFrame.dispose();
+									}else {
+										JOptionPane.showMessageDialog(null, "Not valid input");
+									}
+								}});
+							newJPanel.add(acceptTradeButton);
+							tradeFrame.add(newJPanel);
+							tradeFrame.setContentPane(newJPanel);
+							tradeFrame.revalidate();
+
+						}});
+					f.add(b1);
+					
+					f.setLayout(new FlowLayout());
+					f.setSize(400,200); 
+					f.setVisible(true);
+					
+				}
+			});
+			
+			
+			
+
+			tradeFrame.setLayout(new FlowLayout());
+			tradeFrame.setSize(400,400); 
+			tradeFrame.setVisible(true);
+		}
+		
+		public boolean isNumeric(String strNum) {
+		    if (strNum.equals(null)) {
+		        return false;
+		    }
+		    try {
+		        double d = Double.parseDouble(strNum);
+		    } catch (NumberFormatException nfe) {
+		        return false;
+		    }
+		    return true;
+		}
+		
+		class clickOnPlayerListener implements  ListSelectionListener{
+			
+			JList<String> playersJList;
+			
+			
+			public clickOnPlayerListener(JList<String> playersJList) {
+				this.playersJList = playersJList;
+			}
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
+				if (!e.getValueIsAdjusting()) {//This line prevents double events
+					for (Player thisPlayer : Main.allPlayers) {
+						if (thisPlayer.name.equals(playersJList.getSelectedValue())) {
+							otherPlayer = thisPlayer;
+							if (otherPlayer!= null) {
+								requestTrade.setText("Request trade from "+otherPlayer.name);
+								
+								
+								tradeFrame.add(requestTrade);
+								tradeFrame.revalidate();			
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	class endTurnButtonListener implements ActionListener {
 		
@@ -420,6 +870,7 @@ public class GUI extends JFrame{
 			    			}
 			    			cardImgName = thisProperty.cardImg;
 			    			new MyCanvas();
+			    			break;
 			    		}
 			    	}
 			    }
