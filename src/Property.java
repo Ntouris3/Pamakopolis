@@ -2,7 +2,7 @@
 public abstract class Property extends Location{
 	protected String name;
 	protected String cardImg;
-	protected Player owner ;
+	protected Player owner = null;
 	protected int price;
 	protected int mortgage;
 	protected boolean isMortgaged;

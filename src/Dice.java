@@ -11,6 +11,10 @@ public class Dice extends JPanel {
 	
 	private int faceValue = 1;
 	
+	public void setFaceValue(int faceValue) {
+		this.faceValue = faceValue;
+	}
+
 	public Dice(int xCoord, int yCoord, int width, int height) {
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		setBounds(xCoord, yCoord, width, height);

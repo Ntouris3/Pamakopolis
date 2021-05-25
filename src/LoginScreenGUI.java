@@ -108,6 +108,7 @@ public class LoginScreenGUI extends JFrame {
 			else {
 				new Player(playerNameField.getText() , new Piece ((ImageIcon)sel_piece.getSelectedValue()));
 				listModel.removeElement(sel_piece.getSelectedValue());
+				
 			}
 			
 			playerNameField.setText("Enter name here...");
