@@ -62,7 +62,7 @@ public class GUI extends JFrame{
 		jl.setPreferredSize(new Dimension(400, 400));
 		Dice dice1 = new Dice(150, 180, 40, 40);
 		jl.add(dice1);
-		currPlayer.ShowJailFrame(buyButton);
+		
 		Dice dice2 = new Dice(210, 180, 40, 40);
 		jl.add(dice2);
 		
