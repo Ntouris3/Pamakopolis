@@ -14,7 +14,7 @@ public class Utility extends Property{
 		boolean flag=false;
 		
 		
-		for(int i=0; i<=owner.properties.size(); i++) {
+		for(int i=0; i<owner.properties.size(); i++) {
 			if(owner.properties.get(i).name.equals("Electric Company")) {
 				for(int j=0; j<owner.properties.size(); j++) {
 					if(owner.properties.get(j).name.equals("Water Works")) {

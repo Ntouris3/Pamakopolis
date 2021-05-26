@@ -1,6 +1,9 @@
-import java.awt.Component;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -57,7 +60,7 @@ public class Player {
 		this.piece.MoveOnBoard(this, temp);
 		if (temp == newPos) {         
 				this.position = newPos;
-			if (temp == 0) AddBalance(200);   //0 is the Start
+			if (temp == 0 && this.isInJail==false) AddBalance(200);   //0 is the Start
 		}
 		else 
 		{
@@ -120,7 +123,7 @@ public class Player {
 	
 	public void Unmortgage (Property prop) {
 		if (prop.isMortgaged) {
-		  ReduceBalance((int)1.1*(prop.mortgage));
+		  ReduceBalance((int) (1.1*prop.mortgage));
 		  prop.isMortgaged = false;  
 		}
 	}
@@ -143,7 +146,7 @@ public class Player {
 				sumYellow++;
 			else if (streets.get(i).colour == "Pink")
 				sumPink++;
-			else if (streets.get(i).colour == "White")
+			else if (streets.get(i).colour == "Cyan")
 				sumWhite++;
 		}
 		if (sumRed==3) {
@@ -199,33 +202,43 @@ public class Player {
 		return false;
 	}
 	
-	public void ShowJailFrame() {
+	public void ShowJailFrame(JButton button) {
+		
 		JFrame f = new JFrame();
 		JPanel p = new JPanel();
-		JButton b2 = new JButton("Pay Jail Fee");
-		JButton b1 = new JButton("Use Get Out Of Jail Card");
-		JButton b3 = new JButton("Roll Dice");
-	
+		JLabel playerName = new JLabel("Name: "+this.name);
+		JLabel playerBalance = new JLabel("Balance: "+this.balance+"$");
+		JButton payButton = new JButton("Pay Jail Fee");
+		JButton useCardButton = new JButton("Use Get Out Of Jail Card");
+		JButton rollButton = new JButton("Roll Dice");
 		JLayeredPane jl = new JLayeredPane();
 		
+		
+		playerName.setFont(new Font("Serif", Font.PLAIN,30));
+		playerBalance.setFont(new Font("Serif", Font.PLAIN, 30));
+		
 		if(this.jailCards.size()==0) {
-			b1.setVisible(false);
+			useCardButton.setVisible(false);
 		}
 		
 		if(this.balance<50) {
-			b2.setVisible(false);
+			payButton.setVisible(false);
 		}
 		
 		jl.setPreferredSize(new Dimension(120,41));
+		
 		Dice dice1 = new Dice(0,0, 40, 40);
 		jl.add(dice1);
+		
 		Dice dice2 = new Dice(80, 0, 40, 40);
 		jl.add(dice2);
 		
 		p.setLayout(new FlowLayout());
-		p.add(b1);
-		p.add(b2);
-		p.add(b3);
+		p.add(playerName);
+		p.add(playerBalance);
+		p.add(useCardButton);
+		p.add(payButton);
+		p.add(rollButton);
 		p.add(jl);
 		
 		
@@ -236,7 +249,7 @@ public class Player {
 		this.jailTurns++;
 		
 		
-		b1.addActionListener(new ActionListener() {
+		useCardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(jailCards.get(0).getCardImgName()=="Chance_GOOJF") {
 					Main.allChances.add(jailCards.get(0));
@@ -247,23 +260,25 @@ public class Player {
 				jailCards.remove(0);
 				isInJail=false;
 				jailTurns=0;
+				button.setVisible(true);
 				JOptionPane.showMessageDialog(null,"You succesfully used your card to get out of jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 				f.dispose();
 			}
 		});
 		
 
-		b2.addActionListener(new ActionListener() {
+		payButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ReduceBalance(50);
 				isInJail=false;
 				jailTurns=0;
+				button.setVisible(true);
 				JOptionPane.showMessageDialog(null,"You succesfully payed the fee and got out of jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 				f.dispose();
 			}
 		});
 		
-		b3.addActionListener(new ActionListener() {
+		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
 				dice2.rollDice();
@@ -272,20 +287,41 @@ public class Player {
 					jailTurns = 0;
 					JOptionPane.showMessageDialog(null,"You got out of jail thanks to your dice roll","Alert",JOptionPane.INFORMATION_MESSAGE);
 					f.dispose();
+					ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
 				}
 				else {
-					b3.setVisible(false);
-					p.revalidate();
-					p.repaint();
+					if(jailTurns==3) {
+						if(balance<50) {
+							isInJail = false;
+							jailTurns = 0;
+							JOptionPane.showMessageDialog(null,"You waited 3 rounds you can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+							f.dispose();
+							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+						}else {
+							isInJail = false;
+							jailTurns = 0;
+							ReduceBalance(50);
+							JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50$ have been removed from you balance\nYou can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+							f.dispose();
+							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"You didn't throw doubles\nYou remain in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+						f.dispose();
+					}
+					
 				}
-				
 			}	
 		});
 		
 		
+		
 		f.setVisible(true);
-		f.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		f.setSize(420,400); 
+		f.setResizable(false);
 		f.setTitle("Jail");
 		f.setContentPane(p);
 	}
 }
+

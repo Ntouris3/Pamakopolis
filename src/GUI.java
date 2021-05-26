@@ -70,10 +70,10 @@ public class GUI extends JFrame{
 		jl.setPreferredSize(new Dimension(400, 400));
 		Dice dice1 = new Dice(150, 180, 40, 40);
 		jl.add(dice1);
-
+		
 		Dice dice2 = new Dice(210, 180, 40, 40);
 		jl.add(dice2);
-
+		
 		gameP.setBounds(0, 0, 700, 700);
 		gameP.setVisible(true);
 		
@@ -119,7 +119,7 @@ public class GUI extends JFrame{
 		endTurnButtonListener listener = new endTurnButtonListener();
 		endTurnButton.addActionListener(listener);
 		
-	
+		
 		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -143,8 +143,8 @@ public class GUI extends JFrame{
 						sidepanel.revalidate();
 						sidepanel.repaint();
 						//Paying The Rent//
-						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
-							if(Main.locations.get(currPlayer.position) instanceof Street) {
+						if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer && ((Property)Main.locations.get(currPlayer.position)).isMortgaged==false) {
+							if(Main.locations.get(currPlayer.position) instanceof Street ) {
 								((Street)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
 								System.out.println("Rent payed");
 							}
@@ -202,7 +202,6 @@ public class GUI extends JFrame{
 				
 				if(currPlayer.position == 10) {
 					if(currPlayer.isInJail==true) {
-						mortgageButton.setVisible(false);
 						buyButton.setVisible(false);
 						rollButton.setVisible(false);
 						sidepanel.revalidate();
@@ -235,15 +234,30 @@ public class GUI extends JFrame{
 		mortgageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame f = new JFrame();
+				
+				JLabel nameLabel = new JLabel("Name:"+currPlayer.name);
+				nameLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+				
+				JLabel balanceLabel = new JLabel("Balance:"+String.valueOf(currPlayer.balance)+"$");
+				balanceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+				
 				JPanel p = new JPanel();
+				
+				
 				JButton b1 = new JButton("Mortgage");
 				b1.setVisible(false);
+				
 				JButton b2 = new JButton("Unmortgage");
 				b2.setVisible(false);
-				JLabel label1 = new JLabel("                                    ");
+				
+				JLabel label1 = new JLabel("");
+	
 				JList <Property> list = new JList(currPlayer.properties.toArray());
 				DefaultListModel<Property> model;
-					
+				
+				p.setLayout(new FlowLayout());
+				p.add(nameLabel);
+				p.add(balanceLabel);
 				p.add(list);
 				p.add(b1);
 				p.add(b2);
@@ -283,6 +297,7 @@ public class GUI extends JFrame{
 						label1.setText(pro.name+" is now on Mortgage");
 						b2.setVisible(true);
 		        		b1.setVisible(false);
+		        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"$");
 		        		p.revalidate();
 						p.repaint();
 					}
@@ -292,21 +307,28 @@ public class GUI extends JFrame{
 				b2.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Property pro = list.getSelectedValue();
-						currPlayer.Unmortgage(pro);
-						label1.setText(pro.name+" is no longer on Mortgage");
-						b1.setVisible(true);
-		        		b2.setVisible(false);
-		        		p.revalidate();
-						p.repaint();
+						if(currPlayer.balance>=pro.mortgage*1.1) {
+							currPlayer.Unmortgage(pro);
+							label1.setText(pro.name+" is no longer on Mortgage");
+							b1.setVisible(true);
+			        		b2.setVisible(false);
+			        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"$");
+			        		p.revalidate();
+							p.repaint();
+						}
+						else {
+							JOptionPane.showMessageDialog (null, "Not Enough Balance to unmortgage this property", "Low Balance", JOptionPane.ERROR_MESSAGE);
+						}
+						
 					}
 				});
 							
 						f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-						f.pack();
-						f.setSize(400,400);
+						f.setSize(350,500); 
 						f.setContentPane(p);
 						f.setTitle("Mortgage");
 						f.setVisible(true);
+						f.setResizable(false);
 					}
 		});
 		
@@ -339,8 +361,8 @@ public class GUI extends JFrame{
 		tradeButton.setVisible(true);
 
 		panelbig.setVisible(true);
-		
-		
+		sidepanel.setBackground(Color.DARK_GRAY);
+		panelbig.setBackground(Color.DARK_GRAY);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		this.setUndecorated(false);
@@ -794,21 +816,25 @@ public class GUI extends JFrame{
 			
 			currPlayer = Main.allPlayers.get(currPlayerCounter);
 		
-			if(currPlayer.jailTurns==3) {
-				JOptionPane.showMessageDialog(null,"You waited 3 rounds, you are now free","Alert",JOptionPane.INFORMATION_MESSAGE);
-				currPlayer.isInJail=false;
-			}
 			
 			if(currPlayer.isInJail==true) {
 				rollButton.setVisible(false);
-				currPlayer.ShowJailFrame();
+				sidepanel.revalidate();
+				sidepanel.repaint();
+				currPlayer.ShowJailFrame(rollButton);
 			}
 			else {
 				rollButton.setVisible(true);
+				sidepanel.revalidate();
+				sidepanel.repaint();
 			}
-			
+			if(currPlayer.properties.size()<=0) {
+				mortgageButton.setVisible(false);
+			}
+			else {
+				mortgageButton.setVisible(true);
+			}
 			buyButton.setVisible(false);
-			mortgageButton.setVisible(false);
 		}
 	}
 	class seeCardsButtonListener implements ActionListener {
@@ -1152,11 +1178,5 @@ public class GUI extends JFrame{
 			
 						
 				}
-	}
-	
-	
-	
-	
-	
-	
+	}	
 }
