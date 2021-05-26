@@ -146,7 +146,7 @@ public class Player {
 				sumYellow++;
 			else if (streets.get(i).colour == "Pink")
 				sumPink++;
-			else if (streets.get(i).colour == "White")
+			else if (streets.get(i).colour == "Cyan")
 				sumWhite++;
 		}
 		if (sumRed==3) {
@@ -205,9 +205,7 @@ public class Player {
 	public void ShowJailFrame(JButton button) {
 		
 		JFrame f = new JFrame();
-		ImagePane p = new ImagePane(new ImageIcon(getClass()
-                .getResource("jail.jpg"))
-                .getImage());
+		JPanel p = new JPanel();
 		JLabel playerName = new JLabel("Name: "+this.name);
 		JLabel playerBalance = new JLabel("Balance: "+this.balance+"$");
 		JButton payButton = new JButton("Pay Jail Fee");
@@ -320,32 +318,10 @@ public class Player {
 		
 		
 		f.setVisible(true);
-		f.setSize(p.getSize()); 
+		f.setSize(420,400); 
 		f.setResizable(false);
 		f.setTitle("Jail");
 		f.setContentPane(p);
 	}
 }
 
-class ImagePane extends JPanel {
-
-	
-	
-	private Image img;
-	  public ImagePane(String img) {
-	    this(new ImageIcon(img).getImage());
-	  }
-	  public ImagePane(Image img) {
-	    this.img = img;
-	    Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
-	    setPreferredSize(size);
-	    setMinimumSize(size);
-	    setMaximumSize(size);
-	    setSize(size);
-	    setLayout(null);
-	  }
-	  @Override
-	  public void paintComponent(Graphics g) {
-	    g.drawImage(img, 0, 0, null);
-	  }
-}
