@@ -4,7 +4,10 @@ import java.util.Stack;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -16,8 +19,7 @@ public class Board extends JPanel {
 	private ArrayList<Location> locations;
 	private ArrayList<Player> playerTurn;
 	private BufferedImage boardimg;
-	private Stack<Card> chance;
-	private Stack<Card> communityChest;
+
 	private BufferedImage image;
 
 	public Board() {
@@ -33,6 +35,10 @@ public class Board extends JPanel {
 		
 	     this.setSize(image.getWidth(), image.getHeight());
 	  
+
+		
+			
+
 	    }
 
 	    @Override

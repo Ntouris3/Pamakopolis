@@ -109,7 +109,8 @@ public class Player {
 		if (noTrade == 6)
 			JOptionPane.showMessageDialog(null, "No trade was input");
 		else
-			JOptionPane.showMessageDialog(null, "Trade Succeed");
+			JOptionPane.showMessageDialog(null, "Trade Succeed \n"+currToOtherLocation+"\n"+currToOtherJailCards+"\n"+currToOtherMoney+"€\n"+" were transfered to "+otherPlayer.name+
+					"\n"+otherToCurrLocation+"\n"+otherToCurrJailCards+"\n"+otherToCurrMoney+"€\n"+" were transfered to"+this.name);
 		
 	}
 	

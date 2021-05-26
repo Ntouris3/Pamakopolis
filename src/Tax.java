@@ -14,6 +14,7 @@ public class Tax extends Location{
 		
 		if(player.balance>=tax) {
 			player.ReduceBalance(tax);
+			JOptionPane.showMessageDialog(null, "Tax: "+tax+"€ payed.");
 		}
 		else {
 			JOptionPane.showMessageDialog(null,"You can't afford to pay the tax","Alert",JOptionPane.WARNING_MESSAGE);
