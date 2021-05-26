@@ -1,3 +1,4 @@
+import javax.swing.JOptionPane;
 
 public abstract class Property extends Location{
 	protected String name;

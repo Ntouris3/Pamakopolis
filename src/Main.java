@@ -21,7 +21,6 @@ public class Main {
 		
 		createData();
 		
-		System.out.println(allChances);
 		ArrayList<Card> shuffledThisList = new ArrayList<>();
 		for (int i =0; i<allChances.size();i++) {
 			shuffledThisList.add(allChances.poll());
@@ -31,9 +30,7 @@ public class Main {
 		for (Card thisCard: shuffledThisList) {
 			allChances.add(thisCard);
 		}
-		System.out.println(allChances);
 		
-		System.out.println(allCommunityChests);
 		shuffledThisList = new ArrayList<>();
 		for (int i =0; i<allChances.size();i++) {
 			shuffledThisList.add(allCommunityChests.poll());
@@ -43,7 +40,7 @@ public class Main {
 		for (Card thisCard: shuffledThisList) {
 			allCommunityChests.add(thisCard);
 		}
-		System.out.println(allCommunityChests);
+		
 		//new LoginScreenGUI();
 
 
@@ -63,7 +60,7 @@ public class Main {
 		
 
 
-		//new GUI();
+		new GUI();
 
 
 	}

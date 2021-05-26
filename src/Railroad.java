@@ -23,6 +23,7 @@ public class Railroad extends Property{
 		if(player.balance>=sum*rent) {
 			player.ReduceBalance(sum*rent);
 			owner.AddBalance(sum*rent);
+			JOptionPane.showMessageDialog(null, "Rent: "+sum*rent+"€ payed.");
 		}
 		else {
 			JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);

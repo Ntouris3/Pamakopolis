@@ -17,6 +17,9 @@ public class TransportationCard extends Card{
             newPosition = n;
         }else{	//direct transportation, n is the final new position
             newPosition = n;
+            if (this.cardImgName.equals("Advance_To_Go.png")||this.cardImgName.equals("CC_Advance_to_Go.png")) {
+            	p.AddBalance(200);
+            }
         }
         p.ChangePosition(newPosition);
     }

@@ -20,7 +20,7 @@ import javax.swing.text.BadLocationException;
 public class GUI extends JFrame{
 
 	private Player currPlayer;
-	
+	private boolean canEnd = false;
 	private int timesPressedRoll = 0;
 	public static JPanel panelbig = new JPanel();
 	public static JLayeredPane gameP = new JLayeredPane();
@@ -132,22 +132,34 @@ public class GUI extends JFrame{
 		endTurnButton.addActionListener(listener);
 		
 		
-		
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				timesPressedRoll++;
-				rollButton.setVisible(false);
+				canEnd = true;
+				balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
+				
 				sidepanel.revalidate();
-				//if(timesPressedRoll<3) {
-					//dice1.rollDice();
-					//dice2.rollDice();
-					
+				sidepanel.repaint();
+				if(timesPressedRoll<3) {
+//					dice1.rollDice();
+//					dice2.rollDice();
 					//demo
-					dice1.setFaceValue(2);
+					dice1.setFaceValue(5);
 					dice1.repaint();
 					dice2.setFaceValue(2);
 					dice2.repaint();
+					
+					if(dice1.getFaceValue() != dice2.getFaceValue()) {
+						rollButton.setVisible(false);
+					}else {
+						
+						rollButton.setVisible(true);
+					}
+					sidepanel.revalidate();
+					sidepanel.repaint();
+			
+
 					
 					dice1.paintImmediately(getX(), getY(), getWidth(), getHeight());
 					dice2.paintImmediately(getX(), getY(), getWidth(), getHeight());
@@ -177,7 +189,8 @@ public class GUI extends JFrame{
 					}
 					
 					//Disabling Buy Button And Paying off rent//
-					if(Main.locations.get(currPlayer.position) instanceof Street || Main.locations.get(currPlayer.position) instanceof Utility || Main.locations.get(currPlayer.position) instanceof Railroad) {
+					if(Main.locations.get(currPlayer.position) instanceof Street || Main.locations.get(currPlayer.position) instanceof Utility 
+							|| Main.locations.get(currPlayer.position) instanceof Railroad) {
 						if(((Property)Main.locations.get(currPlayer.position)).getOwner() == null){
 							buyButton.setVisible(true);
 							sidepanel.revalidate();
@@ -191,15 +204,15 @@ public class GUI extends JFrame{
 							if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
 								if(Main.locations.get(currPlayer.position) instanceof Street) {
 									((Street)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
-									System.out.println("Rent payed");
+									//System.out.println("Rent payed");
 								}
 								else if(Main.locations.get(currPlayer.position) instanceof Utility){
 									((Utility)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
-									System.out.println("Rent payed");
+									//System.out.println("Rent payed");
 								}
 								else {
 									((Railroad)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
-									System.out.println("Rent payed");
+									//System.out.println("Rent payed");
 								}
 							}
 							
@@ -235,16 +248,20 @@ public class GUI extends JFrame{
 				//PAYING TAX WHEN HITTING TAX BLOCK//
 				if(Main.locations.get(currPlayer.position) instanceof Tax ){
 					((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
-					System.out.println("Tax payed");
+					//System.out.println("Tax payed");
 				}
 				
 				//Chance And Community Chest/
-				if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
-					Main.allCommunityChests.element().cardFunction(currPlayer);
-				}
-				else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
-					Main.allChances.element().cardFunction(currPlayer);
-				}
+				canEnd = false;
+//				if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
+//					//TO-DO
+//					JOptionPane.showMessageDialog(null,"You stepped on a Community Chest, draw a card.");
+//					//Main.allCommunityChests.element().cardFunction(currPlayer);
+//				}
+//				else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
+//					JOptionPane.showMessageDialog(null,"You stepped on a Chance, draw a card.");
+//					//Main.allChances.element().cardFunction(currPlayer);
+//				}
 				
 				//Go To Prison Block//
 				if(currPlayer.position == 30) {
@@ -264,16 +281,20 @@ public class GUI extends JFrame{
 					//PAYING TAX WHEN HITTING TAX BLOCK//
 					if(Main.locations.get(currPlayer.position) instanceof Tax ){
 						((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
-						System.out.println("Tax payed");
+						//System.out.println("Tax payed");
 					}
 					
 					//Chance And Community Chest/
-					if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
-						Main.allCommunityChests.element().cardFunction(currPlayer);
-					}
-					else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
-						Main.allChances.element().cardFunction(currPlayer);
-					}
+					canEnd = false;
+//					if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
+//						//TO-DO
+//						JOptionPane.showMessageDialog(null,"You stepped on a Community Chest, draw a card.");
+//						//Main.allCommunityChests.element().cardFunction(currPlayer);
+//					}
+//					else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
+//						JOptionPane.showMessageDialog(null,"You stepped on a Chance, draw a card.");
+//						//Main.allChances.element().cardFunction(currPlayer);
+//					}
 					
 					//Go To Prison Block//
 					if(currPlayer.position == 30) {
@@ -292,12 +313,16 @@ public class GUI extends JFrame{
 							JOptionPane.showMessageDialog(null,"You are now in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 						}	
 					}
-//				}else {
-//					currPlayer.isInJail=true;
-//					currPlayer.position = 10;
-//					JOptionPane.showMessageDialog(null,"You rolled 3 times. You are now in jail");
-//				}
-			}
+				}
+				
+			}else {
+					currPlayer.isInJail=true;
+					currPlayer.position = 10;
+					JOptionPane.showMessageDialog(null,"You rolled 3 times. You are now in jail");
+				}
+				balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
+				sidepanel.revalidate();
+				sidepanel.repaint();
 		}});
 	
 		//BUY BUTTON
@@ -307,9 +332,13 @@ public class GUI extends JFrame{
 					JOptionPane.showMessageDialog (null, "Not Enough Balance to aquire this property", "Low Balance", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
+					
 					currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
 					buyButton.setVisible(false);
 					mortgageButton.setVisible(true);
+					balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");		
+					propertyInfoField.setText("This property is owned by "+((Property) Main.locations.get(currPlayer.position)).getOwner().name+
+							" and costs "+((Property) Main.locations.get(currPlayer.position)).price+"€");
 					sidepanel.revalidate();
 					sidepanel.repaint();
 				}
@@ -325,7 +354,7 @@ public class GUI extends JFrame{
 				JLabel nameLabel = new JLabel("Name:"+currPlayer.name);
 				nameLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 				
-				JLabel balanceLabel = new JLabel("Balance:"+String.valueOf(currPlayer.balance)+"$");
+				JLabel balanceLabel = new JLabel("Balance:"+String.valueOf(currPlayer.balance)+"€");
 				balanceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 				
 				JPanel p = new JPanel();
@@ -384,7 +413,7 @@ public class GUI extends JFrame{
 						label1.setText(pro.name+" is now on Mortgage");
 						b2.setVisible(true);
 		        		b1.setVisible(false);
-		        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"$");
+		        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"€");
 		        		p.revalidate();
 						p.repaint();
 					}
@@ -399,7 +428,7 @@ public class GUI extends JFrame{
 							label1.setText(pro.name+" is no longer on Mortgage");
 							b1.setVisible(true);
 			        		b2.setVisible(false);
-			        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"$");
+			        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"€");
 			        		p.revalidate();
 							p.repaint();
 						}
@@ -878,9 +907,11 @@ public class GUI extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			rollButton.setVisible(true);
-			sidepanel.revalidate();
-			if(timesPressedRoll>0) {
+			
+			if(canEnd) {
+				timesPressedRoll = 0;
+				rollButton.setVisible(true);
+				sidepanel.revalidate();
 				currPlayerCounter++;
 				
 				if(currPlayerCounter == Main.allPlayers.size()) {
@@ -896,17 +927,30 @@ public class GUI extends JFrame{
 				
 				if(currPlayer.isInJail==true) {
 					rollButton.setVisible(false);
-					currPlayer.ShowJailFrame();
+					currPlayer.ShowJailFrame(rollButton);
+					//TO-DO
+					canEnd = true;
+					panelbig.setVisible(false);
+					panelbig.repaint();
+					panelbig.revalidate();
 				}
 				else {
 					rollButton.setVisible(true);
 				}
 				
+				balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
 				buyButton.setVisible(false);
 				mortgageButton.setVisible(false);
-			}else {
-				JOptionPane.showMessageDialog(null,"You must roll");
+				canEnd = false;
+			}else if (!currPlayer.isInJail) {
+
+				JOptionPane.showMessageDialog(null,"You can't end turn.");
+			}else{
+				canEnd = true;
 			}
+			panelbig.setVisible(true);
+			panelbig.repaint();
+			panelbig.revalidate();
 		}
 	}
 	class seeCardsButtonListener implements ActionListener {
@@ -998,22 +1042,41 @@ public class GUI extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			if (Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
-				Card thisCard = Main.allCommunityChests.peek();									//PREPEI NA KLEI8EI !!PRIN!! KLEI8EI H cardFunction!!!!
+				Card thisCard = Main.allCommunityChests.poll();
 				cardImgName = thisCard.cardImgName;
+				new MyCanvas();
+				
+				seeLocationInfoButton.setVisible(false);
+				canEnd = true;
+				if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) { 
+					
+					if (!(thisCard.cardImgName.equals("Community_Chest_GTJ.png"))){
+						Main.allCommunityChests.add(thisCard);
+					}
+				}else if (currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
+					if (!(thisCard.cardImgName.equals("Chance_GTJ.png"))){
+						Main.allChances.add(thisCard);
+					}
+				}else {
+					System.out.println("Error");
+				}
+				thisCard.cardFunction(currPlayer);
+				
 			}else if(Main.locations.get(currPlayer.position) instanceof Property){
 				Property tempLocation =  (Property) Main.locations.get(currPlayer.position);;
 				cardImgName = tempLocation.cardImg;
 			}
-			new MyCanvas();
-			
+			balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
+			sidepanel.revalidate();
+			sidepanel.repaint();	
 		}
 		class MyCanvas extends Canvas{
 
 			public MyCanvas() {
 
-				//MyCanvas m = new MyCanvas();
+				
 				super();
 				JFrame f = new JFrame();
 				f.add(this);
@@ -1022,8 +1085,11 @@ public class GUI extends JFrame{
 				}else{
 					f.setSize(360,239);
 				}
-				//f.setLayout(null);
+				
 				f.setVisible(true);
+				f.revalidate();
+				f.repaint();
+				
 				
 			}
 			public void paint(Graphics g) {
@@ -1050,13 +1116,17 @@ public class GUI extends JFrame{
 			JFrame f = new JFrame();
 			JPanel panels=new JPanel();
 
-			
+			JTextField messageF = new JTextField("You can only build if you have all the properties in the colour of the Street you want to build in");
+			messageF.setEditable(false);
+			messageF.setVisible(true);
+			panels.add(messageF);
 			JList<String> propertiestobuild= new JList<String>();
 			DefaultListModel<String> listprop = new DefaultListModel<>();
 						
 			//Ξ²Ξ±Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ± props ΟƒΞµ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± Ο€ΞΏΟ… ΞµΟ€ΞΉΞ»ΞµΞ³ΞµΞΉ
-			for (Property prop1:currPlayer.properties) {
-				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
+			for (Property prop1:currPlayer.PropertiesToBuildIn()) {
+				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) ||
+						(prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
 					//listprop.addElement(prop1.name);
 				}
 				else {
@@ -1127,7 +1197,7 @@ public class GUI extends JFrame{
 			
 			
 			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			f.setSize(400,200);
+			f.setSize(600,200);
 			f.setContentPane(panels);
 			f.setTitle("Build");
 			f.setVisible(true);

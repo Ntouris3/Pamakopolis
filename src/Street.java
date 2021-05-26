@@ -65,6 +65,7 @@ public class Street extends Property{
 		if(player.balance>=sum) {
 			player.ReduceBalance(sum);
 			owner.AddBalance(sum);
+			JOptionPane.showMessageDialog(null, "Rent: "+sum+"€ payed.");
 		}
 		else {
 			JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);

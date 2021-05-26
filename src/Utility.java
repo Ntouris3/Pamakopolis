@@ -28,6 +28,7 @@ public class Utility extends Property{
 			if(player.balance>player.lastDice*10) {
 				player.ReduceBalance(player.lastDice*10);
 				owner.AddBalance(player.lastDice*10);
+				JOptionPane.showMessageDialog(null, "Rent: "+player.lastDice*10+"€ payed.");
 			}
 			else {
 				JOptionPane.showMessageDialog(null,"You don't have enough money to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
@@ -37,6 +38,7 @@ public class Utility extends Property{
 			if(player.balance>=player.lastDice*4) {
 				player.ReduceBalance(player.lastDice*4);
 				owner.AddBalance(player.lastDice*4);
+				JOptionPane.showMessageDialog(null, "Rent: "+player.lastDice*4+"€ payed.");
 			}
 			else {
 				JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
