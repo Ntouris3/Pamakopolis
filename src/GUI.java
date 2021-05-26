@@ -20,7 +20,7 @@ import javax.swing.text.BadLocationException;
 public class GUI extends JFrame{
 
 	private Player currPlayer;
-	private boolean canEnd = false;
+	private boolean drawCard = true;
 	private int timesPressedRoll = 0;
 	public static JPanel panelbig = new JPanel();
 	public static JLayeredPane gameP = new JLayeredPane();
@@ -136,9 +136,7 @@ public class GUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				timesPressedRoll++;
-				canEnd = true;
 				balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
-				
 				sidepanel.revalidate();
 				sidepanel.repaint();
 				if(timesPressedRoll<3) {
@@ -252,7 +250,8 @@ public class GUI extends JFrame{
 				}
 				
 				//Chance And Community Chest/
-				canEnd = false;
+				drawCard = false;
+
 //				if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
 //					//TO-DO
 //					JOptionPane.showMessageDialog(null,"You stepped on a Community Chest, draw a card.");
@@ -285,7 +284,8 @@ public class GUI extends JFrame{
 					}
 					
 					//Chance And Community Chest/
-					canEnd = false;
+					drawCard = false;
+
 //					if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
 //						//TO-DO
 //						JOptionPane.showMessageDialog(null,"You stepped on a Community Chest, draw a card.");
@@ -907,9 +907,9 @@ public class GUI extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			
-			if(canEnd) {
+			if(timesPressedRoll>0 && drawCard == true || currPlayer.isInJail) {
 				timesPressedRoll = 0;
+				drawCard = false;
 				rollButton.setVisible(true);
 				sidepanel.revalidate();
 				currPlayerCounter++;
@@ -929,7 +929,6 @@ public class GUI extends JFrame{
 					rollButton.setVisible(false);
 					currPlayer.ShowJailFrame(rollButton);
 					//TO-DO
-					canEnd = true;
 					panelbig.setVisible(false);
 					panelbig.repaint();
 					panelbig.revalidate();
@@ -941,12 +940,11 @@ public class GUI extends JFrame{
 				balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
 				buyButton.setVisible(false);
 				mortgageButton.setVisible(false);
-				canEnd = false;
-			}else if (!currPlayer.isInJail) {
+			}else if (timesPressedRoll<=0 && !currPlayer.isInJail) {
 
-				JOptionPane.showMessageDialog(null,"You can't end turn.");
-			}else{
-				canEnd = true;
+				JOptionPane.showMessageDialog(null,"You must first roll dice.");
+			}else if (drawCard == false) {
+				JOptionPane.showMessageDialog(null,"You must first draw card.");
 			}
 			panelbig.setVisible(true);
 			panelbig.repaint();
@@ -1042,14 +1040,14 @@ public class GUI extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			
 			if (Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
+				drawCard = true;
 				Card thisCard = Main.allCommunityChests.poll();
 				cardImgName = thisCard.cardImgName;
-				new MyCanvas();
+				
 				
 				seeLocationInfoButton.setVisible(false);
-				canEnd = true;
 				if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) { 
 					
 					if (!(thisCard.cardImgName.equals("Community_Chest_GTJ.png"))){
@@ -1068,6 +1066,7 @@ public class GUI extends JFrame{
 				Property tempLocation =  (Property) Main.locations.get(currPlayer.position);;
 				cardImgName = tempLocation.cardImg;
 			}
+			new MyCanvas();
 			balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
 			sidepanel.revalidate();
 			sidepanel.repaint();	
