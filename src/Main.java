@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -22,6 +20,30 @@ public class Main {
 	    	
 		
 		createData();
+		
+		System.out.println(allChances);
+		ArrayList<Card> shuffledThisList = new ArrayList<>();
+		for (int i =0; i<allChances.size();i++) {
+			shuffledThisList.add(allChances.poll());
+		}
+		Collections.shuffle(shuffledThisList);
+
+		for (Card thisCard: shuffledThisList) {
+			allChances.add(thisCard);
+		}
+		System.out.println(allChances);
+		
+		System.out.println(allCommunityChests);
+		shuffledThisList = new ArrayList<>();
+		for (int i =0; i<allChances.size();i++) {
+			shuffledThisList.add(allCommunityChests.poll());
+		}
+		Collections.shuffle(shuffledThisList);
+
+		for (Card thisCard: shuffledThisList) {
+			allCommunityChests.add(thisCard);
+		}
+		System.out.println(allCommunityChests);
 		//new LoginScreenGUI();
 
 
@@ -41,10 +63,11 @@ public class Main {
 		
 
 
-		new GUI();
+		//new GUI();
 
 
 	}
+	
 	private static void createData() {
 
 		//create location data

@@ -504,6 +504,7 @@ public class GUI extends JFrame{
 					
 					b1.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
+							
 							f.dispose();
 							tradeFrame.getContentPane().invalidate();
 							tradeFrame.getContentPane().validate();
@@ -810,7 +811,7 @@ public class GUI extends JFrame{
 							tradeFrame.add(newJPanel);
 							tradeFrame.setContentPane(newJPanel);
 							tradeFrame.revalidate();
-
+						
 						}});
 					f.add(b1);
 					
