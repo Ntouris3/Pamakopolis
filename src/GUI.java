@@ -471,7 +471,7 @@ public class GUI extends JFrame{
 
 		panelbig.setVisible(true);
 		sidepanel.setBackground(Color.DARK_GRAY);
-		panelbig.setBackground(Color.DARK_GRAY);
+		//panelbig.setBackground(Color.DARK_GRAY);
 		
 
 		sidepanel.add(endTurnButton);

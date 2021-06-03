@@ -28,6 +28,8 @@ public class LoginScreenGUI extends JFrame {
 	private DefaultListModel<ImageIcon> listModel = new DefaultListModel();
 	private JButton addPlayerButton = new JButton("Add Player");
 	private JButton startGameButton = new JButton("Start Game");
+	private JButton darkModeButton = new JButton("Dark Mode");
+	private TitledBorder title;
 
 	
 	
@@ -36,12 +38,12 @@ public class LoginScreenGUI extends JFrame {
 	public LoginScreenGUI() {
 		
 	
-		TitledBorder title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , "MONOPOLY by Φαντάστικ Τέν");
+		title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , "MONOPOLY by Φαντάστικ Τέν");
 		title.setTitleJustification(TitledBorder.CENTER);
 		title.setTitleColor(Color.gray);
 		title.setTitleFont(new Font("SansSerif", Font.ITALIC,13));
 		panel.setBorder(title);
-
+		panel.setBackground(getBackground());
 		
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
@@ -65,6 +67,7 @@ public class LoginScreenGUI extends JFrame {
 		
 		addPlayerButton.setFont(new Font("SansSerif", Font.BOLD,13));
 		startGameButton.setFont(new Font("SansSerif", Font.BOLD,13));
+		darkModeButton.setFont(new Font("SansSerif", Font.BOLD,13));
 		
 		try {
 			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Hat_adobespark.png"))));
@@ -91,11 +94,19 @@ public class LoginScreenGUI extends JFrame {
 		
 		ButtonListener2 listener2 = new ButtonListener2(); //For the startGameButton
 		startGameButton.addActionListener(listener2);
+		
+		ButtonListener3 listener3 = new ButtonListener3(); //For the darkModeButton
+		darkModeButton.addActionListener(listener3);
+		
 		panel.add(sel_piece);
 		
 		buttonPanel.add(addPlayerButton);
 		buttonPanel.add(startGameButton);
+		buttonPanel.add(darkModeButton);
+		
 		panel.add(buttonPanel);
+		
+		panel.repaint();
 		
 		this.setContentPane(panel);
 		this.setSize(700,300);
@@ -160,6 +171,45 @@ public class LoginScreenGUI extends JFrame {
 		}
 		
 	}
+	class ButtonListener3 implements ActionListener {
 
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			if(darkModeButton.getText() == "Dark Mode") {
+				panel.setBackground(Color.DARK_GRAY);
+				buttonPanel.setBackground(Color.DARK_GRAY);
+				namePanel.setBackground(Color.DARK_GRAY);
+				title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , "MONOPOLY by Φαντάστικ Τέν");
+				choosePiece.setForeground(Color.white);
+				sel_piece.setBackground(Color.black);
+				
+				
+				GUI.panelbig.setBackground(Color.DARK_GRAY);
+				
+				
+				
+				darkModeButton.setText("Light Mode");
+				panel.revalidate();
+				panel.repaint();
+			}
+			else{
+				darkModeButton.setText("Dark Mode");
+				panel.setBackground(getBackground());
+				buttonPanel.setBackground(getBackground());
+				namePanel.setBackground(getBackground());
+				title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , "MONOPOLY by Φαντάστικ Τέν");
+				choosePiece.setForeground(Color.black);
+				sel_piece.setBackground(Color.white);
+		
+				GUI.panelbig.setBackground(getBackground());
+				
+				revalidate();
+				repaint();
+			}
+			
+		}
+		
+	}
 	
 }
