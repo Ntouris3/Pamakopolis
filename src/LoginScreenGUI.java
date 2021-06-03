@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +11,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
 
 
@@ -30,10 +35,18 @@ public class LoginScreenGUI extends JFrame {
 	@SuppressWarnings("unchecked")
 	public LoginScreenGUI() {
 		
+	
+		TitledBorder title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , "MONOPOLY by Φαντάστικ Τέν");
+		title.setTitleJustification(TitledBorder.CENTER);
+		title.setTitleColor(Color.gray);
+		title.setTitleFont(new Font("SansSerif", Font.ITALIC,13));
+		panel.setBorder(title);
+
 		
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
 		playerNameField = new JTextField("Enter name here...");
+		playerNameField.setFont(new Font("SansSerif", Font.PLAIN,15));
 	
 		playerNameField.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
@@ -46,10 +59,12 @@ public class LoginScreenGUI extends JFrame {
 		panel.add(namePanel);
 		
 		choosePiece = new JLabel("Select Piece" , JLabel.CENTER);
+		choosePiece.setFont(new Font("SansSerif", Font.BOLD,15));
 		
 		choosePiece.setAlignmentX(CENTER_ALIGNMENT);
 		
-		
+		addPlayerButton.setFont(new Font("SansSerif", Font.BOLD,13));
+		startGameButton.setFont(new Font("SansSerif", Font.BOLD,13));
 		
 		try {
 			listModel.addElement(new ImageIcon(ImageIO.read(getClass().getResource("Assets/Hat_adobespark.png"))));
@@ -66,6 +81,7 @@ public class LoginScreenGUI extends JFrame {
 		sel_piece = new JList<ImageIcon>(listModel);
 		sel_piece.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		sel_piece.setVisibleRowCount(1);
+		sel_piece.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		
 		
 		
@@ -82,7 +98,7 @@ public class LoginScreenGUI extends JFrame {
 		panel.add(buttonPanel);
 		
 		this.setContentPane(panel);
-		this.setSize(700,400);
+		this.setSize(700,300);
 		this.setVisible(true);
 		this.setTitle("Start Screen");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
