@@ -1066,6 +1066,7 @@ public class GUI extends JFrame{
 				Property tempLocation =  (Property) Main.locations.get(currPlayer.position);;
 				cardImgName = tempLocation.cardImg;
 			}
+			drawCard = true;
 			new MyCanvas();
 			balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
 			sidepanel.revalidate();

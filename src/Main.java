@@ -41,7 +41,7 @@ public class Main {
 			allCommunityChests.add(thisCard);
 		}
 		
-		//new LoginScreenGUI();
+		new LoginScreenGUI();
 
 
 
@@ -60,7 +60,7 @@ public class Main {
 		
 
 
-		new GUI();
+		//new GUI();
 
 
 	}
