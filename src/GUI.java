@@ -65,13 +65,13 @@ public class GUI extends JFrame{
 		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		//jl.setBounds(0, 0, 100, 100);
-		jl.setPreferredSize(new Dimension(100, 100));
+		jl.setPreferredSize(new Dimension(300, 100));
 		jl.setBorder(BorderFactory.createLineBorder(Color.black));
 		
-		Dice dice1 = new Dice(50, 180, 40, 40);
+		Dice dice1 = new Dice(80, 135, 40, 40);
 		jl.add(dice1);
 
-		Dice dice2 = new Dice(110, 180, 40, 40);
+		Dice dice2 = new Dice(180, 135, 40, 40);
 		jl.add(dice2);
 		jl.repaint();
 		jl.revalidate();
