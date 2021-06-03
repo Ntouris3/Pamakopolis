@@ -470,7 +470,7 @@ public class GUI extends JFrame{
 		
 
 		panelbig.setVisible(true);
-		sidepanel.setBackground(Color.DARK_GRAY);
+		sidepanel.setBackground(panelbig.getBackground());
 		//panelbig.setBackground(Color.DARK_GRAY);
 		
 
