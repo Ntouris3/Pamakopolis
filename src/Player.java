@@ -207,6 +207,7 @@ public class Player {
 		
 		JFrame f = new JFrame();
 		JPanel p = new JPanel();
+		GUI.setColor(p);
 		JLabel playerName = new JLabel("Name: "+this.name);
 		JLabel playerBalance = new JLabel("Balance: "+this.balance+"$");
 		JButton payButton = new JButton("Pay Jail Fee");
@@ -215,9 +216,11 @@ public class Player {
 		JLayeredPane jl = new JLayeredPane();
 		
 		
-		playerName.setFont(new Font("Serif", Font.PLAIN,30));
-		playerBalance.setFont(new Font("Serif", Font.PLAIN, 30));
-		
+		playerName.setFont(new Font("Serif", Font.PLAIN,20));
+		playerBalance.setFont(new Font("Serif", Font.PLAIN, 20));
+		payButton.setFont(new Font("SansSerif", Font.BOLD, 12));
+		useCardButton.setFont(new Font("SansSerif", Font.BOLD, 12));
+		rollButton.setFont(new Font("SansSerif", Font.BOLD, 12));
 		if(this.jailCards.size()==0) {
 			useCardButton.setVisible(false);
 		}

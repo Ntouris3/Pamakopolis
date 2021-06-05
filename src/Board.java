@@ -1,24 +1,15 @@
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Stack;
+
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+
 import javax.swing.JPanel;
 
 public class Board extends JPanel {
-	private ArrayList<Location> locations;
-	private ArrayList<Player> playerTurn;
-	private BufferedImage boardimg;
+	
 
 	private BufferedImage image;
 
