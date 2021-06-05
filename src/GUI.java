@@ -667,6 +667,7 @@ public class GUI extends JFrame{
 							leftPanel.add(currPlayersBalanceField);
 							
 							JTextField currPlayerTradeMoneyFiled = new JTextField("Enter money...");
+							currPlayerTradeMoneyFiled.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							currPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
 					            public void mouseClicked(MouseEvent e){
 					            	currPlayerTradeMoneyFiled.setText("");
@@ -743,6 +744,7 @@ public class GUI extends JFrame{
 							
 							
 							JTextArea mess3Area = new JTextArea("Player "+ otherPlayer.name +"'s tangible assets");
+							mess3Area.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							mess3Area.setEditable(false);
 							rightPanel.add(mess3Area);
 							
@@ -787,10 +789,12 @@ public class GUI extends JFrame{
 
 							rightPanel.add(otherPropertiesJList);
 							JTextField otherPlayersBalanceField = new JTextField("Player "+otherPlayer.name+" has "+ otherPlayer.balance+"€");
+							otherPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							otherPlayersBalanceField.setEditable(false);
 							rightPanel.add(otherPlayersBalanceField);
 							
 							JTextField otherPlayerTradeMoneyFiled = new JTextField("Enter money...");
+							otherPlayerTradeMoneyFiled.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							otherPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
 					            public void mouseClicked(MouseEvent e){
 					            	otherPlayerTradeMoneyFiled.setText("");
@@ -875,10 +879,12 @@ public class GUI extends JFrame{
 							newJPanel.add(rightPanel);
 							
 							JButton rejectButton = new JButton("Reject");
+							rejectButton.setFont(new Font("SansSerif", Font.BOLD, 12));
 							rejectButton.addActionListener(new ActionListener() {
 								public void actionPerformed(ActionEvent e) {tradeFrame.dispose();}});
 							newJPanel.add(rejectButton);
 							JButton acceptTradeButton = new JButton("Trade");
+							acceptTradeButton.setFont(new Font("SansSerif", Font.BOLD, 12));
 							acceptTradeButton.addActionListener(new ActionListener() {
 								public void actionPerformed(ActionEvent e) {
 									if (!isNumeric(currPlayerTradeMoneyFiled.getText())) {
@@ -1034,6 +1040,7 @@ public class GUI extends JFrame{
 			clickOnPropertiesJListListener listener = new clickOnPropertiesJListListener(PropertiesJList,f);
 			PropertiesJList.addListSelectionListener(listener);
 			JTextField hasInJailCards = new JTextField("Has "+currPlayer.jailCards.size()+" get out of jail cards");
+			hasInJailCards.setFont(new Font("SansSerif", Font.PLAIN, 15));
 			hasInJailCards.setEditable(false);
 			f.add(hasInJailCards);
 			f.setLayout(new FlowLayout());
@@ -1181,6 +1188,7 @@ public class GUI extends JFrame{
 			JPanel panels=new JPanel();
 
 			JTextField messageF = new JTextField("You can only build if you have all the properties in the colour of the Street you want to build in");
+			messageF.setFont(new Font("SansSerif", Font.PLAIN, 15));
 			messageF.setEditable(false);
 			messageF.setVisible(true);
 			panels.add(messageF);
@@ -1210,6 +1218,7 @@ public class GUI extends JFrame{
 			
 			//Ξ�ΞΏΟ…ΞΌΟ€Ξ― build
 			JButton BButton= new JButton("Build");
+			BButton.setFont(new Font("SansSerif", Font.BOLD, 12));
 			panels.add(BButton);
 
 			
@@ -1331,6 +1340,7 @@ public class GUI extends JFrame{
 			
 			//Ξ�ΞΏΟ…ΞΌΟ€Ξ― demolish
 			JButton DButton= new JButton("Demolish");
+			DButton.setFont(new Font("SansSerif", Font.BOLD, 12));
 			panels.add(DButton);
 
 			
