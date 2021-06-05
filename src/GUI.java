@@ -9,6 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.DocumentFilter;
@@ -57,15 +59,23 @@ public class GUI extends JFrame{
 		
 
 		
-		buyButton = new JButton("BUY");
+		buyButton = new JButton("Buy");
+		buyButton.setFont(new Font("SansSerif", Font.BOLD,12));
 		buyButton.setVisible(false);
-		mortgageButton = new JButton("MORTGAGE");
+		mortgageButton = new JButton("Mortgage");
+		mortgageButton.setFont(new Font("SansSerif", Font.BOLD,12));
 		mortgageButton.setVisible(false);
-		
+		rollButton.setFont(new Font("SansSerif", Font.BOLD,12));
+		seeLocationInfoButton.setFont(new Font("SansSerif", Font.BOLD,12));
+		buildButton.setFont(new Font("SansSerif", Font.BOLD,12));
+		demolishButton.setFont(new Font("SansSerif", Font.BOLD,12));
+		seeCardsButton.setFont(new Font("SansSerif", Font.BOLD,12));
+		endTurnButton.setFont(new Font("SansSerif", Font.BOLD,12));
+		tradeButton.setFont(new Font("SansSerif", Font.BOLD,12));
 		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
 		//jl.setBounds(0, 0, 100, 100);
-		jl.setPreferredSize(new Dimension(300, 100));
+		jl.setPreferredSize(new Dimension(300, 300));
 		jl.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		Dice dice1 = new Dice(80, 135, 40, 40);
@@ -91,11 +101,52 @@ public class GUI extends JFrame{
 		}
 		board.repaint();
 
-		balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
+		balanceField.setText(currPlayer.balance + "€");
+		balanceField.setHorizontalAlignment(JTextField.CENTER);
+		balanceField.setFont(new Font("SansSerif", Font.BOLD,20));
 		balanceField.setEditable(false);
 		propertyInfoField.setEditable(false);
+		propertyInfoField.setHorizontalAlignment(JTextField.CENTER);
+		propertyInfoField.setFont(new Font("SansSerif", Font.PLAIN,11));
 		playerInformationPanel.add(balanceField);
 		playerInformationPanel.add(propertyInfoField);
+		playerInformationPanel.setLayout(new BoxLayout(playerInformationPanel, BoxLayout.Y_AXIS));
+		
+		if(panelbig.getBackground() == Color.DARK_GRAY) {
+			jl.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+			playerInformationPanel.setBackground(Color.BLACK);
+			balanceField.setBackground(Color.DARK_GRAY);
+			TitledBorder title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " "+ currPlayer.name + "'s balance: ");
+			title.setTitleJustification(TitledBorder.CENTER);
+			title.setTitleColor(Color.WHITE);
+			title.setTitleFont(new Font("SansSerif", Font.BOLD,17));
+			balanceField.setBorder(title);
+			balanceField.setForeground(Color.WHITE);
+			
+			propertyInfoField.setBackground(Color.DARK_GRAY);
+			TitledBorder titleProp = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " Property Info ");
+			titleProp.setTitleJustification(TitledBorder.CENTER);
+			titleProp.setTitleColor(Color.WHITE);
+			titleProp.setTitleFont(new Font("SansSerif", Font.BOLD,17));
+			propertyInfoField.setBorder(titleProp);
+			propertyInfoField.setForeground(Color.WHITE);
+		}
+		else {
+			jl.setBorder(BorderFactory.createLineBorder(Color.black));
+			playerInformationPanel.setBackground(getBackground());
+			balanceField.setBackground(getBackground());
+			TitledBorder title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " "+ currPlayer.name + "'s balance: ");
+			title.setTitleJustification(TitledBorder.CENTER);
+			title.setTitleColor(Color.BLACK);
+			title.setTitleFont(new Font("SansSerif", Font.BOLD,17));
+			balanceField.setBorder(title);
+	
+			TitledBorder titleProp = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " Property Info ");
+			titleProp.setTitleJustification(TitledBorder.CENTER);
+			titleProp.setTitleColor(Color.BLACK);
+			titleProp.setTitleFont(new Font("SansSerif", Font.BOLD,17));
+			propertyInfoField.setBorder(titleProp);
+		}
 		
 		panelbig.setLayout(new BorderLayout());
 		board.setBorder(BorderFactory.createLineBorder(Color.red));
@@ -105,7 +156,7 @@ public class GUI extends JFrame{
 		panelbig.add(sidepanel, BorderLayout.EAST);
 
 		sidepanel.setLayout(new BoxLayout(sidepanel, BoxLayout.Y_AXIS));
-		sidepanel.setBorder(BorderFactory.createLineBorder(Color.blue));
+		sidepanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		
 		sidepanel.add(rollButton);
@@ -136,16 +187,16 @@ public class GUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				timesPressedRoll++;
-				balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
+				balanceField.setText(currPlayer.balance + "€");
 				sidepanel.revalidate();
 				sidepanel.repaint();
 				if(timesPressedRoll<3) {
-//					dice1.rollDice();
-//					dice2.rollDice();
+					dice1.rollDice();
+					dice2.rollDice();
 					//demo
-					dice1.setFaceValue(5);
+					//dice1.setFaceValue(5);
 					dice1.repaint();
-					dice2.setFaceValue(2);
+					//dice2.setFaceValue(2);
 					dice2.repaint();
 					
 					if(dice1.getFaceValue() != dice2.getFaceValue()) {
@@ -320,7 +371,7 @@ public class GUI extends JFrame{
 					currPlayer.position = 10;
 					JOptionPane.showMessageDialog(null,"You rolled 3 times. You are now in jail");
 				}
-				balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
+				balanceField.setText(currPlayer.balance + "€");
 				sidepanel.revalidate();
 				sidepanel.repaint();
 		}});
@@ -336,7 +387,7 @@ public class GUI extends JFrame{
 					currPlayer.Buy(((Property)Main.locations.get(currPlayer.position)));
 					buyButton.setVisible(false);
 					mortgageButton.setVisible(true);
-					balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");		
+					balanceField.setText(currPlayer.balance + "€");		
 					propertyInfoField.setText("This property is owned by "+((Property) Main.locations.get(currPlayer.position)).getOwner().name+
 							" and costs "+((Property) Main.locations.get(currPlayer.position)).price+"€");
 					sidepanel.revalidate();
@@ -352,21 +403,24 @@ public class GUI extends JFrame{
 				JFrame f = new JFrame();
 				
 				JLabel nameLabel = new JLabel("Name:"+currPlayer.name);
-				nameLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+				nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
 				
 				JLabel balanceLabel = new JLabel("Balance:"+String.valueOf(currPlayer.balance)+"€");
-				balanceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+				balanceLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
 				
 				JPanel p = new JPanel();
 				
 				
 				JButton b1 = new JButton("Mortgage");
+				b1.setFont(new Font("SansSerif", Font.BOLD, 12));
 				b1.setVisible(false);
 				
 				JButton b2 = new JButton("Unmortgage");
+				b2.setFont(new Font("SansSerif", Font.BOLD, 12));
 				b2.setVisible(false);
 				
 				JLabel label1 = new JLabel("");
+				label1.setFont(new Font("SansSerif", Font.PLAIN, 20));
 	
 				JList <Property> list = new JList(currPlayer.properties.toArray());
 				DefaultListModel<Property> model;
@@ -490,6 +544,7 @@ public class GUI extends JFrame{
 		Player otherPlayer = null;
 		JFrame tradeFrame;
 		JButton requestTrade = new JButton();
+		
 		JFrame f = new JFrame();
 		JTextField t = new JTextField();
 		JButton b = new JButton("Reject");
@@ -497,9 +552,15 @@ public class GUI extends JFrame{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			requestTrade.setFont(new Font("SansSerif", Font.BOLD, 12));
+			t.setFont(new Font("SansSerif", Font.PLAIN, 15));
 			tradeFrame = new JFrame("Trading Process");
+			tradeFrame.setFont(new Font("SansSerif", Font.PLAIN, 15));
+			b.setFont(new Font("SansSerif", Font.BOLD, 12));
+			b1.setFont(new Font("SansSerif", Font.BOLD, 12));
 			
 			JTextArea messageArea = new JTextArea("Select a player:");
+			messageArea.setFont(new Font("SansSerif", Font.BOLD, 12));
 			messageArea.setEditable(false);
 			tradeFrame.add(messageArea);
 			
@@ -552,6 +613,7 @@ public class GUI extends JFrame{
 							ArrayList<GetOutOfJailCard> otherToCurrJailCards = new ArrayList<GetOutOfJailCard>();
 							
 							JTextArea mess2Area = new JTextArea("Player "+ currPlayer.name +"'s tangible assets");
+							mess2Area.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							mess2Area.setEditable(false);
 							leftPanel.add(mess2Area);
 							
@@ -600,6 +662,7 @@ public class GUI extends JFrame{
 							leftPanel.add(currPlayerPropertiesJList);
 							
 							JTextField currPlayersBalanceField = new JTextField("Player "+currPlayer.name+" has "+ currPlayer.balance+"€");
+							currPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							currPlayersBalanceField.setEditable(false);
 							leftPanel.add(currPlayersBalanceField);
 							
@@ -937,7 +1000,7 @@ public class GUI extends JFrame{
 					rollButton.setVisible(true);
 				}
 				
-				balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
+				balanceField.setText(currPlayer.balance + "€");
 				buyButton.setVisible(false);
 				mortgageButton.setVisible(false);
 			}else if (timesPressedRoll<=0 && !currPlayer.isInJail) {
@@ -1002,6 +1065,7 @@ public class GUI extends JFrame{
 
 			    				JPanel p = new JPanel();
 			    				tf.setText(thisProperty.name+" has "+((Street) thisProperty).hotel +" hotels and "+((Street) thisProperty).houses+" houses");;
+			    				tf.setFont(new Font("SansSerif", Font.PLAIN,14));
 				    			p.add(tf);
 			    				f.add(p);
 			    				tf.setEditable(false);
@@ -1068,7 +1132,7 @@ public class GUI extends JFrame{
 			}
 			drawCard = true;
 			new MyCanvas();
-			balanceField.setText("Player "+currPlayer.name+" has "+currPlayer.balance+"€");
+			balanceField.setText(currPlayer.balance + "€");
 			sidepanel.revalidate();
 			sidepanel.repaint();	
 		}

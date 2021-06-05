@@ -33,7 +33,7 @@ public class TransactionCard extends Card{
         }else{													//collect 50 from all players card
             for(Player thisPlayer : Main.allPlayers){
                 if (thisPlayer.equals(p)){
-                    p.AddBalance(50*Main.allPlayers.size());
+                    p.AddBalance(50*(Main.allPlayers.size() - 1));
                 }else{
                     thisPlayer.ReduceBalance(50);
                 }
