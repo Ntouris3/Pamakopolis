@@ -1188,7 +1188,7 @@ public class GUI extends JFrame{
 			JPanel panels=new JPanel();
 
 			JTextField messageF = new JTextField("You can only build if you have all the properties in the colour of the Street you want to build in");
-			messageF.setFont(new Font("SansSerif", Font.PLAIN, 15));
+			messageF.setFont(new Font("SansSerif", Font.PLAIN, 13));
 			messageF.setEditable(false);
 			messageF.setVisible(true);
 			panels.add(messageF);
