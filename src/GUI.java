@@ -114,14 +114,14 @@ public class GUI extends JFrame{
 		
 		if(panelbig.getBackground() == Color.DARK_GRAY) {
 			jl.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-			playerInformationPanel.setBackground(Color.BLACK);
-			balanceField.setBackground(Color.DARK_GRAY);
+			//playerInformationPanel.setBackground(Color.BLACK);
+			//balanceField.setBackground(Color.DARK_GRAY);
 			TitledBorder title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " "+ currPlayer.name + "'s balance: ");
 			title.setTitleJustification(TitledBorder.CENTER);
 			title.setTitleColor(Color.WHITE);
 			title.setTitleFont(new Font("SansSerif", Font.BOLD,17));
 			balanceField.setBorder(title);
-			balanceField.setForeground(Color.WHITE);
+			//balanceField.setForeground(Color.WHITE);
 			
 			propertyInfoField.setBackground(Color.DARK_GRAY);
 			TitledBorder titleProp = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " Property Info ");
@@ -129,12 +129,12 @@ public class GUI extends JFrame{
 			titleProp.setTitleColor(Color.WHITE);
 			titleProp.setTitleFont(new Font("SansSerif", Font.BOLD,17));
 			propertyInfoField.setBorder(titleProp);
-			propertyInfoField.setForeground(Color.WHITE);
+			//propertyInfoField.setForeground(Color.WHITE);
 		}
 		else {
 			jl.setBorder(BorderFactory.createLineBorder(Color.black));
-			playerInformationPanel.setBackground(getBackground());
-			balanceField.setBackground(getBackground());
+			//playerInformationPanel.setBackground(getBackground());
+			//balanceField.setBackground(getBackground());
 			TitledBorder title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " "+ currPlayer.name + "'s balance: ");
 			title.setTitleJustification(TitledBorder.CENTER);
 			title.setTitleColor(Color.BLACK);
@@ -147,6 +147,8 @@ public class GUI extends JFrame{
 			titleProp.setTitleFont(new Font("SansSerif", Font.BOLD,17));
 			propertyInfoField.setBorder(titleProp);
 		}
+		setColor(playerInformationPanel);
+		setColor(balanceField);
 		
 		panelbig.setLayout(new BorderLayout());
 		board.setBorder(BorderFactory.createLineBorder(Color.red));
@@ -409,6 +411,7 @@ public class GUI extends JFrame{
 				balanceLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
 				
 				JPanel p = new JPanel();
+				setColor(p);
 				
 				
 				JButton b1 = new JButton("Mortgage");
@@ -552,14 +555,18 @@ public class GUI extends JFrame{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//setColor(t);
 			requestTrade.setFont(new Font("SansSerif", Font.BOLD, 12));
 			t.setFont(new Font("SansSerif", Font.PLAIN, 15));
 			tradeFrame = new JFrame("Trading Process");
+			tradeFrame.getContentPane().setBackground(panelbig.getBackground());
+			f.getContentPane().setBackground(panelbig.getBackground());
 			tradeFrame.setFont(new Font("SansSerif", Font.PLAIN, 15));
 			b.setFont(new Font("SansSerif", Font.BOLD, 12));
 			b1.setFont(new Font("SansSerif", Font.BOLD, 12));
 			
 			JTextArea messageArea = new JTextArea("Select a player:");
+			setColor(messageArea);
 			messageArea.setFont(new Font("SansSerif", Font.BOLD, 12));
 			messageArea.setEditable(false);
 			tradeFrame.add(messageArea);
@@ -601,7 +608,9 @@ public class GUI extends JFrame{
 							tradeFrame.getContentPane().repaint();
 							
 							JPanel leftPanel = new JPanel();
+							setColor(leftPanel);
 							JPanel rightPanel = new JPanel();
+							setColor(rightPanel);
 							
 							
 							ArrayList<Property> currToOtherLocation = new ArrayList<Property>();
@@ -613,6 +622,7 @@ public class GUI extends JFrame{
 							ArrayList<GetOutOfJailCard> otherToCurrJailCards = new ArrayList<GetOutOfJailCard>();
 							
 							JTextArea mess2Area = new JTextArea("Player "+ currPlayer.name +"'s tangible assets");
+							setColor(mess2Area);
 							mess2Area.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							mess2Area.setEditable(false);
 							leftPanel.add(mess2Area);
@@ -662,11 +672,13 @@ public class GUI extends JFrame{
 							leftPanel.add(currPlayerPropertiesJList);
 							
 							JTextField currPlayersBalanceField = new JTextField("Player "+currPlayer.name+" has "+ currPlayer.balance+"€");
+							setColor(currPlayersBalanceField);
 							currPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							currPlayersBalanceField.setEditable(false);
 							leftPanel.add(currPlayersBalanceField);
 							
 							JTextField currPlayerTradeMoneyFiled = new JTextField("Enter money...");
+							setColor(currPlayerTradeMoneyFiled);
 							currPlayerTradeMoneyFiled.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							currPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
 					            public void mouseClicked(MouseEvent e){
@@ -744,6 +756,7 @@ public class GUI extends JFrame{
 							
 							
 							JTextArea mess3Area = new JTextArea("Player "+ otherPlayer.name +"'s tangible assets");
+							setColor(mess3Area);
 							mess3Area.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							mess3Area.setEditable(false);
 							rightPanel.add(mess3Area);
@@ -789,11 +802,13 @@ public class GUI extends JFrame{
 
 							rightPanel.add(otherPropertiesJList);
 							JTextField otherPlayersBalanceField = new JTextField("Player "+otherPlayer.name+" has "+ otherPlayer.balance+"€");
+							setColor(otherPlayersBalanceField);
 							otherPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							otherPlayersBalanceField.setEditable(false);
 							rightPanel.add(otherPlayersBalanceField);
 							
 							JTextField otherPlayerTradeMoneyFiled = new JTextField("Enter money...");
+							setColor(otherPlayerTradeMoneyFiled);
 							otherPlayerTradeMoneyFiled.setFont(new Font("SansSerif", Font.PLAIN, 15));
 							otherPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
 					            public void mouseClicked(MouseEvent e){
@@ -873,6 +888,7 @@ public class GUI extends JFrame{
 							rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
 							
 							JPanel newJPanel = new JPanel();
+							setColor(newJPanel);
 							newJPanel.setVisible(true);
 							newJPanel.setLayout(new FlowLayout());
 							newJPanel.add(leftPanel);
@@ -1026,6 +1042,7 @@ public class GUI extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			JFrame f = new JFrame("Properties");
+			f.getContentPane().setBackground(panelbig.getBackground());
 			
 			JList<String> PropertiesJList = new JList<String>();
 			DefaultListModel<String> model = new DefaultListModel<String>();
@@ -1040,6 +1057,7 @@ public class GUI extends JFrame{
 			clickOnPropertiesJListListener listener = new clickOnPropertiesJListListener(PropertiesJList,f);
 			PropertiesJList.addListSelectionListener(listener);
 			JTextField hasInJailCards = new JTextField("Has "+currPlayer.jailCards.size()+" get out of jail cards");
+			setColor(hasInJailCards);
 			hasInJailCards.setFont(new Font("SansSerif", Font.PLAIN, 15));
 			hasInJailCards.setEditable(false);
 			f.add(hasInJailCards);
@@ -1052,7 +1070,8 @@ public class GUI extends JFrame{
 
 			JList<String> PropertiesJList;
 			JFrame f;
-
+			
+			
 			public clickOnPropertiesJListListener(JList<String> PropertiesJList, JFrame f) {
 				// TODO Auto-generated method stub
 				this.PropertiesJList = PropertiesJList;
@@ -1071,6 +1090,7 @@ public class GUI extends JFrame{
 			    			if (thisProperty instanceof Street) {
 
 			    				JPanel p = new JPanel();
+			    				setColor(p);
 			    				tf.setText(thisProperty.name+" has "+((Street) thisProperty).hotel +" hotels and "+((Street) thisProperty).houses+" houses");;
 			    				tf.setFont(new Font("SansSerif", Font.PLAIN,14));
 				    			p.add(tf);
@@ -1186,8 +1206,10 @@ public class GUI extends JFrame{
 			
 			JFrame f = new JFrame();
 			JPanel panels=new JPanel();
+			setColor(panels);
 
 			JTextField messageF = new JTextField("You can only build if you have all the properties in the colour of the Street you want to build in");
+			setColor(messageF);
 			messageF.setFont(new Font("SansSerif", Font.PLAIN, 13));
 			messageF.setEditable(false);
 			messageF.setVisible(true);
@@ -1288,6 +1310,7 @@ public class GUI extends JFrame{
 			
 			JFrame f = new JFrame();
 			JPanel panels=new JPanel();
+			setColor(panels);
 
 			
 			JList<String> propertiestodemolish= new JList<String>();
@@ -1394,6 +1417,29 @@ public class GUI extends JFrame{
 			
 						
 			}
-	}	
+	}
+	
+	public static void setColor(Object obj) {
+		Color backColor, textColor;
+		if(panelbig.getBackground() == Color.DARK_GRAY) {
+			backColor = Color.DARK_GRAY;
+			textColor = Color.WHITE;
+		}
+		else {
+			backColor = panelbig.getBackground();
+			textColor = Color.BLACK;
+		}
+		if(obj instanceof JPanel) {
+			((JPanel) obj).setBackground(backColor);
+		}
+		else if(obj instanceof JTextField) {
+			((JTextField) obj).setBackground(backColor);
+		    ((JTextField) obj).setForeground(textColor);
+		}
+		else if(obj instanceof JTextArea) {
+			((JTextArea) obj).setBackground(backColor);
+			((JTextArea) obj).setForeground(textColor);
+		}
+	}
 
 }

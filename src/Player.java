@@ -207,6 +207,7 @@ public class Player {
 		
 		JFrame f = new JFrame();
 		JPanel p = new JPanel();
+		GUI.setColor(p);
 		JLabel playerName = new JLabel("Name: "+this.name);
 		JLabel playerBalance = new JLabel("Balance: "+this.balance+"$");
 		JButton payButton = new JButton("Pay Jail Fee");
