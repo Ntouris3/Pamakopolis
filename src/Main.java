@@ -44,20 +44,20 @@ public class Main {
 		new LoginScreenGUI();
 
 
-
-		//demo players
-		File f1 = new File("C:/Users/teoat/Documents/GitHub/Pamakopolis/bin/Assets/Hat_adobespark.png");
-		File f2 = new File("C:/Users/teoat/Documents/GitHub/Pamakopolis/bin/Assets/Car_adobespark.png");
-		try {
-			ImageIcon n = new ImageIcon(ImageIO.read(f1));
-			Player p1 = new Player("P1",new Piece(n));
-			n = new ImageIcon(ImageIO.read(f2));
-			Player p2 = new Player("p2", new Piece(n));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+//
+//		//demo players
+//		File f1 = new File("C:/Users/teoat/Documents/GitHub/Pamakopolis/bin/Assets/Hat_adobespark.png");
+//		File f2 = new File("C:/Users/teoat/Documents/GitHub/Pamakopolis/bin/Assets/Car_adobespark.png");
+//		try {
+//			ImageIcon n = new ImageIcon(ImageIO.read(f1));
+//			Player p1 = new Player("P1",new Piece(n));
+//			n = new ImageIcon(ImageIO.read(f2));
+//			Player p2 = new Player("p2", new Piece(n));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
 
 
 		//new GUI();

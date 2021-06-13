@@ -23,7 +23,7 @@ public class GUI extends JFrame{
 
 	private Player currPlayer;
 	private boolean drawCard = true;
-	private int timesPressedRoll = 0;
+	static int timesPressedRoll = 0;
 	public static JPanel panelbig = new JPanel();
 	public static JLayeredPane gameP = new JLayeredPane();
 	public JPanel sidepanel = new JPanel();
@@ -192,7 +192,7 @@ public class GUI extends JFrame{
 				balanceField.setText(currPlayer.balance + "€");
 				sidepanel.revalidate();
 				sidepanel.repaint();
-				if(timesPressedRoll<3) {
+				if(timesPressedRoll<3 && !currPlayer.isInJail) {
 					dice1.rollDice();
 					dice2.rollDice();
 					//demo
@@ -201,14 +201,7 @@ public class GUI extends JFrame{
 					//dice2.setFaceValue(2);
 					dice2.repaint();
 					
-					if(dice1.getFaceValue() != dice2.getFaceValue()) {
-						rollButton.setVisible(false);
-					}else {
-						
-						rollButton.setVisible(true);
-					}
-					sidepanel.revalidate();
-					sidepanel.repaint();
+				
 			
 
 					
@@ -217,6 +210,9 @@ public class GUI extends JFrame{
 					int newPos = currPlayer.position + dice1.getFaceValue() + dice2.getFaceValue();
 					currPlayer.lastDice = dice1.getFaceValue() + dice2.getFaceValue();
 					currPlayer.ChangePosition(newPos);
+					
+					sidepanel.revalidate();
+					sidepanel.repaint();
 					
 					propertyInfoField.setText("");
 					if (currPlayer.position != 4 && currPlayer.position != 38 && currPlayer.position % 10 != 0) {
@@ -270,19 +266,19 @@ public class GUI extends JFrame{
 						}
 					}	
 					else {
+						if(Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
+							drawCard = false;
+						}
+						else {
+							drawCard=true;
+						}
 							buyButton.setVisible(false);
 							sidepanel.revalidate();
 							sidepanel.repaint();
 					}
 					
 					
-					//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
-					if(currPlayer.properties.size()==0) {
-						mortgageButton.setVisible(false);
-						sidepanel.revalidate();
-						sidepanel.repaint();
-				}
-				
+					
 				
 				//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
 				if(currPlayer.properties.size()==0) {
@@ -290,46 +286,8 @@ public class GUI extends JFrame{
 					sidepanel.revalidate();
 					sidepanel.repaint();
 				}
-				else {
-					mortgageButton.setVisible(true);
-					sidepanel.revalidate();
-					sidepanel.repaint();
-				}
-				
-				//PAYING TAX WHEN HITTING TAX BLOCK//
-				if(Main.locations.get(currPlayer.position) instanceof Tax ){
-					((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
-					//System.out.println("Tax payed");
-				}
-				
-				//Chance And Community Chest/
-				drawCard = false;
-
-//				if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
-//					//TO-DO
-//					JOptionPane.showMessageDialog(null,"You stepped on a Community Chest, draw a card.");
-//					//Main.allCommunityChests.element().cardFunction(currPlayer);
-//				}
-//				else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
-//					JOptionPane.showMessageDialog(null,"You stepped on a Chance, draw a card.");
-//					//Main.allChances.element().cardFunction(currPlayer);
-//				}
-				
-				//Go To Prison Block//
-				if(currPlayer.position == 30) {
-					currPlayer.isInJail = true;
-					currPlayer.ChangePosition(10);
-				}
 				
 				
-				if(currPlayer.position == 10) {
-					if(currPlayer.isInJail==true) {
-						buyButton.setVisible(false);
-						rollButton.setVisible(false);
-						sidepanel.revalidate();
-						sidepanel.repaint();
-					}
-					
 					//PAYING TAX WHEN HITTING TAX BLOCK//
 					if(Main.locations.get(currPlayer.position) instanceof Tax ){
 						((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
@@ -337,7 +295,27 @@ public class GUI extends JFrame{
 					}
 					
 					//Chance And Community Chest/
-					drawCard = false;
+					//drawCard = false;
+
+//					if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
+//						//TO-DO
+//						JOptionPane.showMessageDialog(null,"You stepped on a Community Chest, draw a card.");
+//						//Main.allCommunityChests.element().cardFunction(currPlayer);
+//					}
+//					else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
+//						JOptionPane.showMessageDialog(null,"You stepped on a Chance, draw a card.");
+//						//Main.allChances.element().cardFunction(currPlayer);
+//					}
+				
+					//Go To Prison Block//
+						if(currPlayer.position == 30) {
+							currPlayer.isInJail = true;
+							currPlayer.ChangePosition(10);
+						}
+				
+				
+				
+			
 
 //					if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
 //						//TO-DO
@@ -349,16 +327,11 @@ public class GUI extends JFrame{
 //						//Main.allChances.element().cardFunction(currPlayer);
 //					}
 					
-					//Go To Prison Block//
-					if(currPlayer.position == 30) {
-						currPlayer.isInJail = true;
-						currPlayer.ChangePosition(10);
-					}
+					
 					
 					
 					if(currPlayer.position == 10) {
 						if(currPlayer.isInJail==true) {
-							mortgageButton.setVisible(false);
 							buyButton.setVisible(false);
 							rollButton.setVisible(false);
 							sidepanel.revalidate();
@@ -366,11 +339,23 @@ public class GUI extends JFrame{
 							JOptionPane.showMessageDialog(null,"You are now in jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 						}	
 					}
-				}
-				
+					
+					if(dice1.getFaceValue() != dice2.getFaceValue()) {
+						rollButton.setVisible(false);
+						endTurnButton.setVisible(true);
+					}else {
+						if(!currPlayer.isInJail) {
+							rollButton.setVisible(true);
+							endTurnButton.setVisible(false);
+							JOptionPane.showMessageDialog(null,"You got doubles, play again!!","Alert",JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					
 			}else {
 					currPlayer.isInJail=true;
-					currPlayer.position = 10;
+					currPlayer.ChangePosition(10);
+					endTurnButton.setVisible(true);
+					rollButton.setVisible(false);
 					JOptionPane.showMessageDialog(null,"You rolled 3 times. You are now in jail");
 				}
 				balanceField.setText(currPlayer.balance + "€");
@@ -497,7 +482,7 @@ public class GUI extends JFrame{
 				});
 							
 						f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-						f.setSize(350,500); 
+						f.setSize(450,500); 
 						f.setContentPane(p);
 						f.setTitle("Mortgage");
 						f.setVisible(true);
@@ -1031,6 +1016,9 @@ public class GUI extends JFrame{
 			}else if (drawCard == false) {
 				JOptionPane.showMessageDialog(null,"You must first draw card.");
 			}
+			if(currPlayer.properties.size()>0) {
+				mortgageButton.setVisible(true);
+			}
 			panelbig.setVisible(true);
 			panelbig.repaint();
 			panelbig.revalidate();
@@ -1152,6 +1140,9 @@ public class GUI extends JFrame{
 					System.out.println("Error");
 				}
 				thisCard.cardFunction(currPlayer);
+				if(currPlayer.isInJail) {
+					rollButton.setVisible(false);
+				}
 				
 			}else if(Main.locations.get(currPlayer.position) instanceof Property){
 				Property tempLocation =  (Property) Main.locations.get(currPlayer.position);;

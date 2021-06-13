@@ -286,9 +286,11 @@ public class Player {
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
 				dice2.rollDice();
+				
 				if(dice1.getFaceValue()==dice2.getFaceValue()) {
 					isInJail = false;
 					jailTurns = 0;
+					GUI.timesPressedRoll++;
 					JOptionPane.showMessageDialog(null,"You got out of jail thanks to your dice roll","Alert",JOptionPane.INFORMATION_MESSAGE);
 					f.dispose();
 					ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
@@ -298,13 +300,16 @@ public class Player {
 						if(balance<50) {
 							isInJail = false;
 							jailTurns = 0;
+							GUI.timesPressedRoll++;
 							JOptionPane.showMessageDialog(null,"You waited 3 rounds you can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 							f.dispose();
 							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+							
 						}else {
 							isInJail = false;
 							jailTurns = 0;
 							ReduceBalance(50);
+							GUI.timesPressedRoll++;
 							JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50$ have been removed from you balance\nYou can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 							f.dispose();
 							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
