@@ -26,6 +26,8 @@ public class Main {
 			shuffledThisList.add(allChances.poll());
 		}
 		Collections.shuffle(shuffledThisList);
+		Collections.shuffle(shuffledThisList);
+		Collections.shuffle(shuffledThisList);
 
 		for (Card thisCard: shuffledThisList) {
 			allChances.add(thisCard);
@@ -35,6 +37,8 @@ public class Main {
 		for (int i =0; i<allChances.size();i++) {
 			shuffledThisList.add(allCommunityChests.poll());
 		}
+		Collections.shuffle(shuffledThisList);
+		Collections.shuffle(shuffledThisList);
 		Collections.shuffle(shuffledThisList);
 
 		for (Card thisCard: shuffledThisList) {
@@ -58,9 +62,9 @@ public class Main {
 //			e.printStackTrace();
 //		}
 //		
-
-
-		//new GUI();
+//
+//
+//		new GUI();
 
 
 	}

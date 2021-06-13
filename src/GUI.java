@@ -189,6 +189,7 @@ public class GUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				timesPressedRoll++;
+				seeLocationInfoButton.setVisible(false);
 				balanceField.setText(currPlayer.balance + "€");
 				sidepanel.revalidate();
 				sidepanel.repaint();
@@ -296,6 +297,9 @@ public class GUI extends JFrame{
 					
 					//Chance And Community Chest/
 					//drawCard = false;
+					if(Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
+						drawCard = false;
+					}
 
 //					if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
 //						//TO-DO
@@ -979,8 +983,9 @@ public class GUI extends JFrame{
 			
 			if(timesPressedRoll>0 && drawCard == true || currPlayer.isInJail) {
 				timesPressedRoll = 0;
-				drawCard = false;
+				drawCard = true;
 				rollButton.setVisible(true);
+				seeLocationInfoButton.setVisible(false);
 				sidepanel.revalidate();
 				currPlayerCounter++;
 				
@@ -993,6 +998,7 @@ public class GUI extends JFrame{
 				if(currPlayer.jailTurns==3) {
 					JOptionPane.showMessageDialog(null,"You waited 3 rounds, you are now free","Alert",JOptionPane.INFORMATION_MESSAGE);
 					currPlayer.isInJail=false;
+					currPlayer.jailTurns = 0;
 				}
 				
 				if(currPlayer.isInJail==true) {
