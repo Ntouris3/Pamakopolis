@@ -980,7 +980,6 @@ public class GUI extends JFrame{
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
 			if(timesPressedRoll>0 && drawCard == true || currPlayer.isInJail) {
 				timesPressedRoll = 0;
 				drawCard = true;
@@ -1003,7 +1002,7 @@ public class GUI extends JFrame{
 				
 				if(currPlayer.isInJail==true) {
 					rollButton.setVisible(false);
-					currPlayer.ShowJailFrame(rollButton);
+					currPlayer.ShowJailFrame(rollButton,seeLocationInfoButton);
 					//TO-DO
 					panelbig.setVisible(false);
 					panelbig.repaint();
@@ -1148,6 +1147,7 @@ public class GUI extends JFrame{
 				thisCard.cardFunction(currPlayer);
 				if(currPlayer.isInJail) {
 					rollButton.setVisible(false);
+					endTurnButton.setVisible(true);
 				}
 				
 			}else if(Main.locations.get(currPlayer.position) instanceof Property){
