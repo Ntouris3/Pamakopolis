@@ -22,8 +22,8 @@ import javax.swing.text.BadLocationException;
 public class GUI extends JFrame{
 
 	private Player currPlayer;
-	private boolean drawCard = true;
-	static int timesPressedRoll = 0;
+	private static boolean drawCard = true;
+	private static  int timesPressedRoll = 0;
 	public static JPanel panelbig = new JPanel();
 	public static JLayeredPane gameP = new JLayeredPane();
 	public JPanel sidepanel = new JPanel();
@@ -1439,4 +1439,23 @@ public class GUI extends JFrame{
 		}
 	}
 
+	public static boolean isDrawCard() {
+		return drawCard;
+	}
+
+	public static void setDrawCard(boolean drawCard) {
+		GUI.drawCard = drawCard;
+	}
+
+	public static int getTimesPressedRoll() {
+		return timesPressedRoll;
+	}
+
+	public static void setTimesPressedRoll(int timesPressedRoll) {
+		GUI.timesPressedRoll = timesPressedRoll;
+	}
+
+	
+
+	
 }
