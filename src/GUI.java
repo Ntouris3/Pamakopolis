@@ -1240,8 +1240,11 @@ public class GUI extends JFrame{
 			    	else if(selected=="4 houses") {
 			    		number=4;
 			    	}
-			    	else {
+			    	else if(selected=="Hotel"){
 			    		number=5;
+			    	}
+			    	else {
+			    		number=0;
 			    	}
 			    }
 			});	
@@ -1250,10 +1253,15 @@ public class GUI extends JFrame{
 		
 			   
 	        BButton.addActionListener(new ActionListener() {
-	            	public void actionPerformed(ActionEvent e) {	            				
+	            	public void actionPerformed(ActionEvent e) {
+	            		if(propertiestobuild.getSelectedValue()==null) {
+	            			JOptionPane.showMessageDialog(null, "You have to choose a Street to build on");
+	            		}
+	            		else {
 	            			propertiestobuild.getSelectedValue().Build(currPlayer, number);		    
 	            			hotelLabel.setText("Hotels:" +propertiestobuild.getSelectedValue().hotel);
 	            			houseLabel.setText("Houses:" +propertiestobuild.getSelectedValue().houses);
+	            		}
 	            	}
 	        });
 	            				
@@ -1336,16 +1344,24 @@ public class GUI extends JFrame{
 			    	else if(selected=="4 houses") {
 			    		number=4;
 			    	}
-			    	else {
+			    	else if(selected=="Hotel"){
 			    		number=5;
+			    	}
+			    	else {
+			    		number = 0;
 			    	}
 			    }
 			});							   	                  
 	        DButton.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent e) {
-	            	propertiestodemolish.getSelectedValue().Demolish(currPlayer, number);
-	            	hotelLabel.setText("Hotels:" +propertiestodemolish.getSelectedValue().hotel);
-        			houseLabel.setText("Houses:" +propertiestodemolish.getSelectedValue().houses);      
+	            	if(propertiestodemolish.getSelectedValue()==null) {
+            			JOptionPane.showMessageDialog(null, "You have to choose on which Street you wish to demolish");
+            		}
+	            	else {	        	          
+	            		propertiestodemolish.getSelectedValue().Demolish(currPlayer, number);
+	            		hotelLabel.setText("Hotels:" +propertiestodemolish.getSelectedValue().hotel);
+	            		houseLabel.setText("Houses:" +propertiestodemolish.getSelectedValue().houses);  
+	            	}
 	            }
 	        });
 	         

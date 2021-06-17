@@ -25,27 +25,6 @@ public class Street extends Property{
 		this.houseCost = houseCost;
 		this.hotelCost = hotelCost;
 	}
-
-//	public void Build(Player player, int number) {
-//		//GUI input for number of houses #1-4 and hotel #5
-//		//αν θελει να χτισει ενα hotel κατευθειαν, τι γινεται??
-//		//hotelcost πρεπει να ειναι housecost*5
-//		//θελει pop up window επιβεβαιωσης
-//		if(number+houses>5) {
-//			JOptionPane.showMessageDialog(null, "Can't build more houses!!");
-//		}
-//		else {
-//			if (number==5) {
-//				player.balance=player.balance-hotelCost;
-//				hotel++;
-//			}else {
-//				player.balance=player.balance-(houseCost*number);
-//				houses=houses+number;
-//			}
-//		}
-//		
-//				
-//	}
 	
 	public void Build(Player player, int number) {
 		//GUI input for number of houses #1-4 and hotel #5
@@ -54,17 +33,27 @@ public class Street extends Property{
 		//èåëåé pop up window åðéâåâáéùóçò
 		if (number==5) {
 			if(hotel==0) {
-				player.balance=player.balance-hotelCost;
-				hotel++;
-				houses=0;
+				if(player.balance<hotelCost) {
+					JOptionPane.showMessageDialog(null, "Not enough money to build a hotel!");
+				}
+				else {
+					player.balance=player.balance-hotelCost;
+					hotel++;
+					houses=0;
+				}	
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Already have hotels");
 			}
 		}else {
 			if(number+houses<=4 && hotel==0) {
-				player.balance=player.balance-(houseCost*number);
-				houses=houses+number;
+				if(player.balance<(houseCost*number)) {
+					JOptionPane.showMessageDialog(null, "Not enough money to build "+number+" houses!");
+				}
+				else {
+					player.balance=player.balance-(houseCost*number);
+					houses=houses+number;
+				}
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Can't build more houses!!");
