@@ -3,11 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -25,7 +23,7 @@ public class GUI extends JFrame{
 	private static boolean drawCard = true;
 	private static  int timesPressedRoll = 0;
 
-  public static JPanel panelbig = new JPanel();
+	public static JPanel panelbig = new JPanel();
 	public static JLayeredPane gameP = new JLayeredPane();
 	public static JPanel sidepanel = new JPanel();
 	public static JPanel bankruptPanel = new JPanel();
@@ -78,7 +76,6 @@ public class GUI extends JFrame{
 		tradeButton.setFont(new Font("SansSerif", Font.BOLD,12));
 		
 		currPlayer = Main.allPlayers.get(currPlayerCounter);
-		//jl.setBounds(0, 0, 100, 100);
 		jl.setPreferredSize(new Dimension(300, 300));
 		jl.setBorder(BorderFactory.createLineBorder(Color.black));
 		
@@ -174,9 +171,6 @@ public class GUI extends JFrame{
 		sidepanel.add(buildButton);
 		sidepanel.add(demolishButton);
 		sidepanel.add(tradeButton);
-		//tradeButton.setVisible(true);
-		
-		
 		
 		ButtonListener listener3 = new ButtonListener();
 		buildButton.addActionListener(listener3);
@@ -198,13 +192,7 @@ public class GUI extends JFrame{
 				sidepanel.repaint();
 				if(timesPressedRoll<3 && !currPlayer.isInJail) {
 					dice1.rollDice();
-					dice2.rollDice();
-					//demo
-					//dice1.setFaceValue(2);
-					//dice1.repaint();
-					//dice2.setFaceValue(2);
-					//dice2.repaint();
-					
+					dice2.rollDice();					
 
 					if(dice1.getFaceValue() != dice2.getFaceValue() || currPlayer.isInJail == true) {
 						rollButton.setVisible(false);
@@ -265,15 +253,12 @@ public class GUI extends JFrame{
 							if(((Property)Main.locations.get(currPlayer.position)).getOwner() != currPlayer) {
 								if(Main.locations.get(currPlayer.position) instanceof Street) {
 									((Street)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
-									//System.out.println("Rent payed");
 								}
 								else if(Main.locations.get(currPlayer.position) instanceof Utility){
 									((Utility)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
-									//System.out.println("Rent payed");
 								}
 								else {
 									((Railroad)Main.locations.get(currPlayer.position)).CalcRent(currPlayer);
-									//System.out.println("Rent payed");
 								}
 							}
 							
@@ -292,12 +277,12 @@ public class GUI extends JFrame{
 							sidepanel.repaint();
 					}
 
-				//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
-				if(currPlayer.properties.size()==0) {
-					mortgageButton.setVisible(false);
-					sidepanel.revalidate();
-					sidepanel.repaint();
-				}
+					//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
+					if(currPlayer.properties.size()==0) {
+						mortgageButton.setVisible(false);
+						sidepanel.revalidate();
+						sidepanel.repaint();
+					}
 								
 					//PAYING TAX WHEN HITTING TAX BLOCK//
 					if(Main.locations.get(currPlayer.position) instanceof Tax ){
@@ -497,17 +482,13 @@ public class GUI extends JFrame{
 		seeCardsButton.addActionListener(l3);
 		sidepanel.add(seeCardsButton);
 		
-		
-
 		//trade button
 		tradeButtonListener l4 = new tradeButtonListener();
 		tradeButton.addActionListener(l4);
 		
 
 		panelbig.setVisible(true);
-		sidepanel.setBackground(panelbig.getBackground());
-		//panelbig.setBackground(Color.DARK_GRAY);
-		
+		sidepanel.setBackground(panelbig.getBackground());		
 
 		sidepanel.add(endTurnButton);
 		
@@ -533,7 +514,6 @@ public class GUI extends JFrame{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//setColor(t);
 			requestTrade.setFont(new Font("SansSerif", Font.BOLD, 12));
 			t.setFont(new Font("SansSerif", Font.PLAIN, 15));
 			tradeFrame = new JFrame("Trading Process");
@@ -1013,7 +993,6 @@ public class GUI extends JFrame{
 				if(currPlayer.isInJail==true) {
 					rollButton.setVisible(false);
 					currPlayer.ShowJailFrame(rollButton,seeLocationInfoButton,buyButton);
-					//TO-DO
 					panelbig.setVisible(false);
 					panelbig.repaint();
 					panelbig.revalidate();
@@ -1228,7 +1207,6 @@ public class GUI extends JFrame{
 			for (Property prop1:currPlayer.PropertiesToBuildIn()) {
 				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) ||
 						(prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
-					//listprop.addElement(prop1.name);
 				}
 				else {
 					listprop.addElement(prop1.name);
@@ -1326,7 +1304,6 @@ public class GUI extends JFrame{
 			//Ξ²Ξ±Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ± props ΟƒΞµ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± Ο€ΞΏΟ… ΞµΟ€ΞΉΞ»ΞµΞ³ΞµΞΉ
 			for (Property prop1:currPlayer.properties) {
 				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
-					//listprop.addElement(prop1.name);
 				}
 				else {
 					listprop.addElement(prop1.name);
@@ -1338,7 +1315,6 @@ public class GUI extends JFrame{
 			ArrayList<String> choices=new ArrayList<String>();
 			for (Property prop1:currPlayer.properties) {
 				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
-					//listprop.addElement(prop1.name);
 				}
 				else {
 		    		if (((Street)prop1).houses==1) {

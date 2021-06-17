@@ -58,7 +58,6 @@ public class Dice extends JPanel {
 	public void rollDice(){
 		Random r = new Random();
 		faceValue = r.nextInt(6) + 1;
-//		faceValue = 2;
 		repaint();
 	}
 	

@@ -1,5 +1,3 @@
-import javax.swing.JOptionPane;
-
 public abstract class Property extends Location{
 	protected String name;
 	protected String cardImg;
@@ -39,16 +37,5 @@ public abstract class Property extends Location{
 
 	public int getPrice() {
 		return price;
-	}
-
-
-
-
-
-	
-
-
-	
-	
-	
+	}	
 }

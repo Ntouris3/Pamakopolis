@@ -33,8 +33,7 @@ public class Piece extends JComponent{
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-	    //g.drawImage(pieceimg, 0, 0, getWidth() , getHeight() ,this); // see javadoc for more info on the parameters     
+		super.paintComponent(g);    
 	    pieceimg.paintIcon(this, g, 0, 0);
 	}
 	
@@ -104,13 +103,6 @@ public class Piece extends JComponent{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			
-			
-		}
-		
-		//p.position = currPiecePos;
-		
-		
+		}		
 	}
 }

@@ -560,35 +560,7 @@ public class Player {
 			GUI.sidepanel.repaint();
 			GUI.panelbig.revalidate();
 			GUI.panelbig.repaint();
-			
-			
-			/*class endTurnButtonListener implements ActionListener {
-				
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					
-						
-						if(!GUI.currPlayer.isBankrupt()) {
-							GUI.currPlayerCounter++;
-							
-						}
-						else {
-							JOptionPane.showMessageDialog(null,"Success!");
-							//panelbig.remove(bankruptPanel);
-							//panelbig.add(sidepanel, BorderLayout.EAST);
-						}
-						
-						
-						if(currPlayerCounter >= Main.allPlayers.size()) {
-							currPlayerCounter = 0;
-						}
-						
-						currPlayer = Main.allPlayers.get(currPlayerCounter);
-						
-				}
-			}*/
-			
-		}
+			}
 	}
 		class tradeButtonListener implements ActionListener{
 			Player otherPlayer = null;
@@ -603,8 +575,6 @@ public class Player {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				//Player currPlayer = (Player)e.getSource();
-				//setColor(t);
 				requestTrade.setFont(new Font("SansSerif", Font.BOLD, 12));
 				t.setFont(new Font("SansSerif", Font.PLAIN, 15));
 				tradeFrame = new JFrame("Trading Process");
@@ -962,12 +932,9 @@ public class Player {
 										currToOtherMoney = Integer.parseInt(currPlayerTradeMoneyFiled.getText());
 										otherToCurrMoney = Integer.parseInt(otherPlayerTradeMoneyFiled.getText());
 
-										//if (currToOtherMoney <= curPlayer.balance && otherToCurrMoney <= otherPlayer.balance) {
 											curPlayer.Trade(otherPlayer, currToOtherLocation, currToOtherJailCards, currToOtherMoney, otherToCurrLocation, otherToCurrJailCards, otherToCurrMoney);
 											tradeFrame.dispose();
-										//}else {
-											//JOptionPane.showMessageDialog(null, "Not valid input");
-										//}
+
 									}});
 								newJPanel.add(acceptTradeButton);
 								tradeFrame.add(newJPanel);
