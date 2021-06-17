@@ -34,7 +34,7 @@ public class LoginScreenGUI extends JFrame {
 	public LoginScreenGUI() {
 		
 	
-		title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , "MONOPOLY by Φαντάστικ Τέν");
+		title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , "MONOPOLY by Fantastic 10");
 		title.setTitleJustification(TitledBorder.CENTER);
 		title.setTitleColor(Color.gray);
 		title.setTitleFont(new Font("SansSerif", Font.ITALIC,13));
