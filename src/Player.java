@@ -203,7 +203,7 @@ public class Player {
 		return false;
 	}
 	
-	public void ShowJailFrame(JButton button) {
+	public void ShowJailFrame(JButton button, JButton viewCardButton) {
 		
 		JFrame f = new JFrame();
 		JPanel p = new JPanel();
@@ -252,7 +252,7 @@ public class Player {
 		
 		this.jailTurns++;
 		
-		
+		//Button Listener for using Get Out Of Jail card
 		useCardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(jailCards.get(0).getCardImgName()=="Chance_GOOJF") {
@@ -270,7 +270,7 @@ public class Player {
 			}
 		});
 		
-
+		//Button Listener for paying to get out of Jail
 		payButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ReduceBalance(50);
@@ -282,32 +282,69 @@ public class Player {
 			}
 		});
 		
+		//Button Listener for rolling the dice
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
 				dice2.rollDice();
+			
 				if(dice1.getFaceValue()==dice2.getFaceValue()) {
 					isInJail = false;
 					jailTurns = 0;
+					GUI.setTimesPressedRoll(GUI.getTimesPressedRoll()+1);
 					JOptionPane.showMessageDialog(null,"You got out of jail thanks to your dice roll","Alert",JOptionPane.INFORMATION_MESSAGE);
 					f.dispose();
 					ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+					
+					if (Main.locations.get(position) instanceof ChanceAndCommunityChest) {
+						viewCardButton.setText("Draw the card");
+						viewCardButton.setVisible(true);
+						GUI.setDrawCard(false);
+					}
+					else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
+					|| Main.locations.get(position) instanceof Railroad) {
+						viewCardButton.setText("See Location Info");
+						viewCardButton.setVisible(true);
+					}
+					
 				}
 				else {
 					if(jailTurns==3) {
 						if(balance<50) {
 							isInJail = false;
 							jailTurns = 0;
+							GUI.setTimesPressedRoll(GUI.getTimesPressedRoll()+1);
 							JOptionPane.showMessageDialog(null,"You waited 3 rounds you can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 							f.dispose();
 							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+							if (Main.locations.get(position) instanceof ChanceAndCommunityChest) {
+								viewCardButton.setText("Draw the card");
+								viewCardButton.setVisible(true);
+								GUI.setDrawCard(false);
+							}
+							else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
+							|| Main.locations.get(position) instanceof Railroad) {
+								viewCardButton.setText("See Location Info");
+								viewCardButton.setVisible(true);
+							}
 						}else {
 							isInJail = false;
 							jailTurns = 0;
 							ReduceBalance(50);
+							GUI.setTimesPressedRoll(GUI.getTimesPressedRoll()+1);
 							JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50$ have been removed from you balance\nYou can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 							f.dispose();
 							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+							if (Main.locations.get(position) instanceof ChanceAndCommunityChest) {
+								viewCardButton.setText("Draw the card");
+								viewCardButton.setVisible(true);
+								GUI.setDrawCard(false);
+							}
+							else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
+							|| Main.locations.get(position) instanceof Railroad) {
+								viewCardButton.setText("See Location Info");
+								viewCardButton.setVisible(true);
+							}
 						}
 					}
 					else {
