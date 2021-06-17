@@ -198,7 +198,7 @@ public class GUI extends JFrame{
 					dice1.rollDice();
 					dice2.rollDice();
 					//demo
-					//dice1.setFaceValue();
+					//dice1.setFaceValue(2);
 					//dice1.repaint();
 					//dice2.setFaceValue(2);
 					//dice2.repaint();
@@ -381,7 +381,7 @@ public class GUI extends JFrame{
 				
 			}else {
 					currPlayer.isInJail=true;
-					currPlayer.position = 10;
+					currPlayer.ChangePosition(10);
 					JOptionPane.showMessageDialog(null,"You rolled 3 times. You are now in jail");
 				}
 				balanceField.setText(currPlayer.balance + "€");
