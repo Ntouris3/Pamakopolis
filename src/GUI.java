@@ -81,7 +81,6 @@ public class GUI extends JFrame{
 		
 		Dice dice1 = new Dice(80, 135, 40, 40);
 		jl.add(dice1);
-
 		Dice dice2 = new Dice(180, 135, 40, 40);
 		jl.add(dice2);
 		jl.repaint();
@@ -1193,24 +1192,20 @@ public class GUI extends JFrame{
 			JFrame f = new JFrame();
 			JPanel panels=new JPanel();
 			setColor(panels);
-
+			JLabel houseLabel = new JLabel();
+			JLabel hotelLabel = new JLabel();
 			JTextField messageF = new JTextField("You can only build if you have all the properties in the colour of the Street you want to build in");
 			setColor(messageF);
 			messageF.setFont(new Font("SansSerif", Font.PLAIN, 13));
 			messageF.setEditable(false);
 			messageF.setVisible(true);
 			panels.add(messageF);
-			JList<String> propertiestobuild= new JList<String>();
-			DefaultListModel<String> listprop = new DefaultListModel<>();
-						
+			JList<Street> propertiestobuild= new JList(currPlayer.PropertiesToBuildIn().toArray());
+			DefaultListModel<Street> listprop = new DefaultListModel<>();
+			
 			//Ξ²Ξ±Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ± props ΟƒΞµ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± Ο€ΞΏΟ… ΞµΟ€ΞΉΞ»ΞµΞ³ΞµΞΉ
-			for (Property prop1:currPlayer.PropertiesToBuildIn()) {
-				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) ||
-						(prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
-				}
-				else {
-					listprop.addElement(prop1.name);
-				}
+			for (Street prop1:currPlayer.PropertiesToBuildIn()) {
+					listprop.addElement(prop1);
 			}
 			propertiestobuild.setModel(listprop);
 			
@@ -1231,7 +1226,7 @@ public class GUI extends JFrame{
 			
 			//Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ±Ο�ΞΉΞΈΞΌΞΏΟ… Ο‡Ο„ΞΉΟƒΞΌΞ±Ο„ΞΏΟ‚
 			choicelist.addActionListener(new ActionListener() {
-			    public void actionPerformed(ActionEvent event) {
+			    public void actionPerformed(ActionEvent event) {		
 			    	String selected = (String) choicelist.getSelectedItem();
 			    	if (selected=="1 house") {
 			    		number=1;
@@ -1252,28 +1247,20 @@ public class GUI extends JFrame{
 			});	
 
 			
-			//List listener
-			propertiestobuild.addListSelectionListener(new ListSelectionListener() {
-	            @Override
-	            public void valueChanged(ListSelectionEvent arg0) {
-	                if (!arg0.getValueIsAdjusting()) {
-	                	for (int i=0; i<currPlayer.properties.size(); i++) {
-	                		if (propertiestobuild.getSelectedValue().toString().equals(currPlayer.properties.get(i).name)) {
-	                			int numb=i;
-	            				BButton.addActionListener(new ActionListener() {
-	            					public void actionPerformed(ActionEvent e) {
-	    	                			((Street)currPlayer.properties.get(numb)).Build(currPlayer, number);
-	    	                			System.out.println(currPlayer.properties.get(numb).name);
-	    	                			System.out.println(number);
-	            					}
-	            				});
-	                		}
-	                	}
-	                }
-	            }
-
-	        });	
-			
+		
+			   
+	        BButton.addActionListener(new ActionListener() {
+	            	public void actionPerformed(ActionEvent e) {	            				
+	            			propertiestobuild.getSelectedValue().Build(currPlayer, number);		    
+	            			hotelLabel.setText("Hotels:" +propertiestobuild.getSelectedValue().hotel);
+	            			houseLabel.setText("Houses:" +propertiestobuild.getSelectedValue().houses);
+	            	}
+	        });
+	            				
+	        panels.add(hotelLabel);
+	        panels.add(houseLabel);
+			panels.repaint();
+			panels.revalidate();
 			
 			
 			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -1296,45 +1283,29 @@ public class GUI extends JFrame{
 			JFrame f = new JFrame();
 			JPanel panels=new JPanel();
 			setColor(panels);
-
 			
-			JList<String> propertiestodemolish= new JList<String>();
-			DefaultListModel<String> listprop = new DefaultListModel<>();
+			JLabel houseLabel = new JLabel();
+			JLabel hotelLabel = new JLabel();
+			
+			JList<Street> propertiestodemolish= new JList<Street>();
+			DefaultListModel<Street> listprop = new DefaultListModel<>();
 						
 			//Ξ²Ξ±Ξ¶ΞΏΟ…ΞΌΞµ Ο„Ξ± props ΟƒΞµ ΞΌΞΉΞ± Ξ»ΞΉΟƒΟ„Ξ± Ο€ΞΏΟ… ΞµΟ€ΞΉΞ»ΞµΞ³ΞµΞΉ
-			for (Property prop1:currPlayer.properties) {
-				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
-				}
-				else {
-					listprop.addElement(prop1.name);
-				}
+			for (Street prop1:currPlayer.PropertiesToBuildIn()) {
+					listprop.addElement(prop1);
 			}
 			propertiestodemolish.setModel(listprop);
 			
 			//Ξ¦Ο„ΞΉΞ¬Ο‡Ξ½ΞΏΟ…ΞΌΞµ Ο„ΞΉΟ‚ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ­Ο‚
 			ArrayList<String> choices=new ArrayList<String>();
-			for (Property prop1:currPlayer.properties) {
-				if ((prop1.name.equals("Reading Railroad")) || (prop1.name.equals("Pennsylvania Railroad")) || (prop1.name.equals("B. & O. Railroad")) || (prop1.name.equals("Short Line")) || (prop1.name.equals("Electric Company")) || (prop1.name.equals("Water Works"))) {
-				}
-				else {
-		    		if (((Street)prop1).houses==1) {
-		    			choices.add("1 house");
-		    		}
-		    		if (((Street)prop1).houses==2) {
-		    			choices.add("2 houses");
-		    		}
-		    		if (((Street)prop1).houses==3) {
-		    			choices.add("3 houses");
-		    		}
-		    		if (((Street)prop1).houses==4) {
-		    			choices.add("4 houses");
-		    		}
-		    		if (((Street)prop1).hotel==1) {
-		    			choices.add("Hotel");
-		    		}
-				}
-				
-			}
+		    choices.add("1 house");
+		    choices.add("2 houses");
+		    choices.add("3 houses");
+		    choices.add("4 houses");
+		   	choices.add("Hotel");
+		    		
+		    
+			
 			//Ξ�ΞµΟ„Ξ±Ο„Ο�ΞΏΟ€Ξ® ΟƒΞµ string!
 	    	String[] array = choices.toArray(new String[0]);
 			JComboBox<String> choicelist = new JComboBox<String>(array);
@@ -1369,31 +1340,24 @@ public class GUI extends JFrame{
 			    		number=5;
 			    	}
 			    }
-			});			
-			
-			propertiestodemolish.addListSelectionListener(new ListSelectionListener() {
-	            @Override
-	            public void valueChanged(ListSelectionEvent arg0) {
-	                if (!arg0.getValueIsAdjusting()) {
-	                	for (int i=0; i<currPlayer.properties.size(); i++) {
-	                		if (propertiestodemolish.getSelectedValue().toString().equals(currPlayer.properties.get(i).name)) {
-	                			int numb=i;
-	            				DButton.addActionListener(new ActionListener() {
-	            					public void actionPerformed(ActionEvent e) {
-	    	                			((Street)currPlayer.properties.get(numb)).Demolish(currPlayer, number);
-	    	                			System.out.println(currPlayer.properties.get(numb).name);
-	    	                			System.out.println(number);
-	            					}
-	            				});
-	                		}
-	                	}
-	                }
+			});							   	                  
+	        DButton.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	            	propertiestodemolish.getSelectedValue().Demolish(currPlayer, number);
+	            	hotelLabel.setText("Hotels:" +propertiestodemolish.getSelectedValue().hotel);
+        			houseLabel.setText("Houses:" +propertiestodemolish.getSelectedValue().houses);      
 	            }
-
-	        });		
-			
+	        });
+	         
+	        panels.add(hotelLabel);
+	        panels.add(houseLabel);
+			panels.repaint();
+			panels.revalidate();
+			        	
+	              
+	        
 			f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			f.setSize(400,200);
+			f.setSize(350,200);
 			f.setContentPane(panels);
 			f.setTitle("Demolish");
 			f.setVisible(true);

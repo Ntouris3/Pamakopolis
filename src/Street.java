@@ -26,28 +26,76 @@ public class Street extends Property{
 		this.hotelCost = hotelCost;
 	}
 
+//	public void Build(Player player, int number) {
+//		//GUI input for number of houses #1-4 and hotel #5
+//		//Ξ±Ξ½ ΞΈΞµΞ»ΞµΞΉ Ξ½Ξ± Ο‡Ο„ΞΉΟƒΞµΞΉ ΞµΞ½Ξ± hotel ΞΊΞ±Ο„ΞµΟ…ΞΈΞµΞΉΞ±Ξ½, Ο„ΞΉ Ξ³ΞΉΞ½ΞµΟ„Ξ±ΞΉ??
+//		//hotelcost Ο€ΟΞµΟ€ΞµΞΉ Ξ½Ξ± ΞµΞΉΞ½Ξ±ΞΉ housecost*5
+//		//ΞΈΞµΞ»ΞµΞΉ pop up window ΞµΟ€ΞΉΞ²ΞµΞ²Ξ±ΞΉΟ‰ΟƒΞ·Ο‚
+//		if(number+houses>5) {
+//			JOptionPane.showMessageDialog(null, "Can't build more houses!!");
+//		}
+//		else {
+//			if (number==5) {
+//				player.balance=player.balance-hotelCost;
+//				hotel++;
+//			}else {
+//				player.balance=player.balance-(houseCost*number);
+//				houses=houses+number;
+//			}
+//		}
+//		
+//				
+//	}
+	
 	public void Build(Player player, int number) {
 		//GUI input for number of houses #1-4 and hotel #5
-		//αν θελει να χτισει ενα hotel κατευθειαν, τι γινεται??
-		//hotelcost πρεπει να ειναι housecost*5
-		//θελει pop up window επιβεβαιωσης
+		//Γ΅Γ­ Γ¨Γ¥Γ«Γ¥Γ© Γ­Γ΅ Γ·Γ΄Γ©Γ³Γ¥Γ© Γ¥Γ­Γ΅ hotel ΓªΓ΅Γ΄Γ¥ΓµΓ¨Γ¥Γ©Γ΅Γ­, Γ΄Γ© Γ£Γ©Γ­Γ¥Γ΄Γ΅Γ©??
+		//hotelcost Γ°Γ±Γ¥Γ°Γ¥Γ© Γ­Γ΅ Γ¥Γ©Γ­Γ΅Γ© housecost*5
+		//Γ¨Γ¥Γ«Γ¥Γ© pop up window Γ¥Γ°Γ©ΓΆΓ¥ΓΆΓ΅Γ©ΓΉΓ³Γ§Γ²
 		if (number==5) {
-			player.balance=player.balance-hotelCost;
-			hotel++;
+			if(hotel==0) {
+				player.balance=player.balance-hotelCost;
+				hotel++;
+				houses=0;
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Already have hotels");
+			}
 		}else {
-			player.balance=player.balance-(houseCost*number);
-			houses=houses+number;
+			if(number+houses<=4 && hotel==0) {
+				player.balance=player.balance-(houseCost*number);
+				houses=houses+number;
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Can't build more houses!!");
+			}
 		}
 				
 	}
 	
 	public void Demolish(Player player, int number) {
 		if (number==5) {
-			hotel--;
-			player.balance=player.balance+(hotelCost/2);
+			if(hotel==0) {
+				JOptionPane.showMessageDialog(null, "You have no hotels to demolish");
+			}
+			else {
+				hotel--;
+				houses= 4;
+				player.balance=player.balance+(hotelCost/2);
+			}	
 		}else {
-			houses=houses-number;
-			player.balance=player.balance+(houseCost/2)*number;
+			if(number>houses) {
+				if(hotel==1) {
+					JOptionPane.showMessageDialog(null, "You have a hotel, so you can't demolish houses!!");
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "You can't demolish so many houses");
+				}
+			}
+			else {
+				houses=houses-number;
+				player.balance=player.balance+(houseCost/2)*number;
+			}	
 		}
 	}
 
@@ -72,7 +120,7 @@ public class Street extends Property{
 		else {
 			owner.AddBalance(currbalance);
 		}
-		JOptionPane.showMessageDialog(null, "Rent: "+sum+"€ payed.");
+		JOptionPane.showMessageDialog(null, "Rent: "+sum+"β‚¬ payed.");
 		
 	}
 	

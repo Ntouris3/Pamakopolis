@@ -174,38 +174,42 @@ public class Player {
 			else if (streets.get(i).colour == "Cyan")
 				sumWhite++;
 		}
-		if (sumRed==3) {
-			for (Street s:streets)
-				if (s.colour == "Red")
-					streetsToBuildIn.add(s);}
-	    if (sumBlue==2) {
-			for (Street s:streets)
-				if (s.colour == "Blue")
-					streetsToBuildIn.add(s);}
-		if (sumGreen==3) {
-			for (Street s:streets)
-				if (s.colour == "Green")
-					streetsToBuildIn.add(s);}
-		if (sumOrange==3) {
-			for (Street s:streets)
-				if (s.colour == "Orange")
-					streetsToBuildIn.add(s);}
-		if (sumBrown==2) {
-			for (Street s:streets)
-				if (s.colour == "Brown")
-					streetsToBuildIn.add(s);}
-		if (sumYellow==3) {
-			for (Street s:streets)
-				if (s.colour == "Yellow")
-					streetsToBuildIn.add(s);}
-		if (sumPink==3) {
-			for (Street s:streets)
-				if (s.colour == "Pink")
-					streetsToBuildIn.add(s);}
-		if (sumWhite==3) {
-			for (Street s:streets)
-				if (s.colour == "Cyan")
-					streetsToBuildIn.add(s);}
+		if(streetsToBuildIn.size()==0) {
+			
+		
+			if (sumRed==3) {
+				for (Street s:streets)
+					if (s.colour == "Red")
+						streetsToBuildIn.add(s);}
+		    if (sumBlue==2) {
+				for (Street s:streets)
+					if (s.colour == "Blue")
+						streetsToBuildIn.add(s);}
+			if (sumGreen==3) {
+				for (Street s:streets)
+					if (s.colour == "Green")
+						streetsToBuildIn.add(s);}
+			if (sumOrange==3) {
+				for (Street s:streets)
+					if (s.colour == "Orange")
+						streetsToBuildIn.add(s);}
+			if (sumBrown==2) {
+				for (Street s:streets)
+					if (s.colour == "Brown")
+						streetsToBuildIn.add(s);}
+			if (sumYellow==3) {
+				for (Street s:streets)
+					if (s.colour == "Yellow")
+						streetsToBuildIn.add(s);}
+			if (sumPink==3) {
+				for (Street s:streets)
+					if (s.colour == "Pink")
+						streetsToBuildIn.add(s);}
+			if (sumWhite==3) {
+				for (Street s:streets)
+					if (s.colour == "Cyan")
+						streetsToBuildIn.add(s);}
+		}
 		return streetsToBuildIn;
 	}
 	
@@ -223,7 +227,7 @@ public class Player {
 		JPanel p = new JPanel();
 		GUI.setColor(p);
 		JLabel playerName = new JLabel("Name: "+this.name);
-		JLabel playerBalance = new JLabel("Balance: "+this.balance+"$");
+		JLabel playerBalance = new JLabel("Balance: "+this.balance+"€");
 		JButton payButton = new JButton("Pay Jail Fee");
 		JButton useCardButton = new JButton("Use Get Out Of Jail Card");
 		JButton rollButton = new JButton("Roll Dice");
@@ -352,7 +356,7 @@ public class Player {
 							jailTurns = 0;
 							ReduceBalance(50);
 							GUI.setTimesPressedRoll(GUI.getTimesPressedRoll()+1);
-							JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50$ have been removed from you balance\nYou can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50€ have been removed from you balance\nYou can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 							f.dispose();
 							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
 							if (Main.locations.get(position) instanceof ChanceAndCommunityChest) {
@@ -486,7 +490,7 @@ public class Player {
 			GUI.setColor(p);
 			JTextArea text= new JTextArea("Oh no " + this.name + ", you are almost bankrupt! Mortgage or Trade your belogings to avoid loosing the game!");
 			text.getLineWrap();
-			JLabel playerBalance = new JLabel("Your balance: "+this.balance+"$");
+			JLabel playerBalance = new JLabel("Your balance: "+this.balance+"€");
 			JButton mortgageButton = new JButton("Mortgage");
 			JButton tradeButton = new JButton("Trade");
 		
