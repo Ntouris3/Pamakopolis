@@ -203,7 +203,7 @@ public class Player {
 		return false;
 	}
 	
-	public void ShowJailFrame(JButton button, JButton viewCardButton) {
+	public void ShowJailFrame(JButton button, JButton viewCardButton, JButton buyButton) {
 		
 		JFrame f = new JFrame();
 		JPanel p = new JPanel();
@@ -303,9 +303,14 @@ public class Player {
 					}
 					else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
 					|| Main.locations.get(position) instanceof Railroad) {
+						if(((Property)Main.locations.get(position)).getOwner() == null){
+							buyButton.setVisible(true);
+						}
 						viewCardButton.setText("See Location Info");
 						viewCardButton.setVisible(true);
 					}
+					
+					
 					
 				}
 				else {
@@ -324,6 +329,9 @@ public class Player {
 							}
 							else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
 							|| Main.locations.get(position) instanceof Railroad) {
+								if(((Property)Main.locations.get(position)).getOwner() == null){
+									buyButton.setVisible(true);
+								}
 								viewCardButton.setText("See Location Info");
 								viewCardButton.setVisible(true);
 							}
@@ -342,6 +350,9 @@ public class Player {
 							}
 							else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
 							|| Main.locations.get(position) instanceof Railroad) {
+								if(((Property)Main.locations.get(position)).getOwner() == null){
+									buyButton.setVisible(true);
+								}
 								viewCardButton.setText("See Location Info");
 								viewCardButton.setVisible(true);
 							}

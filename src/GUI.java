@@ -1002,7 +1002,7 @@ public class GUI extends JFrame{
 				
 				if(currPlayer.isInJail==true) {
 					rollButton.setVisible(false);
-					currPlayer.ShowJailFrame(rollButton,seeLocationInfoButton);
+					currPlayer.ShowJailFrame(rollButton,seeLocationInfoButton,buyButton);
 					//TO-DO
 					panelbig.setVisible(false);
 					panelbig.repaint();
