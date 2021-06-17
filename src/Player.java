@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -8,12 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
 public class Player {
 	public String name;
 	public Piece piece;
-	public int balance = 1500;
+	public int balance = 300;
 	public boolean isInJail = false;
     ArrayList<GetOutOfJailCard> jailCards = new ArrayList<GetOutOfJailCard>();
 	public int position = 0;
@@ -36,7 +39,12 @@ public class Player {
 	}
 	
 	public void ReduceBalance (int amount) {
-		balance = balance - amount;
+		
+		this.balance = this.balance - amount;
+		if(this.balance < 0) {
+			bankruptGUI(this);
+		}
+		
 	}
 	
 	public void Buy (Property prop) {
@@ -186,20 +194,10 @@ public class Player {
 	}
 	
 	public boolean isBankrupt () {
-		int sum1 = 0, sum2 = 0;
-		
-		for (int i=0; i<properties.size(); i++)
-		{
-			sum1 += properties.get(i).price; //mortgage
-		}
-		
-		for (int i=0; i<streets.size();i++)
-		{
-			sum2 += (streets.get(i).hotelCost + streets.get(i).houseCost);
-		}
-		
-		if ( balance<0 && sum1==0 && sum2==0 )
+		if(this.balance < 0 && allMortgaged() && this.jailCards.isEmpty()) {
 			return true;
+		}
+		
 		return false;
 	}
 	
@@ -327,5 +325,212 @@ public class Player {
 		f.setTitle("Jail");
 		f.setContentPane(p);
 	}
+		
+	
+	private void mortgageWhenBankrupt(Player currPlayer) {
+		JFrame o = new JFrame();
+		
+		JLabel nameLabel = new JLabel("Name:"+this.name);
+		nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+		
+		JLabel balanceLabel = new JLabel("Balance:"+String.valueOf(this.balance)+"€");
+		balanceLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+		
+		JPanel p = new JPanel();
+		GUI.setColor(p);
+		
+		
+		JButton b1 = new JButton("Mortgage");
+		b1.setFont(new Font("SansSerif", Font.BOLD, 12));
+		b1.setVisible(false);
+		
+		
+		JLabel label1 = new JLabel("");
+		label1.setFont(new Font("SansSerif", Font.PLAIN, 20));
+
+		JList <Property> list = new JList(this.properties.toArray());
+		DefaultListModel<Property> model;
+		
+		p.setLayout(new FlowLayout());
+		p.add(nameLabel);
+		p.add(balanceLabel);
+		p.add(list);
+		p.add(b1);
+		
+		p.add(label1);
+				
+		model = new DefaultListModel<Property>();
+		for(Property prop: this.properties) {
+			model.addElement(prop);
+		}
+		list.setModel(model);
+				
+		//ENABLING AND DISABLING THE BUTTONS DEPENDING PLAYERS SELECTION
+		list.addListSelectionListener( new ListSelectionListener() {
+			   @Override
+				public void valueChanged(ListSelectionEvent e) {
+				   if(list.getSelectedValue().isMortgaged==true) {
+		        		b1.setVisible(false);
+		        		p.revalidate();
+						p.repaint();
+		        	}
+		        	else {
+		        		b1.setVisible(true);
+		        		p.revalidate();
+						p.repaint();
+		        	}	
+				}
+		});
+		
+		
+		//Mortgage Button//
+		b1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Property pro = list.getSelectedValue();
+				currPlayer.AddToMortgage(pro);
+				label1.setText(pro.name+" is now on Mortgage");
+        		b1.setVisible(false);
+        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"€");
+        		p.revalidate();
+				p.repaint();
+			}
+		});
+					
+				
+				o.setSize(350,500); 
+				o.setContentPane(p);
+				o.setTitle("Mortgage");
+				o.setVisible(true);
+				o.setResizable(false);
+			
+	
+	}	
+	
+	private boolean allMortgaged() {
+		
+		for(int i=0; i<this.properties.size(); i++) {
+			if(!this.properties.get(i).isMortgaged) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public void bankruptGUI(Player aPlayer) {
+		if(!isBankrupt()) {
+			JFrame f = new JFrame();
+			JPanel p = new JPanel();
+			GUI.setColor(p);
+			JTextArea text= new JTextArea("Oh no " + this.name + ", you are almost bankrupt! Mortgage or Trade your belogings to avoid loosing the game!");
+			text.getLineWrap();
+			JLabel playerBalance = new JLabel("Your balance: "+this.balance+"$");
+			JButton mortgageButton = new JButton("Mortgage");
+			JButton tradeButton = new JButton("Trade");
+		
+			f.add(p);
+			
+			p.add(text);
+			text.setFont(new Font("SansSerif", Font.PLAIN,15));
+			p.add(playerBalance);
+			playerBalance.setFont(new Font("SansSerif", Font.BOLD,15));
+			p.add(mortgageButton);
+			mortgageButton.setFont(new Font("SansSerif", Font.BOLD,12));
+			p.add(tradeButton);
+			tradeButton.setFont(new Font("SansSerif", Font.BOLD,12));
+			
+			
+			
+			
+			mortgageButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
+			
+			tradeButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
+			
+			mortgageButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mortgageWhenBankrupt(aPlayer);
+			}});
+			
+		
+			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			f.setVisible(true);
+			f.setSize(420,400); 
+			f.setResizable(false);
+			f.setTitle("");
+			f.setContentPane(p);
+		}
+		else {
+			JOptionPane.showMessageDialog(null,"Player " + this.name + " is bankrupt , R.I.P. ");
+			for(int i=0; i<this.properties.size(); i++) {
+				this.properties.get(i).owner = null;
+				this.properties.get(i).isMortgaged = false;
+			}
+			for(int i=0; i<this.jailCards.size(); i++) {
+				this.jailCards.get(i).restoreCard(aPlayer);
+			}
+			for(int i=0; i<Main.allPlayers.size(); i++) {
+				if(Main.allPlayers.get(i).name == this.name) {
+					GUI.gameP.remove(Main.allPlayers.get(i).piece);
+					Main.allPlayers.remove(i);
+					
+					if(GUI.currPlayerCounter >= Main.allPlayers.size()) {
+						GUI.currPlayerCounter = 0;
+					}
+					
+					if(Main.allPlayers.size() > 1) {
+						GUI.currPlayer = Main.allPlayers.get(GUI.currPlayerCounter);
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"Player " + Main.allPlayers.get(0).name + " won !");
+						System.exit(0);
+						
+					}
+					
+				}
+			}
+			
+			GUI.sidepanel.revalidate();
+			GUI.sidepanel.repaint();
+			GUI.panelbig.revalidate();
+			GUI.panelbig.repaint();
+			
+			
+			/*class endTurnButtonListener implements ActionListener {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					
+						
+						if(!GUI.currPlayer.isBankrupt()) {
+							GUI.currPlayerCounter++;
+							
+						}
+						else {
+							JOptionPane.showMessageDialog(null,"Success!");
+							//panelbig.remove(bankruptPanel);
+							//panelbig.add(sidepanel, BorderLayout.EAST);
+						}
+						
+						
+						if(currPlayerCounter >= Main.allPlayers.size()) {
+							currPlayerCounter = 0;
+						}
+						
+						currPlayer = Main.allPlayers.get(currPlayerCounter);
+						
+				}
+			}*/
+			
+		}
+		
+		
+		}
 }
 

@@ -44,7 +44,7 @@ public class Main {
 		new LoginScreenGUI();
 
 
-
+		/*
 		//demo players
 		File f1 = new File("C:/Users/teoat/Documents/GitHub/Pamakopolis/bin/Assets/Hat_adobespark.png");
 		File f2 = new File("C:/Users/teoat/Documents/GitHub/Pamakopolis/bin/Assets/Car_adobespark.png");
@@ -57,7 +57,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 
 
 		//new GUI();
