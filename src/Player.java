@@ -133,8 +133,8 @@ public class Player {
 		if (noTrade == 6)
 			JOptionPane.showMessageDialog(null, "No trade was input");
 		else
-			JOptionPane.showMessageDialog(null, "Trade Succeed \n"+currToOtherLocation+"\n"+currToOtherJailCards+"\n"+currToOtherMoney+"€\n"+" were transfered to "+otherPlayer.name+
-					"\n"+otherToCurrLocation+"\n"+otherToCurrJailCards+"\n"+otherToCurrMoney+"€\n"+" were transfered to"+this.name);
+			JOptionPane.showMessageDialog(null, "Trade Succeed \n"+currToOtherLocation+"\n"+currToOtherJailCards+"\n"+currToOtherMoney+"â‚¬\n"+" were transfered to "+otherPlayer.name+
+					"\n"+otherToCurrLocation+"\n"+otherToCurrJailCards+"\n"+otherToCurrMoney+"â‚¬\n"+" were transfered to"+this.name);
 		
 	}
 	
@@ -217,7 +217,7 @@ public class Player {
 		return false;
 	}
 	
-	public void ShowJailFrame(JButton button) {
+	public void ShowJailFrame(JButton button, JButton viewCardButton, JButton buyButton) {
 		
 		JFrame f = new JFrame();
 		JPanel p = new JPanel();
@@ -266,7 +266,7 @@ public class Player {
 		
 		this.jailTurns++;
 		
-		
+		//Button Listener for using Get Out Of Jail card
 		useCardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(jailCards.get(0).getCardImgName()=="Chance_GOOJF") {
@@ -284,7 +284,7 @@ public class Player {
 			}
 		});
 		
-
+		//Button Listener for paying to get out of Jail
 		payButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ReduceBalance(50);
@@ -296,33 +296,78 @@ public class Player {
 			}
 		});
 		
+		//Button Listener for rolling the dice
 		rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dice1.rollDice();
 				dice2.rollDice();
+			
 				if(dice1.getFaceValue()==dice2.getFaceValue()) {
 					isInJail = false;
 					jailTurns = 0;
+					GUI.setTimesPressedRoll(GUI.getTimesPressedRoll()+1);
 					JOptionPane.showMessageDialog(null,"You got out of jail thanks to your dice roll","Alert",JOptionPane.INFORMATION_MESSAGE);
 					f.dispose();
 					ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
-					GUI.rollButton.setVisible(true);
+					
+					if (Main.locations.get(position) instanceof ChanceAndCommunityChest) {
+						viewCardButton.setText("Draw the card");
+						viewCardButton.setVisible(true);
+						GUI.setDrawCard(false);
+					}
+					else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
+					|| Main.locations.get(position) instanceof Railroad) {
+						if(((Property)Main.locations.get(position)).getOwner() == null){
+							buyButton.setVisible(true);
+						}
+						viewCardButton.setText("See Location Info");
+						viewCardButton.setVisible(true);
+					}
+
 				}
 				else {
 					if(jailTurns==3) {
 						if(balance<50) {
 							isInJail = false;
 							jailTurns = 0;
+							GUI.setTimesPressedRoll(GUI.getTimesPressedRoll()+1);
 							JOptionPane.showMessageDialog(null,"You waited 3 rounds you can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 							f.dispose();
 							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+							if (Main.locations.get(position) instanceof ChanceAndCommunityChest) {
+								viewCardButton.setText("Draw the card");
+								viewCardButton.setVisible(true);
+								GUI.setDrawCard(false);
+							}
+							else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
+							|| Main.locations.get(position) instanceof Railroad) {
+								if(((Property)Main.locations.get(position)).getOwner() == null){
+									buyButton.setVisible(true);
+								}
+								viewCardButton.setText("See Location Info");
+								viewCardButton.setVisible(true);
+							}
 						}else {
 							isInJail = false;
 							jailTurns = 0;
 							ReduceBalance(50);
+							GUI.setTimesPressedRoll(GUI.getTimesPressedRoll()+1);
 							JOptionPane.showMessageDialog(null,"You didn't throw doubles, 50$ have been removed from you balance\nYou can now leave jail","Alert",JOptionPane.INFORMATION_MESSAGE);
 							f.dispose();
 							ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+							if (Main.locations.get(position) instanceof ChanceAndCommunityChest) {
+								viewCardButton.setText("Draw the card");
+								viewCardButton.setVisible(true);
+								GUI.setDrawCard(false);
+							}
+							else if (Main.locations.get(position) instanceof Street || Main.locations.get(position) instanceof Utility 
+							|| Main.locations.get(position) instanceof Railroad) {
+								if(((Property)Main.locations.get(position)).getOwner() == null){
+									buyButton.setVisible(true);
+								}
+								viewCardButton.setText("See Location Info");
+								viewCardButton.setVisible(true);
+							}
 						}
 					}
 					else {
@@ -350,7 +395,7 @@ public class Player {
 		JLabel nameLabel = new JLabel("Name:"+this.name);
 		nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
 		
-		JLabel balanceLabel = new JLabel(this.balance + "€");
+		JLabel balanceLabel = new JLabel(this.balance + "â‚¬");
 		balanceLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
 		
 		JPanel p = new JPanel();
@@ -407,7 +452,7 @@ public class Player {
 				currPlayer.AddToMortgage(pro);
 				label1.setText(pro.name+" is now on Mortgage");
         		b1.setVisible(false);
-        		balanceLabel.setText(currPlayer.balance + "€");
+        		balanceLabel.setText(currPlayer.balance + "â‚¬");
         		GUI.balanceField.setText(balanceLabel.getText());
         		p.revalidate();
 				p.repaint();
@@ -675,7 +720,7 @@ public class Player {
 								
 								leftPanel.add(currPlayerPropertiesJList);
 								
-								JTextField currPlayersBalanceField = new JTextField("Player "+curPlayer.name+" has "+ curPlayer.balance+"€");
+								JTextField currPlayersBalanceField = new JTextField("Player "+curPlayer.name+" has "+ curPlayer.balance+"â‚¬");
 								GUI.setColor(currPlayersBalanceField);
 								currPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
 								currPlayersBalanceField.setEditable(false);
@@ -804,7 +849,7 @@ public class Player {
 								otherPropertiesJList.setModel(model2);
 
 								rightPanel.add(otherPropertiesJList);
-								JTextField otherPlayersBalanceField = new JTextField("Player "+otherPlayer.name+" has "+ otherPlayer.balance+"€");
+								JTextField otherPlayersBalanceField = new JTextField("Player "+otherPlayer.name+" has "+ otherPlayer.balance+"â‚¬");
 								GUI.setColor(otherPlayersBalanceField);
 								otherPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
 								otherPlayersBalanceField.setEditable(false);
