@@ -14,6 +14,15 @@ public class GetOutOfJailCard extends Card{
 			Main.allCommunityChests.remove(this);
 		}
     }
+    
+    public void restoreCard(Player p) {
+    	p.jailCards.remove(this);
+    	if (this.cardImgName.equals("Chance_GOOJF.png")){ 
+			Main.allChances.add(this);
+		}else{
+			Main.allCommunityChests.add(this);
+		}
+    }
 
 	
 }

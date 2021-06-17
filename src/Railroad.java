@@ -20,14 +20,19 @@ public class Railroad extends Property{
 					sum++;
 				}		
 			}
-		if(player.balance>=sum*rent) {
-			player.ReduceBalance(sum*rent);
-			owner.AddBalance(sum*rent);
+			
+			int currbalance = player.balance; // saving current balance in case the player bankrupts from this rent
+			player.ReduceBalance(sum); 
+			
+			if(currbalance >= sum*rent) {
+				owner.AddBalance(sum*rent);
+			}
+			else {
+				owner.AddBalance(currbalance);
+			}
+		
 			JOptionPane.showMessageDialog(null, "Rent: "+sum*rent+"€ payed.");
-		}
-		else {
-			JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
-		}
+		
 		
 	}
 					

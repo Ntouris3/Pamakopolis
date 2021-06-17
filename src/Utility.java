@@ -25,24 +25,32 @@ public class Utility extends Property{
 			}
 		}
 		if (flag) {
-			if(player.balance>player.lastDice*10) {
-				player.ReduceBalance(player.lastDice*10);
+			int currbalance = player.balance; // saving current balance in case the player bankrupts from this rent
+			player.ReduceBalance(player.lastDice*10); 
+			
+			if(currbalance >= player.lastDice*10) {
 				owner.AddBalance(player.lastDice*10);
-				JOptionPane.showMessageDialog(null, "Rent: "+player.lastDice*10+"€ payed.");
 			}
 			else {
-				JOptionPane.showMessageDialog(null,"You don't have enough money to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
-			}	
+				owner.AddBalance(currbalance);
+			}
+			
+			JOptionPane.showMessageDialog(null, "Rent: "+player.lastDice*10+"€ payed.");
+			
 		}
 		else {
-			if(player.balance>=player.lastDice*4) {
-				player.ReduceBalance(player.lastDice*4);
+			
+			int currbalance = player.balance; // saving current balance in case the player bankrupts from this rent
+			player.ReduceBalance(player.lastDice*4); 
+			
+			if(currbalance >= player.lastDice*4) {
 				owner.AddBalance(player.lastDice*4);
-				JOptionPane.showMessageDialog(null, "Rent: "+player.lastDice*4+"€ payed.");
 			}
 			else {
-				JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
-			}	
+				owner.AddBalance(currbalance);
+			}
+			
+			JOptionPane.showMessageDialog(null, "Rent: "+player.lastDice*4+"€ payed.");
 		}
 	}
 

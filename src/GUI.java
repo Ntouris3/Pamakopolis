@@ -21,15 +21,17 @@ import javax.swing.text.BadLocationException;
 
 public class GUI extends JFrame{
 
-	private Player currPlayer;
+	public static Player currPlayer;
 	private static boolean drawCard = true;
 	private static  int timesPressedRoll = 0;
-	public static JPanel panelbig = new JPanel();
+
+  public static JPanel panelbig = new JPanel();
 	public static JLayeredPane gameP = new JLayeredPane();
-	public JPanel sidepanel = new JPanel();
+	public static JPanel sidepanel = new JPanel();
+	public static JPanel bankruptPanel = new JPanel();
 	private JTextField propertyInfoField = new JTextField();
 	public JLayeredPane jl = new JLayeredPane();
-	public JButton rollButton = new JButton("Roll Dice");	
+	public static JButton rollButton = new JButton("Roll Dice");	
 
 	private JButton buyButton;
 	private JButton seeLocationInfoButton = new JButton("");
@@ -47,12 +49,14 @@ public class GUI extends JFrame{
 	
 	
 	private JPanel playerInformationPanel = new JPanel();
-	private JTextField balanceField = new JTextField();
+	public static JTextField balanceField = new JTextField();
 	
 	private Board board = new Board();
 
 	public int number;
-	public int currPlayerCounter=0;
+	public static int currPlayerCounter=0;
+	
+	public TitledBorder title1;
 	
 	
 	public GUI(){
@@ -114,14 +118,13 @@ public class GUI extends JFrame{
 		
 		if(panelbig.getBackground() == Color.DARK_GRAY) {
 			jl.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-			//playerInformationPanel.setBackground(Color.BLACK);
-			//balanceField.setBackground(Color.DARK_GRAY);
-			TitledBorder title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " "+ currPlayer.name + "'s balance: ");
-			title.setTitleJustification(TitledBorder.CENTER);
-			title.setTitleColor(Color.WHITE);
-			title.setTitleFont(new Font("SansSerif", Font.BOLD,17));
-			balanceField.setBorder(title);
-			//balanceField.setForeground(Color.WHITE);
+			
+			title1 = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " "+ currPlayer.name + "'s balance: ");
+			title1.setTitleJustification(TitledBorder.CENTER);
+			title1.setTitleColor(Color.WHITE);
+			title1.setTitleFont(new Font("SansSerif", Font.BOLD,17));
+			balanceField.setBorder(title1);
+			
 			
 			propertyInfoField.setBackground(Color.DARK_GRAY);
 			TitledBorder titleProp = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " Property Info ");
@@ -129,12 +132,11 @@ public class GUI extends JFrame{
 			titleProp.setTitleColor(Color.WHITE);
 			titleProp.setTitleFont(new Font("SansSerif", Font.BOLD,17));
 			propertyInfoField.setBorder(titleProp);
-			//propertyInfoField.setForeground(Color.WHITE);
+			
 		}
 		else {
 			jl.setBorder(BorderFactory.createLineBorder(Color.black));
-			//playerInformationPanel.setBackground(getBackground());
-			//balanceField.setBackground(getBackground());
+			
 			TitledBorder title = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " "+ currPlayer.name + "'s balance: ");
 			title.setTitleJustification(TitledBorder.CENTER);
 			title.setTitleColor(Color.BLACK);
@@ -147,6 +149,7 @@ public class GUI extends JFrame{
 			titleProp.setTitleFont(new Font("SansSerif", Font.BOLD,17));
 			propertyInfoField.setBorder(titleProp);
 		}
+		setColor(propertyInfoField);
 		setColor(playerInformationPanel);
 		setColor(balanceField);
 		
@@ -154,7 +157,7 @@ public class GUI extends JFrame{
 		board.setBorder(BorderFactory.createLineBorder(Color.red));
 		panelbig.add(gameP, BorderLayout.CENTER);
 		
-		
+		bankruptPanel.add(endTurnButton);
 		panelbig.add(sidepanel, BorderLayout.EAST);
 
 		sidepanel.setLayout(new BoxLayout(sidepanel, BoxLayout.Y_AXIS));
@@ -197,12 +200,20 @@ public class GUI extends JFrame{
 					dice1.rollDice();
 					dice2.rollDice();
 					//demo
-					//dice1.setFaceValue(5);
-					dice1.repaint();
+					//dice1.setFaceValue(2);
+					//dice1.repaint();
 					//dice2.setFaceValue(2);
-					dice2.repaint();
+					//dice2.repaint();
 					
-				
+
+					if(dice1.getFaceValue() != dice2.getFaceValue() || currPlayer.isInJail == true) {
+						rollButton.setVisible(false);
+					}else {
+						
+						rollButton.setVisible(true);
+					}
+					sidepanel.revalidate();
+					sidepanel.repaint();
 			
 
 					
@@ -232,6 +243,7 @@ public class GUI extends JFrame{
 						seeLocationInfoButton.setVisible(true);
 						sidepanel.revalidate();
 					}else {
+						
 						seeLocationInfoButton.setVisible(false);
 						sidepanel.revalidate();
 					}
@@ -239,6 +251,7 @@ public class GUI extends JFrame{
 					//Disabling Buy Button And Paying off rent//
 					if(Main.locations.get(currPlayer.position) instanceof Street || Main.locations.get(currPlayer.position) instanceof Utility 
 							|| Main.locations.get(currPlayer.position) instanceof Railroad) {
+						drawCard = true;
 						if(((Property)Main.locations.get(currPlayer.position)).getOwner() == null){
 							buyButton.setVisible(true);
 							sidepanel.revalidate();
@@ -265,6 +278,7 @@ public class GUI extends JFrame{
 							}
 							
 						}
+						
 					}	
 					else {
 						if(Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
@@ -277,63 +291,30 @@ public class GUI extends JFrame{
 							sidepanel.revalidate();
 							sidepanel.repaint();
 					}
-					
-					
-					
-				
+
 				//DISABLING MORTGAGE BUTTON WHEN PLAYER HAS NO PROPERTIES
 				if(currPlayer.properties.size()==0) {
 					mortgageButton.setVisible(false);
 					sidepanel.revalidate();
 					sidepanel.repaint();
 				}
-				
-				
+								
 					//PAYING TAX WHEN HITTING TAX BLOCK//
 					if(Main.locations.get(currPlayer.position) instanceof Tax ){
 						((Tax)Main.locations.get(currPlayer.position)).CalcTax(currPlayer);
-						//System.out.println("Tax payed");
 					}
 					
-					//Chance And Community Chest/
-					//drawCard = false;
 					if(Main.locations.get(currPlayer.position) instanceof ChanceAndCommunityChest) {
 						drawCard = false;
 					}
 
-//					if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
-//						//TO-DO
-//						JOptionPane.showMessageDialog(null,"You stepped on a Community Chest, draw a card.");
-//						//Main.allCommunityChests.element().cardFunction(currPlayer);
-//					}
-//					else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
-//						JOptionPane.showMessageDialog(null,"You stepped on a Chance, draw a card.");
-//						//Main.allChances.element().cardFunction(currPlayer);
-//					}
 				
 					//Go To Prison Block//
 						if(currPlayer.position == 30) {
 							currPlayer.isInJail = true;
 							currPlayer.ChangePosition(10);
 						}
-				
-				
-				
-			
 
-//					if (currPlayer.position ==2 || currPlayer.position ==17 || currPlayer.position ==33) {
-//						//TO-DO
-//						JOptionPane.showMessageDialog(null,"You stepped on a Community Chest, draw a card.");
-//						//Main.allCommunityChests.element().cardFunction(currPlayer);
-//					}
-//					else if(currPlayer.position ==7 || currPlayer.position ==22 || currPlayer.position ==36) {
-//						JOptionPane.showMessageDialog(null,"You stepped on a Chance, draw a card.");
-//						//Main.allChances.element().cardFunction(currPlayer);
-//					}
-					
-					
-					
-					
 					if(currPlayer.position == 10) {
 						if(currPlayer.isInJail==true) {
 							buyButton.setVisible(false);
@@ -459,9 +440,15 @@ public class GUI extends JFrame{
 						label1.setText(pro.name+" is now on Mortgage");
 						b2.setVisible(true);
 		        		b1.setVisible(false);
-		        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"€");
+		        		balanceLabel.setText(currPlayer.balance + "€");
+		        		balanceField.setText(balanceLabel.getText());
 		        		p.revalidate();
 						p.repaint();
+						
+						balanceField.revalidate();
+						balanceField.repaint();
+						panelbig.revalidate();
+						panelbig.repaint();
 					}
 				});
 				
@@ -474,9 +461,11 @@ public class GUI extends JFrame{
 							label1.setText(pro.name+" is no longer on Mortgage");
 							b1.setVisible(true);
 			        		b2.setVisible(false);
-			        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"€");
+			        		balanceLabel.setText(currPlayer.balance + "€");
+			        		balanceField.setText(balanceLabel.getText());
 			        		p.revalidate();
 							p.repaint();
+							sidepanel.repaint();
 						}
 						else {
 							JOptionPane.showMessageDialog (null, "Not Enough Balance to unmortgage this property", "Low Balance", JOptionPane.ERROR_MESSAGE);
@@ -986,13 +975,34 @@ public class GUI extends JFrame{
 				rollButton.setVisible(true);
 				seeLocationInfoButton.setVisible(false);
 				sidepanel.revalidate();
-				currPlayerCounter++;
 				
-				if(currPlayerCounter == Main.allPlayers.size()) {
+				if(!currPlayer.isBankrupt()) {
+					currPlayerCounter++;
+					
+				}
+				else {
+					JOptionPane.showMessageDialog(null,"Success!");
+					
+				}
+				
+				
+				if(currPlayerCounter >= Main.allPlayers.size()) {
 					currPlayerCounter = 0;
 				}
 				
 				currPlayer = Main.allPlayers.get(currPlayerCounter);
+				title1 = BorderFactory.createTitledBorder(new LineBorder(Color.LIGHT_GRAY) , " "+ currPlayer.name + "'s balance: ");
+				title1.setTitleJustification(TitledBorder.CENTER);
+				if(panelbig.getBackground() == Color.DARK_GRAY){
+					title1.setTitleColor(Color.WHITE);
+				}
+				else {
+					title1.setTitleColor(Color.BLACK);
+				}
+				
+				title1.setTitleFont(new Font("SansSerif", Font.BOLD,17));
+				balanceField.setBorder(title1);;
+				
 			
 				if(currPlayer.jailTurns==3) {
 					JOptionPane.showMessageDialog(null,"You waited 3 rounds, you are now free","Alert",JOptionPane.INFORMATION_MESSAGE);
@@ -1455,7 +1465,4 @@ public class GUI extends JFrame{
 		GUI.timesPressedRoll = timesPressedRoll;
 	}
 
-	
-
-	
 }

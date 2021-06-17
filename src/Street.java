@@ -62,14 +62,18 @@ public class Street extends Property{
 			sum=rent[houses];			
 		}
 		
-		if(player.balance>=sum) {
-			player.ReduceBalance(sum);
+		
+		int currbalance = player.balance; // saving current balance in case the player bankrupts from this rent
+		player.ReduceBalance(sum); 
+		
+		if(currbalance >= sum) {
 			owner.AddBalance(sum);
-			JOptionPane.showMessageDialog(null, "Rent: "+sum+"€ payed.");
 		}
 		else {
-			JOptionPane.showMessageDialog(null,"You can't afford to pay the rent","Alert",JOptionPane.WARNING_MESSAGE);
+			owner.AddBalance(currbalance);
 		}
+		JOptionPane.showMessageDialog(null, "Rent: "+sum+"€ payed.");
+		
 	}
 	
 
