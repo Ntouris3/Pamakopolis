@@ -30,7 +30,7 @@ import javax.swing.text.DocumentFilter.FilterBypass;
 public class Player {
 	public String name;
 	public Piece piece;
-	public int balance = 300;
+	public int balance = 1500;
 	public boolean isInJail = false;
     ArrayList<GetOutOfJailCard> jailCards = new ArrayList<GetOutOfJailCard>();
 	public int position = 0;
