@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 public class TransactionCard extends Card{
 
 	private int moneyToTrasact;
@@ -23,13 +25,28 @@ public class TransactionCard extends Card{
                 p.ReduceBalance(moneyToTrasact);
             }
         }else if(this.cardImgName.equals("Chance_YHBAECOTB.png")){ // pay each player 50 card
-                for(Player thisPlayer : Main.allPlayers){
-                    if (thisPlayer.equals(p)){
-                        p.ReduceBalance(50*Main.allPlayers.size());
-                    }else{
-                        thisPlayer.AddBalance(50);
-                    }
+        		int numOfPlayersToPay = Main.allPlayers.size() - 1;
+        		
+        		int currbalance = p.balance; // saving current balance in case the player bankrupts from this reduction of money
+    			p.ReduceBalance(numOfPlayersToPay*50); 
+    			
+    			if(currbalance >= numOfPlayersToPay*50) {
+    				for(Player thisPlayer : Main.allPlayers){
+                    if (!thisPlayer.equals(p)){
+                       thisPlayer.AddBalance(50);
+                    	}
+    				}
+    			}
+    			else {
+    				for(Player thisPlayer : Main.allPlayers){
+                        if (!thisPlayer.equals(p)){
+                           thisPlayer.AddBalance(currbalance/numOfPlayersToPay);
+                        }
+    			}
+                
+                    
                 }
+                p.ReduceBalance(50*Main.allPlayers.size());
         }else{													//collect 50 from all players card
             for(Player thisPlayer : Main.allPlayers){
                 if (thisPlayer.equals(p)){

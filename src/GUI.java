@@ -48,7 +48,7 @@ public class GUI extends JFrame{
 	
 	
 	private JPanel playerInformationPanel = new JPanel();
-	private JTextField balanceField = new JTextField();
+	public static JTextField balanceField = new JTextField();
 	
 	private Board board = new Board();
 
@@ -1481,5 +1481,14 @@ public class GUI extends JFrame{
 			((JTextArea) obj).setForeground(textColor);
 		}
 	}
-
+	
+	//set & get for balanceField
+	
+	/*public JTextField getBalance() {
+		return balanceField;
+	}
+	
+	public void setBalance(String aBalance) {
+		balanceField.setText(aBalance);
+	}*/
 }

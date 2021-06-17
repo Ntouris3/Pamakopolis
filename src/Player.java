@@ -7,10 +7,24 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.DocumentFilter.FilterBypass;
+
+
+
+
 
 
 public class Player {
@@ -333,7 +347,7 @@ public class Player {
 		JLabel nameLabel = new JLabel("Name:"+this.name);
 		nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
 		
-		JLabel balanceLabel = new JLabel("Balance:"+String.valueOf(this.balance)+"€");
+		JLabel balanceLabel = new JLabel(this.balance + "€");
 		balanceLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
 		
 		JPanel p = new JPanel();
@@ -390,14 +404,15 @@ public class Player {
 				currPlayer.AddToMortgage(pro);
 				label1.setText(pro.name+" is now on Mortgage");
         		b1.setVisible(false);
-        		balanceLabel.setText("Balance:"+String.valueOf(currPlayer.balance)+"€");
+        		balanceLabel.setText(currPlayer.balance + "€");
+        		GUI.balanceField.setText(balanceLabel.getText());
         		p.revalidate();
 				p.repaint();
 			}
 		});
 					
 				
-				o.setSize(350,500); 
+				o.setSize(500,350); 
 				o.setContentPane(p);
 				o.setTitle("Mortgage");
 				o.setVisible(true);
@@ -441,17 +456,13 @@ public class Player {
 			
 			
 			
-			mortgageButton.addActionListener(new ActionListener() {
+			/*endTurnButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
 				}
-			});
-			
-			tradeButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-				}
-			});
+			});*/
+			tradeButtonListener lis = new tradeButtonListener();
+			tradeButton.addActionListener(lis);
 			
 			mortgageButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -529,8 +540,460 @@ public class Player {
 			}*/
 			
 		}
-		
-		
+	}
+		class tradeButtonListener implements ActionListener{
+			Player otherPlayer = null;
+			JFrame tradeFrame;
+			JButton requestTrade = new JButton();
+			
+			JFrame f = new JFrame();
+			JTextField t = new JTextField();
+			JButton b = new JButton("Reject");
+			JButton b1 = new JButton("Accept");
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				Player currPlayer = (Player)e.getSource();
+				//setColor(t);
+				requestTrade.setFont(new Font("SansSerif", Font.BOLD, 12));
+				t.setFont(new Font("SansSerif", Font.PLAIN, 15));
+				tradeFrame = new JFrame("Trading Process");
+				tradeFrame.getContentPane().setBackground(GUI.panelbig.getBackground());
+				f.getContentPane().setBackground(GUI.panelbig.getBackground());
+				tradeFrame.setFont(new Font("SansSerif", Font.PLAIN, 15));
+				b.setFont(new Font("SansSerif", Font.BOLD, 12));
+				b1.setFont(new Font("SansSerif", Font.BOLD, 12));
+				
+				JTextArea messageArea = new JTextArea("Select a player:");
+				GUI.setColor(messageArea);
+				messageArea.setFont(new Font("SansSerif", Font.BOLD, 12));
+				messageArea.setEditable(false);
+				tradeFrame.add(messageArea);
+				
+				JList<String> playersJList = new JList<String>();
+				DefaultListModel<String> model = new DefaultListModel<String>();
+				for(Player thisPlayer:Main.allPlayers) {
+					if (!(thisPlayer.equals(currPlayer)))
+						model.addElement(thisPlayer.name);
+				}	
+				playersJList.setModel(model);
+
+				tradeFrame.add(playersJList);	
+				
+				playersJList.addListSelectionListener(new clickOnPlayerListener(playersJList));
+				
+				requestTrade.addActionListener(new ActionListener() {
+					int currToOtherMoney = 0;
+					int otherToCurrMoney = 0;
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+							
+						t.setText("Does player "+ otherPlayer.name+" accept the trading?");
+						t.setEditable(false);
+						f.add(t);
+						
+						b.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {f.dispose();}});
+						f.add(b);
+						
+						
+						b1.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								
+								f.dispose();
+								tradeFrame.getContentPane().invalidate();
+								tradeFrame.getContentPane().validate();
+								tradeFrame.getContentPane().repaint();
+								
+								JPanel leftPanel = new JPanel();
+								GUI.setColor(leftPanel);
+								JPanel rightPanel = new JPanel();
+								GUI.setColor(rightPanel);
+								
+								
+								ArrayList<Property> currToOtherLocation = new ArrayList<Property>();
+								
+								ArrayList<GetOutOfJailCard> currToOtherJailCards = new ArrayList<GetOutOfJailCard>();
+								
+								ArrayList<Property> otherToCurrLocation = new ArrayList<Property>();
+								
+								ArrayList<GetOutOfJailCard> otherToCurrJailCards = new ArrayList<GetOutOfJailCard>();
+								
+								JTextArea mess2Area = new JTextArea("Player "+ currPlayer.name +"'s tangible assets");
+								GUI.setColor(mess2Area);
+								mess2Area.setFont(new Font("SansSerif", Font.PLAIN, 15));
+								mess2Area.setEditable(false);
+								leftPanel.add(mess2Area);
+								
+								JList<String> currPlayerPropertiesJList = new JList<String>();
+								DefaultListModel<String> model1 = new DefaultListModel<String>();
+								for(Property thisProperty:currPlayer.properties) {
+									model1.addElement(thisProperty.name);
+								}
+								currPlayerPropertiesJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+								
+								currPlayerPropertiesJList.setModel(model1);
+								
+								currPlayerPropertiesJList.setSelectionModel(new DefaultListSelectionModel() {
+								    @Override
+								    public void setSelectionInterval(int index0, int index1) {
+								        if(super.isSelectedIndex(index0)) {
+								            super.removeSelectionInterval(index0, index1);
+								        }
+								        else {
+								            super.addSelectionInterval(index0, index1);
+								        }
+								    }});
+								
+								currPlayerPropertiesJList.addListSelectionListener(new ListSelectionListener() {
+									
+									@Override
+									public void valueChanged(ListSelectionEvent e) {
+										
+										if (!e.getValueIsAdjusting()) {
+											
+											for (String thisPropertyName : currPlayerPropertiesJList.getSelectedValuesList() ) {
+												for (Property thisProperty : currPlayer.properties) {
+													if (thisPropertyName.equals(thisProperty.name) && !(currToOtherLocation.contains(thisProperty))) {
+														currToOtherLocation.add(thisProperty);
+														break;
+													}
+												}
+											}
+											
+											;
+										}
+									}
+								});
+								
+								leftPanel.add(currPlayerPropertiesJList);
+								
+								JTextField currPlayersBalanceField = new JTextField("Player "+currPlayer.name+" has "+ currPlayer.balance+"€");
+								GUI.setColor(currPlayersBalanceField);
+								currPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
+								currPlayersBalanceField.setEditable(false);
+								leftPanel.add(currPlayersBalanceField);
+								
+								JTextField currPlayerTradeMoneyFiled = new JTextField("Enter money...");
+								GUI.setColor(currPlayerTradeMoneyFiled);
+								currPlayerTradeMoneyFiled.setFont(new Font("SansSerif", Font.PLAIN, 15));
+								currPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
+						            public void mouseClicked(MouseEvent e){
+						            	currPlayerTradeMoneyFiled.setText("");
+						            }
+						        });
+								currPlayerTradeMoneyFiled.setColumns(10);
+								
+								
+								((AbstractDocument)currPlayerTradeMoneyFiled.getDocument()).setDocumentFilter(new DocumentFilter(){
+							        Pattern regEx = Pattern.compile("\\d*");
+
+							        @Override
+							        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {          
+							            Matcher matcher = regEx.matcher(text);
+							            if(!matcher.matches()){
+							                return;
+							            }
+							            super.replace(fb, offset, length, text, attrs);
+							        }
+							    });
+								
+								leftPanel.add(currPlayerTradeMoneyFiled);
+								
+								JList<String> currPlayerJailCardsJList = new JList<String>();
+								DefaultListModel<String> model3 = new DefaultListModel<String>();
+								for(GetOutOfJailCard thiscard:currPlayer.jailCards) {
+									
+										if (thiscard.cardImgName.equals("Chance_GOOJF.png")) {
+											model3.addElement("Chance Get out of Jail Card");
+										}else {
+											model3.addElement("Community Chest Get out of Jail Card");
+										}
+									
+								}
+								currPlayerJailCardsJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+								currPlayerJailCardsJList.setSelectionModel(new DefaultListSelectionModel() {
+								    @Override
+								    public void setSelectionInterval(int index0, int index1) {
+								        if(super.isSelectedIndex(index0)) {
+								            super.removeSelectionInterval(index0, index1);
+								        }
+								        else {
+								            super.addSelectionInterval(index0, index1);
+								        }
+								    }});
+								currPlayerJailCardsJList.addListSelectionListener(new ListSelectionListener() {
+									
+									@Override
+									public void valueChanged(ListSelectionEvent e) {
+										
+										if (!e.getValueIsAdjusting()) {
+											
+											
+											for (String thisJailCardName : currPlayerJailCardsJList.getSelectedValuesList() ) {
+												String s ;
+												if (thisJailCardName.equals("Chance Get out of Jail Card")) {
+													s = new String("Chance_GOOJF.png");
+												}else {
+													s = new String("Community_Chest_GOOJF.png");
+												}
+												for (GetOutOfJailCard thisJailCard : currPlayer.jailCards) {
+													if (s.equals(thisJailCard.cardImgName) && !(currToOtherJailCards.contains(thisJailCard))) {
+														currToOtherJailCards.add(thisJailCard);
+														break;
+													}
+												}
+											}
+										}
+									}
+								});
+								currPlayerJailCardsJList.setModel(model3);
+
+								leftPanel.add(currPlayerJailCardsJList);
+								
+								
+								JTextArea mess3Area = new JTextArea("Player "+ otherPlayer.name +"'s tangible assets");
+								GUI.setColor(mess3Area);
+								mess3Area.setFont(new Font("SansSerif", Font.PLAIN, 15));
+								mess3Area.setEditable(false);
+								rightPanel.add(mess3Area);
+								
+								
+								JList<String> otherPropertiesJList = new JList<String>();
+								DefaultListModel<String> model2 = new DefaultListModel<String>();
+								for(Property thisProperty:otherPlayer.properties) {
+									model2.addElement(thisProperty.name);
+								}
+								otherPropertiesJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+								
+								otherPropertiesJList.setSelectionModel(new DefaultListSelectionModel() {
+								    @Override
+								    public void setSelectionInterval(int index0, int index1) {
+								        if(super.isSelectedIndex(index0)) {
+								            super.removeSelectionInterval(index0, index1);
+								        }
+								        else {
+								            super.addSelectionInterval(index0, index1);
+								        }
+								    }});
+								
+								otherPropertiesJList.addListSelectionListener(new ListSelectionListener() {
+									
+									@Override
+									public void valueChanged(ListSelectionEvent e) {
+										if (!e.getValueIsAdjusting()) {
+											
+											for (String thisPropertyName : otherPropertiesJList.getSelectedValuesList() ) {
+												for (Property thisProperty : otherPlayer.properties) {
+													if (thisPropertyName.equals(thisProperty.name) && !(otherToCurrLocation.contains(thisProperty))) {
+														otherToCurrLocation.add(thisProperty);
+														break;
+													}
+												}
+											}
+										}
+									}
+								});
+								otherPropertiesJList.setModel(model2);
+
+								rightPanel.add(otherPropertiesJList);
+								JTextField otherPlayersBalanceField = new JTextField("Player "+otherPlayer.name+" has "+ otherPlayer.balance+"€");
+								GUI.setColor(otherPlayersBalanceField);
+								otherPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
+								otherPlayersBalanceField.setEditable(false);
+								rightPanel.add(otherPlayersBalanceField);
+								
+								JTextField otherPlayerTradeMoneyFiled = new JTextField("Enter money...");
+								GUI.setColor(otherPlayerTradeMoneyFiled);
+								otherPlayerTradeMoneyFiled.setFont(new Font("SansSerif", Font.PLAIN, 15));
+								otherPlayerTradeMoneyFiled.addMouseListener(new MouseAdapter(){
+						            public void mouseClicked(MouseEvent e){
+						            	otherPlayerTradeMoneyFiled.setText("");
+						            }
+						        });
+								otherPlayerTradeMoneyFiled.setColumns(10);
+								
+								((AbstractDocument)otherPlayerTradeMoneyFiled.getDocument()).setDocumentFilter(new DocumentFilter(){
+							        Pattern regEx = Pattern.compile("\\d*");
+
+							        @Override
+							        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {          
+							            Matcher matcher = regEx.matcher(text);
+							            if(!matcher.matches()){
+							                return;
+							            }
+							            super.replace(fb, offset, length, text, attrs);
+							        }
+							    });
+								
+								rightPanel.add(otherPlayerTradeMoneyFiled);
+								
+								JList<String> otherPlayerJailCardsJList = new JList<String>();
+								DefaultListModel<String> model4 = new DefaultListModel<String>();
+								for(GetOutOfJailCard thiscard: otherPlayer.jailCards) {
+										if (thiscard.cardImgName.equals("Chance_GOOJF.png")) {
+											model4.addElement("Chance Get out of Jail Card");
+										}else {
+											model4.addElement("Community Chest Get out of Jail Card");
+										}
+									
+								}
+								otherPlayerJailCardsJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+								otherPlayerJailCardsJList.setSelectionModel(new DefaultListSelectionModel() {
+								    @Override
+								    public void setSelectionInterval(int index0, int index1) {
+								        if(super.isSelectedIndex(index0)) {
+								            super.removeSelectionInterval(index0, index1);
+								        }
+								        else {
+								            super.addSelectionInterval(index0, index1);
+								        }
+								    }});
+								otherPlayerJailCardsJList.addListSelectionListener(new ListSelectionListener() {
+									
+									@Override
+									public void valueChanged(ListSelectionEvent e) {
+										
+										if (!e.getValueIsAdjusting()) {
+											
+											for (String thisJailCardName : otherPlayerJailCardsJList.getSelectedValuesList() ) {
+												String s ;
+												if (thisJailCardName.equals("Chance Get out of Jail Card")) {
+													s = new String("Chance_GOOJF.png");
+												}else {
+													s = new String("Community_Chest_GOOJF.png");
+												}
+												for (GetOutOfJailCard thisJailCard : otherPlayer.jailCards) {
+													if (s.equals(thisJailCard.cardImgName) && !(otherToCurrJailCards.contains(thisJailCard))) {
+														otherToCurrJailCards.add(thisJailCard);
+														break;
+													}
+												}
+											}
+										}
+									}
+								});
+								otherPlayerJailCardsJList.setModel(model4);
+
+								rightPanel.add(otherPlayerJailCardsJList);
+								
+								
+								leftPanel.setVisible(true);
+								rightPanel.setVisible(true);
+								leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
+								rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
+								
+								JPanel newJPanel = new JPanel();
+								GUI.setColor(newJPanel);
+								newJPanel.setVisible(true);
+								newJPanel.setLayout(new FlowLayout());
+								newJPanel.add(leftPanel);
+								newJPanel.add(rightPanel);
+								
+								JButton rejectButton = new JButton("Reject");
+								rejectButton.setFont(new Font("SansSerif", Font.BOLD, 12));
+								rejectButton.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {tradeFrame.dispose();}});
+								newJPanel.add(rejectButton);
+								JButton acceptTradeButton = new JButton("Trade");
+								acceptTradeButton.setFont(new Font("SansSerif", Font.BOLD, 12));
+								acceptTradeButton.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										if (!isNumeric(currPlayerTradeMoneyFiled.getText())) {
+											currPlayerTradeMoneyFiled.setText("0");
+										}
+										
+										if (!isNumeric(otherPlayerTradeMoneyFiled.getText())) {
+											otherPlayerTradeMoneyFiled.setText("0");
+										}
+										
+										currToOtherMoney = Integer.parseInt(currPlayerTradeMoneyFiled.getText());
+										otherToCurrMoney = Integer.parseInt(otherPlayerTradeMoneyFiled.getText());
+
+										if (currToOtherMoney <= currPlayer.balance && otherToCurrMoney <= otherPlayer.balance) {
+											currPlayer.Trade(otherPlayer, currToOtherLocation, currToOtherJailCards, currToOtherMoney, otherToCurrLocation, otherToCurrJailCards, otherToCurrMoney);
+											tradeFrame.dispose();
+										}else {
+											JOptionPane.showMessageDialog(null, "Not valid input");
+										}
+									}});
+								newJPanel.add(acceptTradeButton);
+								tradeFrame.add(newJPanel);
+								tradeFrame.setContentPane(newJPanel);
+								tradeFrame.revalidate();
+							
+							}});
+						f.add(b1);
+						
+						f.setLayout(new FlowLayout());
+						f.setSize(400,200); 
+						f.setVisible(true);
+						
+					}
+				});
+				
+				
+				
+
+				tradeFrame.setLayout(new FlowLayout());
+				tradeFrame.setSize(350,400); 
+				tradeFrame.setVisible(true);
+			}
+			
+			public boolean isNumeric(String strNum) {
+			    if (strNum.equals(null)) {
+			        return false;
+			    }
+			    try {
+			        @SuppressWarnings("unused")
+					double d = Double.parseDouble(strNum);
+			    } catch (NumberFormatException nfe) {
+			        return false;
+			    }
+			    return true;
+			}
+			
+			class clickOnPlayerListener implements  ListSelectionListener{
+				
+				JList<String> playersJList;
+				
+				
+				public clickOnPlayerListener(JList<String> playersJList) {
+					this.playersJList = playersJList;
+				}
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+
+					if (!e.getValueIsAdjusting()) {//This line prevents double events
+						for (Player thisPlayer : Main.allPlayers) {
+							if (thisPlayer.name.equals(playersJList.getSelectedValue())) {
+								otherPlayer = thisPlayer;
+								if (otherPlayer!= null) {
+									requestTrade.setText("Request trade from "+otherPlayer.name);
+									
+									
+									tradeFrame.add(requestTrade);
+									tradeFrame.revalidate();			
+								}
+								break;
+							}
+						}
+					}
+				}
+			}
+			
 		}
+		
+		
+	
+
+	
+		
+		
+		
+	
 }
 
