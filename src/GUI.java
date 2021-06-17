@@ -30,7 +30,7 @@ public class GUI extends JFrame{
 	public static JPanel bankruptPanel = new JPanel();
 	private JTextField propertyInfoField = new JTextField();
 	public JLayeredPane jl = new JLayeredPane();
-	public JButton rollButton = new JButton("Roll Dice");	
+	public static JButton rollButton = new JButton("Roll Dice");	
 
 	private JButton buyButton;
 	private JButton seeLocationInfoButton = new JButton("");

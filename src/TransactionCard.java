@@ -52,7 +52,7 @@ public class TransactionCard extends Card{
                 if (thisPlayer.equals(p)){
                     p.AddBalance(50*(Main.allPlayers.size() - 1));
                 }else{
-                    thisPlayer.ReduceBalance(50);
+                	thisPlayer.ReduceBalance(50);
                 }
             }
         }

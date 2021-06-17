@@ -39,6 +39,7 @@ public class Player {
 	public ArrayList <Street> streets = new ArrayList<Street>();
 	public ArrayList <Street> streetsToBuildIn = new ArrayList<Street>();
 	public int jailTurns = 0;
+	public Player curPlayer = this;
 	
 	public Player(String name, Piece piece) {
 	
@@ -57,6 +58,7 @@ public class Player {
 		this.balance = this.balance - amount;
 		if(this.balance < 0) {
 			bankruptGUI(this);
+			ReduceBalance(amount);
 		}
 		
 	}
@@ -304,6 +306,7 @@ public class Player {
 					JOptionPane.showMessageDialog(null,"You got out of jail thanks to your dice roll","Alert",JOptionPane.INFORMATION_MESSAGE);
 					f.dispose();
 					ChangePosition(dice1.getFaceValue()+dice2.getFaceValue()+10);
+					GUI.rollButton.setVisible(true);
 				}
 				else {
 					if(jailTurns==3) {
@@ -472,12 +475,13 @@ public class Player {
 		
 			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			f.setVisible(true);
-			f.setSize(420,400); 
+			f.setSize(700,500); 
 			f.setResizable(false);
 			f.setTitle("");
 			f.setContentPane(p);
 		}
-		else {
+		
+		if(isBankrupt()){
 			JOptionPane.showMessageDialog(null,"Player " + this.name + " is bankrupt , R.I.P. ");
 			for(int i=0; i<this.properties.size(); i++) {
 				this.properties.get(i).owner = null;
@@ -554,7 +558,7 @@ public class Player {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				Player currPlayer = (Player)e.getSource();
+				//Player currPlayer = (Player)e.getSource();
 				//setColor(t);
 				requestTrade.setFont(new Font("SansSerif", Font.BOLD, 12));
 				t.setFont(new Font("SansSerif", Font.PLAIN, 15));
@@ -574,7 +578,7 @@ public class Player {
 				JList<String> playersJList = new JList<String>();
 				DefaultListModel<String> model = new DefaultListModel<String>();
 				for(Player thisPlayer:Main.allPlayers) {
-					if (!(thisPlayer.equals(currPlayer)))
+					if (!(thisPlayer.equals(curPlayer)))
 						model.addElement(thisPlayer.name);
 				}	
 				playersJList.setModel(model);
@@ -621,7 +625,7 @@ public class Player {
 								
 								ArrayList<GetOutOfJailCard> otherToCurrJailCards = new ArrayList<GetOutOfJailCard>();
 								
-								JTextArea mess2Area = new JTextArea("Player "+ currPlayer.name +"'s tangible assets");
+								JTextArea mess2Area = new JTextArea("Player "+ curPlayer.name +"'s tangible assets");
 								GUI.setColor(mess2Area);
 								mess2Area.setFont(new Font("SansSerif", Font.PLAIN, 15));
 								mess2Area.setEditable(false);
@@ -629,7 +633,7 @@ public class Player {
 								
 								JList<String> currPlayerPropertiesJList = new JList<String>();
 								DefaultListModel<String> model1 = new DefaultListModel<String>();
-								for(Property thisProperty:currPlayer.properties) {
+								for(Property thisProperty:curPlayer.properties) {
 									model1.addElement(thisProperty.name);
 								}
 								currPlayerPropertiesJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -656,7 +660,7 @@ public class Player {
 										if (!e.getValueIsAdjusting()) {
 											
 											for (String thisPropertyName : currPlayerPropertiesJList.getSelectedValuesList() ) {
-												for (Property thisProperty : currPlayer.properties) {
+												for (Property thisProperty : curPlayer.properties) {
 													if (thisPropertyName.equals(thisProperty.name) && !(currToOtherLocation.contains(thisProperty))) {
 														currToOtherLocation.add(thisProperty);
 														break;
@@ -671,7 +675,7 @@ public class Player {
 								
 								leftPanel.add(currPlayerPropertiesJList);
 								
-								JTextField currPlayersBalanceField = new JTextField("Player "+currPlayer.name+" has "+ currPlayer.balance+"€");
+								JTextField currPlayersBalanceField = new JTextField("Player "+curPlayer.name+" has "+ curPlayer.balance+"€");
 								GUI.setColor(currPlayersBalanceField);
 								currPlayersBalanceField.setFont(new Font("SansSerif", Font.PLAIN, 15));
 								currPlayersBalanceField.setEditable(false);
@@ -705,7 +709,7 @@ public class Player {
 								
 								JList<String> currPlayerJailCardsJList = new JList<String>();
 								DefaultListModel<String> model3 = new DefaultListModel<String>();
-								for(GetOutOfJailCard thiscard:currPlayer.jailCards) {
+								for(GetOutOfJailCard thiscard:curPlayer.jailCards) {
 									
 										if (thiscard.cardImgName.equals("Chance_GOOJF.png")) {
 											model3.addElement("Chance Get out of Jail Card");
@@ -740,7 +744,7 @@ public class Player {
 												}else {
 													s = new String("Community_Chest_GOOJF.png");
 												}
-												for (GetOutOfJailCard thisJailCard : currPlayer.jailCards) {
+												for (GetOutOfJailCard thisJailCard : curPlayer.jailCards) {
 													if (s.equals(thisJailCard.cardImgName) && !(currToOtherJailCards.contains(thisJailCard))) {
 														currToOtherJailCards.add(thisJailCard);
 														break;
@@ -913,12 +917,12 @@ public class Player {
 										currToOtherMoney = Integer.parseInt(currPlayerTradeMoneyFiled.getText());
 										otherToCurrMoney = Integer.parseInt(otherPlayerTradeMoneyFiled.getText());
 
-										if (currToOtherMoney <= currPlayer.balance && otherToCurrMoney <= otherPlayer.balance) {
-											currPlayer.Trade(otherPlayer, currToOtherLocation, currToOtherJailCards, currToOtherMoney, otherToCurrLocation, otherToCurrJailCards, otherToCurrMoney);
+										//if (currToOtherMoney <= curPlayer.balance && otherToCurrMoney <= otherPlayer.balance) {
+											curPlayer.Trade(otherPlayer, currToOtherLocation, currToOtherJailCards, currToOtherMoney, otherToCurrLocation, otherToCurrJailCards, otherToCurrMoney);
 											tradeFrame.dispose();
-										}else {
-											JOptionPane.showMessageDialog(null, "Not valid input");
-										}
+										//}else {
+											//JOptionPane.showMessageDialog(null, "Not valid input");
+										//}
 									}});
 								newJPanel.add(acceptTradeButton);
 								tradeFrame.add(newJPanel);
